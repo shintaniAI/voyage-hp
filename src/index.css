@@ -1,0 +1,151 @@
+@import "tailwindcss";
+
+*,*::before,*::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  margin: 0; padding: 0;
+  color: #111;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+.font-en { font-family: 'Sora', 'Noto Sans JP', sans-serif; }
+
+/* ─── Keyframes ─── */
+@keyframes scroll-left   { 0% { transform: translateX(0) }   100% { transform: translateX(-50%) } }
+@keyframes scroll-right  { 0% { transform: translateX(-50%) } 100% { transform: translateX(0) } }
+@keyframes scroll-up     { 0% { transform: translateY(0) }    100% { transform: translateY(-50%) } }
+@keyframes scroll-down   { 0% { transform: translateY(-50%) } 100% { transform: translateY(0) } }
+@keyframes float-a       { 0%,100% { transform: translate(0,0) scale(1) } 50% { transform: translate(20px,-15px) scale(1.03) } }
+@keyframes float-b       { 0%,100% { transform: translate(0,0) } 50% { transform: translate(-15px,20px) } }
+@keyframes slide-down    { 0% { top:-40%; opacity:0 } 20% { opacity:1 } 80% { opacity:1 } 100% { top:140%; opacity:0 } }
+@keyframes pulse-glow    { 0%,100% { opacity:.4; transform:scale(1) } 50% { opacity:.7; transform:scale(1.08) } }
+@keyframes drift-x       { 0%,100% { transform:translateX(0) } 50% { transform:translateX(30px) } }
+@keyframes drift-y       { 0%,100% { transform:translateY(0) } 50% { transform:translateY(-25px) } }
+@keyframes spin-slow     { 0% { transform:rotate(0deg) } 100% { transform:rotate(360deg) } }
+@keyframes marquee-x     { 0% { transform:translateX(0) } 100% { transform:translateX(-50%) } }
+@keyframes grow-bar      { 0% { width:0 } 100% { width:100% } }
+@keyframes stack-in      { 0% { opacity:0; transform:translateX(-50%) translateY(20px) scale(.9) } 100% { opacity:1; transform:translateX(-50%) translateY(0) scale(var(--s,1)) } }
+@keyframes slide-up      { 0% { opacity:0; transform:translateY(60px) } 100% { opacity:1; transform:translateY(0) } }
+@keyframes text-shimmer  { 0% { background-position:100% 50% } 100% { background-position:0% 50% } }
+@keyframes count-in      { 0% { transform:translateY(100%); opacity:0 } 100% { transform:translateY(0); opacity:1 } }
+@keyframes slide-in-left { 0% { transform:translateX(-60px); opacity:0 } 100% { transform:translateX(0); opacity:1 } }
+@keyframes slide-in-right{ 0% { transform:translateX(60px); opacity:0 } 100% { transform:translateX(0); opacity:1 } }
+@keyframes scale-in      { 0% { transform:scale(.85); opacity:0 } 100% { transform:scale(1); opacity:1 } }
+@keyframes blur-in       { 0% { filter:blur(8px); opacity:0 } 100% { filter:blur(0); opacity:1 } }
+@keyframes draw-line     { 0% { width:0 } 100% { width:100% } }
+
+/* ─── Dot grid pattern ─── */
+.dot-pattern {
+  background-image: radial-gradient(circle, rgba(6,199,85,.08) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+.dot-pattern-dark {
+  background-image: radial-gradient(circle, rgba(255,255,255,.04) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+.dot-pattern-white {
+  background-image: radial-gradient(circle, rgba(6,199,85,.04) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* ─── Utilities ─── */
+@utility animate-phone-left   { animation: scroll-left 50s linear infinite; }
+@utility animate-phone-right  { animation: scroll-right 50s linear infinite; }
+@utility animate-card-left    { animation: scroll-left 45s linear infinite; }
+@utility animate-card-right   { animation: scroll-right 45s linear infinite; }
+@utility animate-float-a      { animation: float-a 18s ease-in-out infinite; }
+@utility animate-float-b      { animation: float-b 22s ease-in-out infinite; }
+@utility animate-slide-down   { animation: slide-down 2s ease-in-out infinite; }
+
+@utility pause-on-hover { &:hover { animation-play-state: paused; } }
+@utility scrollbar-hide { -ms-overflow-style:none; scrollbar-width:none; &::-webkit-scrollbar{display:none} }
+@utility animate-pulse-glow { animation: pulse-glow 6s ease-in-out infinite; }
+@utility animate-drift-x    { animation: drift-x 14s ease-in-out infinite; }
+@utility animate-drift-y    { animation: drift-y 16s ease-in-out infinite; }
+@utility animate-spin-slow  { animation: spin-slow 60s linear infinite; }
+@utility animate-marquee-x  { animation: marquee-x 25s linear infinite; }
+@utility animate-marquee-x-slow { animation: marquee-x 40s linear infinite; }
+
+/* ─── Parallax helper ─── */
+.parallax-bg {
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
+}
+@supports (-webkit-touch-callout: none) {
+  .parallax-bg { background-attachment: scroll; }
+}
+
+/* ─── Text shimmer on hover ─── */
+.text-shimmer {
+  background: linear-gradient(90deg, #06C755 20%, #38d9a9 40%, #06C755 60%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: text-shimmer 4s linear infinite;
+}
+
+/* ─── Animated underline draw ─── */
+.draw-line-on-view::after {
+  animation: draw-line .8s ease-out forwards;
+}
+
+/* ─── Button ripple ─── */
+@keyframes ripple-out { 0% { transform:scale(0); opacity:.3 } 100% { transform:scale(2.5); opacity:0 } }
+.btn-ripple { position:relative; overflow:hidden; }
+.btn-ripple::after { content:''; position:absolute; inset:0; background:radial-gradient(circle,rgba(255,255,255,.25) 10%,transparent 70%); transform:scale(0); opacity:0; transition:none; }
+.btn-ripple:active::after { animation:ripple-out .5s ease-out; }
+
+::selection { background: rgba(6,199,85,.15); color: #111; }
+
+/* ─── Wave separator shapes ─── */
+.wave-top-white, .wave-bottom-white,
+.wave-top-green, .wave-bottom-green {
+  position: absolute;
+  left: 0; right: 0;
+  width: 100%;
+  height: 48px;
+  pointer-events: none;
+  z-index: 2;
+}
+@media (min-width: 768px) {
+  .wave-top-white, .wave-bottom-white,
+  .wave-top-green, .wave-bottom-green { height: 64px; }
+}
+.wave-top-white { top: -1px; }
+.wave-bottom-white { bottom: -1px; transform: rotate(180deg); }
+.wave-top-green { top: -1px; }
+.wave-bottom-green { bottom: -1px; transform: rotate(180deg); }
+
+/* ─── Section heading underline decoration ─── */
+.heading-line {
+  position: relative;
+  display: inline-block;
+}
+.heading-line::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 48px;
+  height: 3px;
+  border-radius: 999px;
+  background: #06C755;
+}
+
+/* ─── Green label tag ─── */
+.section-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  color: #06C755;
+  background: rgba(6,199,85,.08);
+  border-radius: 999px;
+  padding: 4px 14px;
+  letter-spacing: 0.04em;
+}
