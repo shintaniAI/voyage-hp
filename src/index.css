@@ -176,3 +176,74 @@ body {
   position: relative;
   border-radius: 10px 10px 10px 3px;
 }
+
+/* ─── スムーズスクロール連動アニメ ─── */
+@keyframes fade-in-up-sm { 0% { opacity:0; transform:translateY(14px) } 100% { opacity:1; transform:translateY(0) } }
+@keyframes fade-in-scale  { 0% { opacity:0; transform:scale(.92) } 100% { opacity:1; transform:scale(1) } }
+@keyframes subtle-float   { 0%,100% { transform:translateY(0) } 50% { transform:translateY(-8px) } }
+@keyframes rotate-subtle  { 0%,100% { transform:rotate(-1deg) } 50% { transform:rotate(1deg) } }
+@keyframes dash-border    { 0% { stroke-dashoffset:100% } 100% { stroke-dashoffset:0 } }
+@utility animate-subtle-float { animation: subtle-float 5s ease-in-out infinite; }
+@utility animate-rotate-subtle { animation: rotate-subtle 8s ease-in-out infinite; }
+
+/* ─── 斜め線パターン背景 ─── */
+.diagonal-pattern {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 14px,
+    rgba(6,199,85,.025) 14px,
+    rgba(6,199,85,.025) 15px
+  );
+}
+.diagonal-pattern-dark {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 14px,
+    rgba(255,255,255,.02) 14px,
+    rgba(255,255,255,.02) 15px
+  );
+}
+
+/* ─── クロスハッチパターン ─── */
+.crosshatch-pattern {
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 19px, rgba(6,199,85,.02) 19px, rgba(6,199,85,.02) 20px),
+    repeating-linear-gradient(90deg, transparent, transparent 19px, rgba(6,199,85,.02) 19px, rgba(6,199,85,.02) 20px);
+}
+
+/* ─── Circle ring pattern ─── */
+.circle-ring-pattern {
+  background-image: radial-gradient(circle, transparent 8px, rgba(6,199,85,.015) 8px, rgba(6,199,85,.015) 9px, transparent 9px);
+  background-size: 40px 40px;
+}
+
+/* ─── スマホ向け調整 ─── */
+@media (max-width: 767px) {
+  .heading-line::after {
+    width: 36px;
+    height: 2px;
+    bottom: -4px;
+  }
+}
+
+/* ─── ホバーカードのリフト ─── */
+.hover-lift {
+  transition: transform 0.35s cubic-bezier(.23,1,.32,1), box-shadow 0.35s ease;
+}
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0,0,0,.08);
+}
+
+/* ─── スクロール連動のフェードイン ─── */
+.scroll-fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.scroll-fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}

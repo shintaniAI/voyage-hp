@@ -39,7 +39,7 @@ const CLIENTS = [
 
 const PAINS = [
   { icon: Users, img: "/pain-recruit-cost.png", tag: "採用", audience: "経営者", keyword: "採用の歩留まりが悪く面接までつながらない", text: "求人媒体やエージェントに毎年多額の費用を払っているが、母集団の質が低く面接辞退も多い。", statNum: "50万円〜", statLabel: "1人あたり採用コスト" },
-  { icon: Phone, img: "/pain-dropout.png", tag: "採用", audience: "人事", keyword: "面談前に離脱される", text: "せっかく応募があっても、メールや電話が繋がらず、面談前に候補者がいなくなる。", statNum: "4%", statLabel: "面談到達率" },
+  { icon: Phone, img: "/pain-dropout.png", tag: "採用", audience: "人事", keyword: "面談前に離脱されてしまう", text: "せっかく応募があっても、メールや電話が繋がらず、面談前に候補者がいなくなる。", statNum: "4%", statLabel: "面談到達率" },
   { icon: TrendingUp, img: "/pain-no-repeat.png", tag: "集客", audience: "マーケティング担当", keyword: "リピート・成約に繋がらない", text: "SNS広告やWeb広告で新規獲得はできているが、一度きりで終わり再来店・再購入に至らない。", statNum: "80%", statLabel: "が初回で離脱" },
   { icon: Settings, img: "/pain-what-to-send.png", tag: "集客", audience: "広報・営業担当", keyword: "何を配信すればいいかわからない", text: "LINE公式アカウントを作ったものの、何を送れば効果的なのか分からず放置してしまう。", statNum: "60%", statLabel: "が運用を停止" },
 ];
@@ -101,13 +101,10 @@ const FAQ_ITEMS = [
   { q: "LINEのセキュリティ・プライバシーが不安です。", a: "LINE公式アカウントはLINE社が提供するビジネス向け正規サービスです。個人情報保護法に準拠した運用体制で万全を期しています。" },
 ];
 
-const LACADEMIA = [
-  { img: "/icon-line-setup.png", title: "公式LINEアカウント開設・運用", desc: "目的に合わせた最適なアカウント設計と日常運用をフルサポート。" },
-  { img: "/icon-lstep.png", title: "Lステップ構築・運用", desc: "高度なシナリオ自動化で、顧客体験と運用効率を同時に向上。" },
-  { img: "/icon-scenario.png", title: "企画・シナリオ設計", desc: "ユーザー心理に基づいた配信シナリオで離脱防止とCV最大化。" },
-  { img: "/icon-webdesign.png", title: "WEBデザイン", desc: "リッチメニューやLPなど、ブランドに合った高品質クリエイティブ。" },
-  { img: "/icon-copywriting.png", title: "コピーライティング・記事作成", desc: "行動を促す文章設計で開封率・クリック率を引き上げます。" },
-  { img: "/icon-analytics.png", title: "アカウント分析・改善", desc: "数値に基づく定期分析と、成果直結の改善施策を提案。" },
+const LACADEMIA_POINTS = [
+  { num: "01", title: "200社以上のノウハウを徹底解説したカリキュラム", sub: "圧倒的な網羅性", desc: "累計200社以上のLINE構築・運用支援実績から導き出された「成功の法則」を体系化。基礎から応用まで、成果を出すために必要な知識を余すことなく網羅しており、未経験からでもプロレベルのスキルが身につきます。" },
+  { num: "02", title: "実践型で現場の即戦力をやしなう", sub: "即実践・即成果", desc: "座学だけでは終わりません。実際のアカウント構築を通じて学ぶ実践型カリキュラムで、現場で即通用するスキルを習得。成果実証済みのテンプレートも活用しながら、手を動かして確実に力をつけていきます。" },
+  { num: "03", title: "コンサルの伴走支援", sub: "挫折させない環境", desc: "現役のプロ講師があなたの学習を徹底サポート。わからないことはチャットで質問し放題なだけでなく、オンラインによる個別コンサルティングや制作物の添削まで実施。独学ではつまずきやすいポイントも、二人三脚で確実に乗り越えられます。" },
 ];
 
 /* ═══════════════════════════════════════════════════════════
@@ -424,6 +421,15 @@ const LineBtn = ({ children, large }) => (
   </a>
 );
 
+/* ── 薄い英語背景テキスト ── */
+const BgText = ({ children, light, dark }) => (
+  <div className={`absolute inset-0 pointer-events-none select-none flex items-center justify-center overflow-hidden ${
+    dark ? "text-white/[0.06]" : light ? "text-black/[0.035]" : "text-black/[0.05]"
+  }`}>
+    <span className="font-en font-extrabold text-[100px] md:text-[180px] tracking-tighter whitespace-nowrap">{children}</span>
+  </div>
+);
+
 /* ── Reusable wave SVG ── */
 const WaveSvg = ({ fill = "#fff", flip = false }) => (
   <svg viewBox="0 0 1440 60" preserveAspectRatio="none" className={`w-full block ${flip ? "rotate-180" : ""}`} style={{ height: "clamp(32px, 4vw, 60px)" }}>
@@ -507,9 +513,9 @@ const Header = () => {
   return (
     <>
       <header className={`fixed top-0 w-full z-50 transition-all duration-500 bg-white/95 backdrop-blur-md ${scrolled ? "shadow-[0_1px_0_rgba(0,0,0,.06)]" : ""}`}>
-        <div className="max-w-[1200px] mx-auto px-5 md:px-8 h-16 flex items-center justify-between">
-          <a href="#" className="relative z-10">
-            <img src="/logo-horizontal.png" alt="VOYAGE" className="h-[28px] md:h-[32px] w-auto transition-all duration-500" />
+        <div className="max-w-[1200px] mx-auto px-4 md:px-8 h-14 md:h-16 flex items-center justify-between overflow-visible">
+          <a href="#" className="relative z-10 flex items-center">
+            <img src="/logo-horizontal.png" alt="VOYAGE" className="h-[40px] md:h-[56px] w-auto transition-all duration-500 object-contain" />
           </a>
           <nav className="hidden lg:flex items-center gap-7">
             {links.map(n => <a key={n.l} href={n.h} className="text-[12px] font-semibold tracking-wide transition-colors text-black/50 hover:text-black">{n.l}</a>)}
@@ -674,33 +680,33 @@ const Hero = () => {
       <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-transparent to-white/40" />
       <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-white via-transparent to-white" />
 
-      <div className="relative z-10 max-w-[1100px] mx-auto px-5 md:px-8 w-full pt-20 pb-8 md:pt-24 md:pb-10">
+      <div className="relative z-10 max-w-[1100px] mx-auto px-4 md:px-8 w-full pt-20 pb-8 md:pt-24 md:pb-10">
         <div className="max-w-[660px]">
           {/* 吹き出しタグ - 参考デザインに沿った訴求 */}
           <div className={show()} style={{ transitionDelay: "200ms" }}>
-            <div className="hero-bubble inline-block bg-[#06C755] text-white px-5 py-2.5 font-bold text-[13px] md:text-[14px] tracking-wide shadow-[0_2px_12px_rgba(6,199,85,.25)]">
+            <div className="hero-bubble inline-block bg-[#06C755] text-white px-4 py-2 md:px-5 md:py-2.5 font-bold text-[12px] md:text-[14px] tracking-wide shadow-[0_2px_12px_rgba(6,199,85,.25)]">
               LINE活用でお悩みの企業様へ
             </div>
           </div>
           {/* Main Copy */}
           <div className={show()} style={{ transitionDelay: "400ms" }}>
-            <h1 className="leading-[1.4] font-display mt-4 md:mt-5">
-              <span className="block text-[28px] md:text-[42px] lg:text-[52px] font-black text-[#333] tracking-tight">
-                LINE活用で、<br className="hidden md:block" />貴社の<span className="text-[#06C755]">事業成長</span>を<br className="hidden md:block" />加速させる。
+            <h1 className="leading-[1.35] md:leading-[1.4] font-display mt-4 md:mt-5">
+              <span className="block text-[24px] md:text-[42px] lg:text-[52px] font-black text-[#333] tracking-tight">
+                LINE活用で、<br />貴社の<span className="text-[#06C755]">事業成長</span>を<br className="hidden md:block" />加速させる。
               </span>
             </h1>
           </div>
           {/* Sub Copy */}
           <div className={show()} style={{ transitionDelay: "600ms" }}>
-            <p className="text-black/55 text-[14px] md:text-[16px] leading-[2] mt-6 max-w-[520px]">
+            <p className="text-black/55 text-[13px] md:text-[16px] leading-[1.9] md:leading-[2] mt-4 md:mt-6 max-w-[520px]">
               採用も、集客も。200アカウント以上のご支援から得た知見で、<br className="hidden md:block" />
               企業の「採用」と「売上」を最大化するLINEソリューション。
             </p>
           </div>
           <div className={show()} style={{ transitionDelay: "800ms" }}>
-            <div className="mt-7 flex items-center gap-5 flex-wrap">
+            <div className="mt-6 md:mt-7 flex items-center gap-4 md:gap-5 flex-wrap">
               <MagneticWrap className="inline-block" strength={0.15}><LineBtn large>ご相談・お問合せ（無料）</LineBtn></MagneticWrap>
-              <img src="/badge-200.png" alt="運用実績200社以上" className="h-[70px] md:h-[80px] w-auto drop-shadow-[0_2px_8px_rgba(0,0,0,.08)]" loading="lazy" />
+              <img src="/badge-200.png" alt="運用実績200社以上" className="h-[56px] md:h-[80px] w-auto drop-shadow-[0_2px_8px_rgba(0,0,0,.08)]" loading="lazy" />
             </div>
           </div>
         </div>
@@ -717,12 +723,12 @@ const ClientShowcase = () => {
     <div className="shrink-0 mx-2 group">
       <div className="relative rounded-2xl overflow-hidden shadow-[0_2px_16px_rgba(0,0,0,.06)] hover:shadow-[0_8px_32px_rgba(0,0,0,.10)] transition-all duration-500">
         {c.logo ? (
-          <div className="w-[360px] md:w-[440px] h-[200px] md:h-[250px] overflow-hidden bg-white flex items-center justify-center">
+          <div className="w-[280px] md:w-[440px] h-[160px] md:h-[250px] overflow-hidden bg-white flex items-center justify-center">
             <img src={c.logo} alt={c.name} className={`w-full h-full ${c.fill ? "object-cover" : "object-contain"} group-hover:scale-105 transition-transform duration-500`} style={c.scale ? { transform: `scale(${c.scale})` } : undefined} />
           </div>
         ) : (
-          <div className="w-[360px] md:w-[440px] h-[200px] md:h-[250px] flex items-center justify-center" style={{ background: `linear-gradient(135deg, ${c.accent}, ${c.accent}cc)` }}>
-            <span className="text-white font-black font-en text-[22px] md:text-[28px] tracking-wide text-center px-6">{c.name}</span>
+          <div className="w-[280px] md:w-[440px] h-[160px] md:h-[250px] flex items-center justify-center" style={{ background: `linear-gradient(135deg, ${c.accent}, ${c.accent}cc)` }}>
+            <span className="text-white font-black font-en text-[18px] md:text-[28px] tracking-wide text-center px-6">{c.name}</span>
           </div>
         )}
       </div>
@@ -760,15 +766,16 @@ const ClientShowcase = () => {
    PAIN POINTS — イメージをアイコンに、そこから吹き出し
    ═══════════════════════════════════════════════════════════ */
 const PainPoints = () => (
-  <section className="relative bg-[#e8f5e9] pt-8 pb-10 md:pt-10 md:pb-14 overflow-hidden">
+  <section className="relative bg-[#e8f5e9] pt-8 pb-4 md:pt-10 md:pb-6 overflow-hidden">
+    <div className="absolute inset-0 diagonal-pattern pointer-events-none" />
     <WaveSvg fill="#e8f5e9" />
     <FloatingParticles count={8} />
-    <div className="w-full max-w-[1280px] mx-auto px-10 md:px-16 lg:px-24 relative z-10">
+    <div className="w-full max-w-[1280px] mx-auto px-4 md:px-16 lg:px-24 relative z-10">
       <Reveal>
         <SectionHead>こんなお悩みはありませんか？</SectionHead>
       </Reveal>
 
-      <div className="mt-10 bg-[#e8f5e9] rounded-2xl px-10 py-10 md:px-16 md:py-12 lg:px-24 min-h-[320px] overflow-visible">
+      <div className="mt-8 md:mt-10 bg-[#e8f5e9] rounded-2xl px-4 py-8 md:px-16 md:py-12 lg:px-24 min-h-0 md:min-h-[320px] overflow-visible">
         {PAINS.map((pain, i) => (
           <TiltReveal key={i} delay={i * 80} direction={i % 2 === 0 ? "left" : "right"}>
             <div className="mb-14 md:mb-16 last:mb-0 flex items-start gap-4 md:gap-5 py-2">
@@ -843,14 +850,14 @@ const ChevronDivider = ({ headline, sub, body }) => {
       <div className="absolute bottom-[-15%] left-[-8%] w-[30%] aspect-square rounded-full bg-white/[.05] blur-[50px] pointer-events-none animate-drift-y" />
       <FloatingParticles count={5} color="rgba(255,255,255," />
 
-      <div className="max-w-[640px] mx-auto px-5 md:px-8 py-10 md:py-14 text-center relative z-10">
-        {sub && <p className="text-white/80 text-[20px] md:text-[26px] font-bold mb-4 transition-all duration-500" style={{ transform: `translateY(${(1 - progress) * 20}px)`, opacity: Math.min(progress * 2, 1) }}>{sub}</p>}
-        <h2 className="text-[30px] md:text-[44px] font-black text-white leading-[1.4] mb-5 transition-all duration-500" style={{ transform: `translateY(${(1 - progress) * 30}px) scale(${0.9 + progress * 0.1})`, opacity: Math.min(progress * 1.5, 1) }}>
+      <div className="max-w-[640px] mx-auto px-4 md:px-8 py-8 md:py-14 text-center relative z-10">
+        {sub && <p className="text-white/80 text-[16px] md:text-[26px] font-bold mb-3 md:mb-4 transition-all duration-500" style={{ transform: `translateY(${(1 - progress) * 20}px)`, opacity: Math.min(progress * 2, 1) }}>{sub}</p>}
+        <h2 className="text-[24px] md:text-[44px] font-black text-white leading-[1.35] md:leading-[1.4] mb-4 md:mb-5 transition-all duration-500" style={{ transform: `translateY(${(1 - progress) * 30}px) scale(${0.9 + progress * 0.1})`, opacity: Math.min(progress * 1.5, 1) }}>
           {headline}
         </h2>
         {body && (
           <Reveal delay={100}>
-            <p className="text-[13px] md:text-[15px] text-white/75 leading-[2] max-w-[500px] mx-auto mt-5">{body}</p>
+            <p className="text-[12px] md:text-[15px] text-white/75 leading-[1.9] md:leading-[2] max-w-[500px] mx-auto mt-4 md:mt-5">{body}</p>
           </Reveal>
         )}
       </div>
@@ -953,7 +960,7 @@ const MarketData = () => (
       <Reveal delay={80}>
         <div className="mt-14 md:mt-16 pt-10 md:pt-12 text-center">
           <p className="leading-[1.6]">
-            <span className="text-[24px] md:text-[28px] font-semibold text-black/90"><span className="text-[#06C755]">LINE</span>はずっと残り続ける<span className="text-[#06C755]">資産</span>です。</span>
+            <span className="text-[28px] md:text-[36px] font-semibold text-black/90"><span className="text-[#06C755]">LINE</span>はずっと残り続ける<span className="text-[#06C755]">資産</span>です。</span>
             <span className="block text-[15px] md:text-[16px] font-normal text-black/45 mt-2">広告やエージェントは止めれば流入がゼロに。だからこそ、LINEで蓄積する資産を。</span>
           </p>
         </div>
@@ -1013,10 +1020,10 @@ const BackstageGroup = () => {
           />
         </div>
         {/* テキストエリア — グラデーションの始まり（下側68%）に文字の始まりがくるよう上に寄せる */}
-        <div className="relative z-10 w-full max-w-[800px] mx-auto px-5 md:px-8 -mt-[18vw] pt-36 pb-20 md:-mt-[20vw] md:pt-44 md:pb-28">
+        <div className="relative z-10 w-full max-w-[800px] mx-auto px-4 md:px-8 -mt-[18vw] pt-44 pb-16 md:-mt-[20vw] md:pt-72 md:pb-28">
           <Reveal>
-            <h2 className="text-[22px] md:text-[28px] font-semibold text-black text-center mb-4 leading-[1.5]">
-              国内NO.1の影響力をもつBACKSTAGE Group。<br />その採用・マーケティングを担当。
+            <h2 className="text-[20px] md:text-[36px] font-semibold text-black text-center mb-3 md:mb-4 leading-[1.5]">
+              国内NO.1の影響力をもつ<br className="md:hidden" />BACKSTAGE Group。<br />その採用・マーケティングを担当。
             </h2>
           </Reveal>
           <div className="flex justify-center gap-6 md:gap-10 mb-4">
@@ -1038,60 +1045,48 @@ const LEADERS = [
   { img: "/ceo-mizoguchi-v3.png", name: "溝口 勇児", title: "監修 / 共同代表", desc: "BACKSTAGE Inc. 代表取締役。FiNC創業者。累計180億円超の資金調達を実現。" },
 ];
 
-const Leadership = () => {
-  const [active, setActive] = useState(0);
-  return (
-    <section className="relative bg-[#e8f5e9] pt-16 pb-14 md:pt-24 md:pb-20 overflow-hidden">
-      <div className="relative z-10 max-w-[960px] mx-auto px-5 md:px-8">
-        <Reveal>
-          <h2 className="text-[18px] md:text-[22px] font-semibold text-black/70 tracking-[0.08em] mb-8 md:mb-10">
-            経営陣
-          </h2>
-        </Reveal>
-        {/* 切り替え式カルーセル */}
-        <div className="relative min-h-[320px] md:min-h-[280px]">
+const Leadership = () => (
+  <section className="relative bg-[#e8f5e9] pt-16 pb-14 md:pt-24 md:pb-20 overflow-hidden">
+    {/* 上部の区切り線 */}
+    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[80%] max-w-[600px] h-px bg-black/10" />
+    <div className="relative z-10 max-w-[960px] mx-auto px-4 md:px-8">
+      <Reveal>
+        <h2 className="text-[16px] md:text-[22px] font-semibold text-black/70 tracking-[0.08em] mb-6 md:mb-10">
+          経営陣
+        </h2>
+      </Reveal>
+      <div
+        className="overflow-x-auto overflow-y-hidden -mx-4 md:-mx-8 px-4 md:px-8 pb-2 scrollbar-hide snap-x snap-mandatory"
+        style={{ scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch" }}
+      >
+        <div className="flex gap-4 md:gap-8 min-w-max">
           {LEADERS.map((l, i) => (
             <div
               key={i}
-              className={`transition-opacity duration-500 ${i === active ? "opacity-100 relative" : "opacity-0 absolute inset-x-0 top-0 pointer-events-none"}`}
+              className="flex flex-col md:flex-row gap-4 md:gap-8 shrink-0 w-[80vw] md:w-[420px] snap-start snap-always"
             >
-              <div className={`flex flex-col md:flex-row gap-6 md:gap-8 ${i === active ? "" : "invisible"}`}>
-                <div className="w-full md:w-[200px] shrink-0 aspect-square md:aspect-auto md:h-[240px] overflow-hidden">
-                  <img src={l.img} alt={l.name} className="w-full h-full object-cover" style={{ objectPosition: "center 15%" }} loading="lazy" />
-                </div>
-                <div className="flex-1 min-w-0 flex flex-col justify-center">
-                  <h3 className="text-[22px] md:text-[26px] font-bold text-black/90 mb-1 tracking-tight">{l.name}</h3>
-                  <p className="text-[12px] text-black/40 font-medium tracking-widest uppercase mb-4">{l.title}</p>
-                  <p className="text-[14px] md:text-[15px] text-black/60 leading-[1.85] tracking-[0.02em]">{l.desc}</p>
-                </div>
+              <div className="w-full md:w-[200px] shrink-0 aspect-[4/3] md:aspect-auto md:h-[240px] overflow-hidden rounded-lg">
+                <img src={l.img} alt={l.name} className="w-full h-full object-cover" style={{ objectPosition: "center 15%" }} loading="lazy" />
+              </div>
+              <div className="flex-1 min-w-0 flex flex-col justify-center">
+                <h3 className="text-[20px] md:text-[26px] font-bold text-black/90 mb-1 tracking-tight">{l.name}</h3>
+                <p className="text-[11px] md:text-[12px] text-black/40 font-medium tracking-widest uppercase mb-3 md:mb-4">{l.title}</p>
+                <p className="text-[13px] md:text-[15px] text-black/60 leading-[1.8] md:leading-[1.85] tracking-[0.02em]">{l.desc}</p>
               </div>
             </div>
           ))}
-          {/* ドット＋矢印で切り替え */}
-          <div className="flex items-center justify-center gap-4 mt-6 md:mt-8">
-            <button onClick={() => setActive(a => (a - 1 + LEADERS.length) % LEADERS.length)} className="p-2 rounded-full text-black/50 hover:text-black/80 hover:bg-black/5 transition-colors" aria-label="前へ">
-              <ChevronDown size={20} className="rotate-90" />
-            </button>
-            <div className="flex gap-2">
-              {LEADERS.map((_, i) => (
-                <button key={i} onClick={() => setActive(i)} className={`w-2.5 h-2.5 rounded-full transition-all ${i === active ? "bg-black/60 scale-110" : "bg-black/25 hover:bg-black/40"}`} aria-label={`${i + 1}人目`} />
-              ))}
-            </div>
-            <button onClick={() => setActive(a => (a + 1) % LEADERS.length)} className="p-2 rounded-full text-black/50 hover:text-black/80 hover:bg-black/5 transition-colors" aria-label="次へ">
-              <ChevronDown size={20} className="-rotate-90" />
-            </button>
-          </div>
         </div>
       </div>
-    </section>
-  );
-};
+    </div>
+  </section>
+);
 
 /* ═══════════════════════════════════════════════════════════
    SERVICE — white bg
    ═══════════════════════════════════════════════════════════ */
 const Service = () => (
   <section id="service" className="py-14 md:py-20 bg-white relative overflow-hidden">
+    <div className="absolute inset-0 circle-ring-pattern pointer-events-none" />
     <div className="absolute top-[10%] left-[-5%] w-[25%] aspect-square rounded-full bg-[#06C755]/[.03] pointer-events-none animate-drift-y" />
     <div className="absolute bottom-[5%] right-[-6%] w-[20%] aspect-square rounded-full bg-[#06C755]/[.04] pointer-events-none animate-drift-x" />
     <div className="absolute top-[30%] right-[4%] w-2.5 h-2.5 rounded-full bg-[#06C755]/20 pointer-events-none animate-float-b" />
@@ -1099,7 +1094,7 @@ const Service = () => (
     <div className="absolute bottom-[25%] right-[10%] w-2 h-2 rounded-full bg-[#06C755]/25 pointer-events-none animate-drift-y" />
     <div className="absolute inset-0 dot-pattern-white pointer-events-none" />
     <FloatingParticles count={6} />
-    <div className="max-w-[1000px] mx-auto px-5 md:px-8 relative z-10">
+    <div className="max-w-[1000px] mx-auto px-4 md:px-8 relative z-10">
       <Reveal>
         <SectionHead>
           サービス内容
@@ -1107,58 +1102,56 @@ const Service = () => (
       </Reveal>
 
           <Reveal>
-        <div className="mb-12 md:mb-14">
-          <div className="text-center mb-6">
+        <div className="mb-12 md:mb-16">
+          <div className="text-center mb-5 md:mb-6">
             <p className="text-[11px] text-black/30 font-bold mb-2">採用DXソリューション</p>
-            <PopIn><img src="/logo-riquel.png" alt="リクエル" className="h-[100px] md:h-[160px] w-auto mx-auto" loading="lazy" /></PopIn>
-              </div>
-          <p className="text-[14px] text-black/45 leading-[1.9] max-w-[600px] mx-auto text-center mb-8">
+            <PopIn><img src="/logo-riquel.png" alt="リクエル" className="h-[80px] md:h-[160px] w-auto mx-auto" loading="lazy" /></PopIn>
+          </div>
+          <p className="text-[13px] md:text-[14px] text-black/45 leading-[1.8] md:leading-[1.9] max-w-[600px] mx-auto text-center mb-6 md:mb-8">
             月間9,700万人が利用するLINEを基盤に、エントリーから内定承諾までを自動化・最適化。
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-0">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 md:gap-x-8 gap-y-8 md:gap-y-0">
             {[
-              { ja: "即時性", desc: "開封率80%の到達力で候補者との接点を維持し選考離脱を防止。" },
-              { ja: "自動化", desc: "日程調整・Q&A対応をシステム化し採用担当者の工数を大幅圧縮。" },
-              { ja: "可視化", desc: "スコアリングで候補者の志望度を定量化。データに基づく意思決定。" },
+              { num: "01", ja: "歩留まりの改善", sub: "連絡不通・離脱の防止", desc: "メールや電話では連絡がつかない応募者とも、日常的に使うLINEならスムーズに連絡が可能。到達率・開封率の高いLINEを使うことで、説明会や面接の無断キャンセルを防ぎ、選考への参加率を最大化します。" },
+              { num: "02", ja: "データの可視化", sub: "ミスマッチのない採用へ", desc: "「誰が・いつ・どの配信を見たか」といった応募者の行動データを可視化・分析。興味度合いに応じたセグメント配信を行うことで、自社にマッチする熱量の高い人材を効率的に見極め、戦略的な採用活動を実現します。" },
+              { num: "03", ja: "採用工数の削減と自動化", sub: "リソース不足の解消", desc: "会社説明会の日程調整やリマインド配信、面接の案内など、これまで手動で行っていたルーチン業務をLINE上で自動化。採用担当者の負担を大幅に減らし、本来注力すべき「応募者との対話」や「選考」に時間を割ける体制を構築します。" },
             ].map((f, i) => (
               <Reveal key={i} delay={i * 100}>
-                <div className="pl-5 md:pl-6 border-l-2 border-[#06C755]/30 h-full">
-                  <span className="text-[11px] font-bold text-[#06C755]/50 font-en tracking-wider">{String(i + 1).padStart(2, "0")}</span>
-                  <h4 className="text-[17px] md:text-[18px] font-black text-black mt-1 mb-2">{f.ja}</h4>
+                <div className="pl-5 md:pl-6 pr-2 border-l-2 border-[#06C755]/30 min-h-0">
+                  <span className="text-[11px] font-bold text-[#06C755]/50 font-en tracking-wider">{f.num}</span>
+                  <h4 className="text-[16px] md:text-[17px] font-black text-black mt-1 mb-0.5">{f.ja}</h4>
+                  <p className="text-[11px] text-[#06C755]/70 font-semibold mb-2">（{f.sub}）</p>
                   <p className="text-[13px] text-black/45 leading-[1.85]">{f.desc}</p>
                 </div>
               </Reveal>
             ))}
           </div>
-              </div>
-            </Reveal>
+        </div>
+      </Reveal>
 
       <Reveal>
         <div>
-          <div className="text-center mb-6">
+          <div className="text-center mb-5 md:mb-6">
             <p className="text-[11px] text-black/30 font-bold mb-2">実践型LINEマーケティングスクール</p>
-            <img src="/logo-lacademia.png" alt="L-ACADEMIA" className="h-[60px] md:h-[90px] w-auto mx-auto object-contain" loading="lazy" />
-                  </div>
-          <p className="text-[14px] text-black/45 leading-[1.9] max-w-[600px] mx-auto text-center mb-8">
+            <img src="/logo-lacademia.png" alt="L-ACADEMIA" className="h-[50px] md:h-[90px] w-auto mx-auto object-contain" loading="lazy" />
+          </div>
+          <p className="text-[13px] md:text-[14px] text-black/45 leading-[1.8] md:leading-[1.9] max-w-[600px] mx-auto text-center mb-6 md:mb-8">
             200アカウント以上で培った実証済みの勝ちパターンを実践型カリキュラム化。
           </p>
-          <div className="bg-[#f7faf7] rounded-2xl px-6 md:px-8 py-6 md:py-7">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-5">
-              {LACADEMIA.map((s, i) => (
-                <Reveal key={i} delay={i * 40}>
-                  <div className="flex items-start gap-3">
-                    <div className="w-2 h-2 rounded-full bg-[#06C755] mt-[7px] shrink-0" />
-                    <div>
-                      <h4 className="text-[14px] font-bold text-black mb-0.5">{s.title}</h4>
-                      <p className="text-[12px] text-black/40 leading-[1.7]">{s.desc}</p>
-                    </div>
-                  </div>
-                </Reveal>
-              ))}
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 md:gap-x-8 gap-y-8 md:gap-y-0">
+            {LACADEMIA_POINTS.map((p, i) => (
+              <Reveal key={i} delay={i * 100}>
+                <div className="pl-5 md:pl-6 pr-2 border-l-2 border-[#06C755]/30 min-h-0">
+                  <span className="text-[11px] font-bold text-[#06C755]/50 font-en tracking-wider">{p.num}</span>
+                  <h4 className="text-[16px] md:text-[17px] font-black text-black mt-1 mb-0.5">{p.title}</h4>
+                  {p.sub && <p className="text-[11px] text-[#06C755]/70 font-semibold mb-2">（{p.sub}）</p>}
+                  <p className="text-[13px] text-black/45 leading-[1.85]">{p.desc}</p>
+                </div>
+              </Reveal>
+            ))}
           </div>
-              </div>
-            </Reveal>
+        </div>
+      </Reveal>
           </div>
   </section>
 );
@@ -1181,16 +1174,16 @@ const CTABanner = () => (
       <div className="absolute inset-0 dot-pattern-dark pointer-events-none opacity-15" />
       <div className="absolute top-[25%] left-[6%] w-2 h-2 rounded-full bg-white/20 pointer-events-none animate-float-a" />
       <div className="absolute bottom-[30%] right-[10%] w-2.5 h-2.5 rounded-full bg-white/15 pointer-events-none animate-float-b" />
-        <div className="max-w-[600px] mx-auto px-5 md:px-8 py-10 md:py-14 text-center relative z-10">
+        <div className="max-w-[600px] mx-auto px-4 md:px-8 py-8 md:py-14 text-center relative z-10">
         <Reveal>
-          <p className="text-white text-[20px] md:text-[26px] font-black leading-[1.7] mb-5 font-display tracking-tight">
+          <p className="text-white text-[18px] md:text-[26px] font-black leading-[1.6] md:leading-[1.7] mb-5 font-display tracking-tight">
             LINEマーケティングの<br />戦略設計からアカウント構築<br />運用・分析まで
           </p>
           <MagneticWrap className="inline-block" strength={0.2}>
-            <a href="#contact" className="btn-ripple group inline-flex items-center gap-3 bg-white text-[#06C755] font-black rounded-full shadow-[0_4px_24px_rgba(255,255,255,.25)] hover:shadow-[0_8px_40px_rgba(255,255,255,.35)] hover:-translate-y-1 active:translate-y-0 transition-all duration-300 px-10 py-4.5 text-[16px] border-2 border-white/80" style={{ animation: "glow-pulse 3s ease-in-out infinite" }}>
-              <img src="/line-icon.png" alt="" className="w-6 h-6 rounded-md" />
+            <a href="#contact" className="btn-ripple group inline-flex items-center gap-2.5 md:gap-3 bg-white text-[#06C755] font-black rounded-full shadow-[0_4px_24px_rgba(255,255,255,.25)] hover:shadow-[0_8px_40px_rgba(255,255,255,.35)] hover:-translate-y-1 active:translate-y-0 transition-all duration-300 px-7 py-3.5 md:px-10 md:py-4.5 text-[14px] md:text-[16px] border-2 border-white/80" style={{ animation: "glow-pulse 3s ease-in-out infinite" }}>
+              <img src="/line-icon.png" alt="" className="w-5 h-5 md:w-6 md:h-6 rounded-md" />
               ご相談・お問合せ（無料）
-              <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform duration-300" />
+              <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform duration-300" />
             </a>
           </MagneticWrap>
           </Reveal>
@@ -1212,33 +1205,33 @@ const Achievements = () => (
     <WaveSvg fill="#e8f5e9" />
     <div className="max-w-[1100px] mx-auto px-4 md:px-6 relative z-10">
         <Reveal>
-        <h2 className="text-[16px] md:text-[18px] font-semibold text-black/70 tracking-[0.06em] mb-6 text-center">
+        <h2 className="text-[24px] md:text-[30px] font-bold text-black/70 tracking-[0.06em] mb-8 text-center">
           成果事例
         </h2>
         </Reveal>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5 mb-8 md:items-stretch">
         {CASES.map((c, i) => (
           <Reveal key={i} delay={i * 60}>
-            <article className="h-full flex flex-col bg-white/90 rounded-lg overflow-hidden border border-black/[0.04] hover:border-[#06C755]/20 transition-colors">
-              <div className="aspect-[16/10] shrink-0 overflow-hidden bg-black/[0.02] flex items-center justify-center">
-                <img src={c.img} alt={c.name} className="w-full h-full object-contain" loading="lazy" />
+            <article className="h-full flex flex-col bg-white rounded-xl overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,.06)] hover:shadow-[0_4px_20px_rgba(6,199,85,.12)] hover:-translate-y-1 transition-all duration-300">
+              <div className="aspect-[16/10] shrink-0 overflow-hidden bg-white flex items-center justify-center">
+                <img src={c.img} alt={c.name} className="w-full h-full object-contain p-2" loading="lazy" />
               </div>
-              <div className="flex-1 flex flex-col p-4 md:p-5 min-h-0">
+              <div className="flex-1 flex flex-col p-4 md:p-6 min-h-0 bg-gradient-to-b from-[#f8fdf9] to-white">
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="text-[9px] font-semibold text-[#06C755]/80 tracking-wider tabular-nums">{c.num}</span>
-                  <span className="text-[10px] text-black/40">{c.cat}</span>
+                  <span className="text-[10px] font-bold text-white bg-[#06C755] rounded px-1.5 py-0.5 tabular-nums">{c.num}</span>
+                  <span className="text-[11px] text-black/50 font-medium">{c.cat}</span>
                 </div>
-                <h3 className="text-[14px] md:text-[15px] font-semibold text-black/90 mb-2">{c.name}</h3>
-                <div className="mb-2">
-                  <span className="text-[9px] text-black/35 block mb-0.5">{c.metric}</span>
+                <h3 className="text-[15px] md:text-[16px] font-bold text-black/90 mb-3">{c.name}</h3>
+                <div className="mb-3 bg-[#f0faf3] rounded-lg px-3 py-2.5">
+                  <span className="text-[10px] text-black/40 block mb-1">{c.metric}</span>
                   <div className="flex items-baseline gap-1.5">
-                    {c.before !== "—" && <span className="text-[12px] text-black/25 line-through tabular-nums">{c.before}</span>}
-                    {c.before !== "—" && <ArrowRight size={10} className="text-[#06C755]/60 shrink-0" />}
-                    <span className="font-en text-[20px] md:text-[22px] font-bold text-[#06C755] tabular-nums leading-none">{c.after}</span>
+                    {c.before !== "—" && <span className="text-[13px] text-black/30 line-through tabular-nums">{c.before}</span>}
+                    {c.before !== "—" && <ArrowRight size={12} className="text-[#06C755]/70 shrink-0" />}
+                    <span className="font-en text-[22px] md:text-[24px] font-bold text-[#06C755] tabular-nums leading-none">{c.after}</span>
                   </div>
                 </div>
-                {c.challenge && <p className="text-[11px] text-black/50 leading-[1.5]">{c.challenge}</p>}
-                <p className="text-[11px] text-black/45 leading-[1.6] mt-1">{c.desc}</p>
+                {c.challenge && <p className="text-[11px] text-black/50 leading-[1.6] mb-1">{c.challenge}</p>}
+                <p className="text-[11px] text-black/45 leading-[1.7]">{c.desc}</p>
               </div>
             </article>
           </Reveal>
@@ -1246,13 +1239,15 @@ const Achievements = () => (
       </div>
 
       <ScrollLine />
-      <p className="text-[11px] font-medium text-black/40 mb-4 text-center tracking-wide">お客様の声</p>
+      <p className="text-[18px] md:text-[22px] font-bold text-black/70 mb-6 text-center tracking-wide">お客様の声</p>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
         {VOICES.map((v, i) => (
           <PopIn key={i} delay={i * 80}>
             <div className="h-full">
               <div className="flex items-center gap-3 mb-3">
-                <img src={v.avatar} alt="" className="w-9 h-9 md:w-10 md:h-10 rounded-full shrink-0 object-contain ring-1 ring-black/[0.06]" />
+                <div className="w-9 h-9 md:w-10 md:h-10 rounded-full shrink-0 ring-1 ring-black/[0.06] overflow-hidden">
+                  <img src={v.avatar} alt="" className="w-[120%] h-[120%] object-cover -ml-[10%] -mt-[10%]" />
+                </div>
                 <p className="text-[12px] font-semibold text-black/60 leading-tight">{v.role}</p>
               </div>
               <div className="relative bg-white rounded-lg rounded-tl-md p-4 shadow-[0_1px_8px_rgba(0,0,0,.04)] ml-4 border border-black/[0.03]">
@@ -1277,24 +1272,26 @@ const Achievements = () => (
    ═══════════════════════════════════════════════════════════ */
 const Strength = () => (
   <section className="py-14 md:py-20 bg-white relative overflow-hidden">
+    <BgText light>STRENGTH</BgText>
+    <div className="absolute inset-0 crosshatch-pattern pointer-events-none" />
     <div className="absolute bottom-[-10%] right-[-8%] w-[30%] aspect-square rounded-full bg-[#06C755]/[.03] pointer-events-none animate-pulse-glow" />
     <div className="absolute top-[-5%] left-[-6%] w-[25%] aspect-square rounded-full bg-[#06C755]/[.04] pointer-events-none animate-drift-y" />
     <div className="absolute top-[25%] right-[3%] w-3 h-3 rounded-full bg-[#06C755]/15 pointer-events-none animate-float-a" />
     <div className="absolute bottom-[35%] left-[5%] w-2 h-2 rounded-full bg-[#06C755]/20 pointer-events-none animate-float-b" />
     <div className="absolute inset-0 dot-pattern-white pointer-events-none" />
-    <div className="max-w-[1000px] mx-auto px-5 md:px-8 relative z-10">
+    <div className="max-w-[1000px] mx-auto px-4 md:px-8 relative z-10">
         <Reveal>
         <SectionHead>VOYAGEが選ばれる理由</SectionHead>
         </Reveal>
-      <div className="space-y-10 md:space-y-14">
+      <div className="space-y-8 md:space-y-14">
         {STRENGTHS.map((s, i) => (
           <HorizontalReveal key={i} delay={i * 120} direction={i % 2 === 0 ? "left" : "right"}>
-            <div className={`flex flex-col ${i % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"} items-center gap-6 md:gap-10 group`}>
+            <div className={`flex flex-col ${i % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"} items-center gap-4 md:gap-10 group`}>
               <div className="w-full md:w-[45%] shrink-0 transition-transform duration-500 group-hover:scale-[1.03]">
                 <img
                   src={s.img}
                   alt={s.ja}
-                  className="w-full h-[200px] md:h-[240px] object-contain"
+                  className="w-full h-[160px] md:h-[240px] object-contain"
                   loading="lazy"
                   style={{
                     mask: "radial-gradient(ellipse at center, black 40%, transparent 72%)",
@@ -1303,11 +1300,11 @@ const Strength = () => (
                 />
               </div>
               <div className={`flex-1 ${i % 2 === 0 ? "md:text-left" : "md:text-right"}`}>
-                <span className="block text-[11px] font-bold text-[#06C755] tracking-widest font-en mb-3">STRENGTH {String(i + 1).padStart(2, "0")}</span>
+                <span className="block text-[10px] md:text-[11px] font-bold text-[#06C755] tracking-widest font-en mb-2 md:mb-3">STRENGTH {String(i + 1).padStart(2, "0")}</span>
                 <GrowUnderline>
-                  <h3 className="text-[20px] md:text-[24px] font-black text-black mb-3">{s.ja}</h3>
+                  <h3 className="text-[18px] md:text-[24px] font-black text-black mb-2 md:mb-3">{s.ja}</h3>
                 </GrowUnderline>
-                <p className="text-[14px] text-black/45 leading-[2]">{s.desc}</p>
+                <p className="text-[13px] md:text-[14px] text-black/45 leading-[1.85] md:leading-[2]">{s.desc}</p>
                 </div>
               </div>
           </HorizontalReveal>
@@ -1322,11 +1319,12 @@ const Strength = () => (
    ═══════════════════════════════════════════════════════════ */
 const Flow = () => (
   <section className="relative bg-[#e8f5e9] pt-14 pb-16 md:pt-16 md:pb-20 overflow-hidden">
+    <div className="absolute inset-0 diagonal-pattern pointer-events-none" />
     <WaveSvg fill="#e8f5e9" />
     <div className="absolute top-[10%] right-[-4%] w-[120px] md:w-[200px] aspect-square rounded-full bg-[#06C755]/[.06] blur-[40px] pointer-events-none animate-drift-y" />
     <div className="absolute bottom-[15%] left-[-6%] w-[100px] md:w-[160px] aspect-square rounded-full bg-[#06C755]/[.05] blur-[30px] pointer-events-none animate-drift-x" />
     <div className="absolute inset-0 dot-pattern pointer-events-none opacity-40" />
-    <div className="max-w-[1100px] mx-auto px-5 md:px-8 relative z-10">
+    <div className="max-w-[1100px] mx-auto px-4 md:px-8 relative z-10">
       <Reveal>
         <SectionHead>運用開始までの流れ</SectionHead>
       </Reveal>
@@ -1351,20 +1349,20 @@ const FlowTimeline = ({ steps }) => {
       </div>
       {steps.map((s, i) => (
         <HorizontalReveal key={i} delay={i * 120} direction={i % 2 === 0 ? "left" : "right"}>
-          <div className={`flex items-start gap-8 md:gap-12 relative pb-10 ${i % 2 === 0 ? "md:flex-row md:text-left" : "md:flex-row-reverse md:text-right"}`}>
+          <div className={`flex items-start gap-4 md:gap-12 relative pb-8 md:pb-10 ${i % 2 === 0 ? "md:flex-row md:text-left" : "md:flex-row-reverse md:text-right"}`}>
             <PopIn delay={i * 150}>
-              <div className="w-12 h-12 bg-[#06C755] text-white rounded-full flex items-center justify-center font-black text-[16px] shrink-0 relative z-20 shadow-[0_4px_16px_rgba(6,199,85,.3)] md:absolute md:left-1/2 md:-translate-x-1/2">
+              <div className="w-10 h-10 md:w-12 md:h-12 bg-[#06C755] text-white rounded-full flex items-center justify-center font-black text-[14px] md:text-[16px] shrink-0 relative z-20 shadow-[0_4px_16px_rgba(6,199,85,.3)] md:absolute md:left-1/2 md:-translate-x-1/2">
                 {String(i + 1).padStart(2, "0")}
               </div>
             </PopIn>
-            <div className={`flex-1 bg-white rounded-2xl p-5 md:p-6 shadow-[0_1px_2px_rgba(0,0,0,.08)] relative hover:shadow-[0_4px_16px_rgba(0,0,0,.06)] transition-shadow duration-500 overflow-visible ${i % 2 === 0 ? "md:mr-[calc(50%+88px)] md:ml-0 rounded-tl-md" : "md:ml-[calc(50%+88px)] md:mr-0 rounded-tr-md"}`}>
+            <div className={`flex-1 bg-white rounded-2xl p-4 md:p-6 shadow-[0_1px_2px_rgba(0,0,0,.08)] relative hover:shadow-[0_4px_16px_rgba(0,0,0,.06)] transition-shadow duration-500 overflow-visible ${i % 2 === 0 ? "md:mr-[calc(50%+88px)] md:ml-0 rounded-tl-md" : "md:ml-[calc(50%+88px)] md:mr-0 rounded-tr-md"}`}>
               {/* 尾 — PainPointsと同じ形（番号方向に三角）左側の吹き出し */}
-              {i % 2 === 0 && <div className="absolute left-0 top-5 w-0 h-0 border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent border-r-[12px] border-r-white" style={{ transform: "translateX(-1px)" }} />}
+              {i % 2 === 0 && <div className="absolute left-0 top-4 md:top-5 w-0 h-0 border-t-[8px] md:border-t-[10px] border-t-transparent border-b-[8px] md:border-b-[10px] border-b-transparent border-r-[10px] md:border-r-[12px] border-r-white" style={{ transform: "translateX(-1px)" }} />}
               {/* 右側の吹き出し（デスクトップのみ右向き尾） */}
-              {i % 2 === 1 && <><div className="absolute left-0 top-5 w-0 h-0 border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent border-r-[12px] border-r-white md:hidden" style={{ transform: "translateX(-1px)" }} /><div className="absolute right-0 top-5 w-0 h-0 border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent border-l-[12px] border-l-white hidden md:block" style={{ transform: "translateX(1px)" }} /></>}
-              <p className="text-[11px] font-bold text-[#06C755] mb-1">{s.sub}</p>
-              <h3 className="text-[17px] font-bold text-black mb-2">{s.ja}</h3>
-              <p className="text-[13px] text-black/50 leading-[1.85]">{s.desc}</p>
+              {i % 2 === 1 && <><div className="absolute left-0 top-4 md:top-5 w-0 h-0 border-t-[8px] md:border-t-[10px] border-t-transparent border-b-[8px] md:border-b-[10px] border-b-transparent border-r-[10px] md:border-r-[12px] border-r-white md:hidden" style={{ transform: "translateX(-1px)" }} /><div className="absolute right-0 top-5 w-0 h-0 border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent border-l-[12px] border-l-white hidden md:block" style={{ transform: "translateX(1px)" }} /></>}
+              <p className="text-[10px] md:text-[11px] font-bold text-[#06C755] mb-1">{s.sub}</p>
+              <h3 className="text-[15px] md:text-[17px] font-bold text-black mb-1.5 md:mb-2">{s.ja}</h3>
+              <p className="text-[12px] md:text-[13px] text-black/50 leading-[1.75] md:leading-[1.85]">{s.desc}</p>
             </div>
           </div>
         </HorizontalReveal>
@@ -1380,23 +1378,24 @@ const FAQ = () => {
   const [openIdx, setOpenIdx] = useState(null);
   return (
     <section className="py-14 md:py-20 bg-white relative overflow-hidden">
+      <div className="absolute inset-0 diagonal-pattern pointer-events-none opacity-60" />
       <div className="absolute top-[10%] right-[-5%] w-[20%] aspect-square rounded-full bg-[#06C755]/[.03] pointer-events-none animate-drift-y" />
       <div className="absolute bottom-[15%] left-[-4%] w-[15%] aspect-square rounded-full bg-[#06C755]/[.04] pointer-events-none animate-drift-x" />
       <div className="absolute inset-0 dot-pattern-white pointer-events-none" />
-      <div className="max-w-[700px] mx-auto px-5 md:px-8 relative z-10">
+      <div className="max-w-[700px] mx-auto px-4 md:px-8 relative z-10">
         <Reveal>
           <SectionHead>よくあるご質問</SectionHead>
         </Reveal>
-        <div className="space-y-3">
+        <div className="space-y-2.5 md:space-y-3">
           {FAQ_ITEMS.map((item, i) => (
             <HorizontalReveal key={i} delay={i * 80} direction={i % 2 === 0 ? "left" : "right"}>
               <div className={`bg-[#f7faf7] rounded-xl overflow-hidden transition-all duration-300 ${openIdx === i ? "shadow-[0_4px_20px_rgba(6,199,85,.08)]" : ""}`}>
-                <button onClick={() => setOpenIdx(openIdx === i ? null : i)} className="w-full flex items-center justify-between gap-4 px-5 py-4 text-left group">
-                  <span className="text-[14px] font-bold text-black group-hover:text-[#06C755] transition-colors">{item.q}</span>
+                <button onClick={() => setOpenIdx(openIdx === i ? null : i)} className="w-full flex items-center justify-between gap-3 md:gap-4 px-4 py-3.5 md:px-5 md:py-4 text-left group">
+                  <span className="text-[13px] md:text-[14px] font-bold text-black group-hover:text-[#06C755] transition-colors">{item.q}</span>
                   <ChevronDown className={`text-black/20 shrink-0 transition-transform duration-300 ${openIdx === i ? "rotate-180 !text-[#06C755]" : ""}`} size={16} />
               </button>
-              <div className={`overflow-hidden transition-all duration-500 ease-out ${openIdx === i ? "max-h-40 pb-4" : "max-h-0"}`}>
-                  <p className="text-[13px] text-black/50 leading-[1.9] px-5">{item.a}</p>
+              <div className={`overflow-hidden transition-all duration-500 ease-out ${openIdx === i ? "max-h-40 pb-3 md:pb-4" : "max-h-0"}`}>
+                  <p className="text-[12px] md:text-[13px] text-black/50 leading-[1.8] md:leading-[1.9] px-4 md:px-5">{item.a}</p>
               </div>
             </div>
             </HorizontalReveal>
@@ -1412,6 +1411,7 @@ const FAQ = () => {
    ═══════════════════════════════════════════════════════════ */
 const Contact = () => (
     <section id="contact" className="relative bg-[#06C755] pt-14 pb-14 md:pt-16 md:pb-16 overflow-hidden">
+      <div className="absolute inset-0 diagonal-pattern-dark pointer-events-none" />
       <WaveSvg fill="#06C755" />
       <div className="absolute inset-0 pointer-events-none opacity-10">
         <div className="absolute bottom-0 left-0 w-[50%] h-[50%] bg-white rounded-full blur-[80px] translate-y-1/3 -translate-x-1/4" />
@@ -1421,30 +1421,30 @@ const Contact = () => (
       <div className="absolute top-[20%] left-[8%] w-2 h-2 rounded-full bg-white/20 pointer-events-none animate-float-a" />
       <div className="absolute bottom-[25%] right-[12%] w-3 h-3 rounded-full bg-white/15 pointer-events-none animate-float-b" />
       <div className="absolute top-[50%] right-[5%] w-2 h-2 rounded-full bg-white/10 pointer-events-none animate-drift-y" />
-      <div className="max-w-[720px] mx-auto px-5 md:px-8 relative z-10">
+      <div className="max-w-[720px] mx-auto px-4 md:px-8 relative z-10">
         <Reveal>
-          <h2 className="text-[24px] md:text-[30px] font-black text-white mb-3 leading-[1.5] text-center">
+          <h2 className="text-[22px] md:text-[30px] font-black text-white mb-3 leading-[1.5] text-center">
             <TextRevealChar text="まずはお気軽に" className="inline" />
             <br className="md:hidden" />
             <TextRevealChar text="ご相談ください" className="inline" delay={400} />
           </h2>
-          <p className="text-white/60 text-[14px] leading-[1.9] mb-8 max-w-[440px] mx-auto text-center">
+          <p className="text-white/60 text-[13px] md:text-[14px] leading-[1.8] md:leading-[1.9] mb-6 md:mb-8 max-w-[440px] mx-auto text-center">
             お客様の現状をお聞きし、最適なご提案をさせていただきます。
           </p>
         </Reveal>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-stretch">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 items-stretch">
           {/* LINEお問合せ */}
           <Reveal delay={100} className="h-full">
-            <div className="h-full bg-white rounded-2xl p-7 md:p-8 shadow-[0_8px_40px_rgba(0,0,0,.10)] flex flex-col items-center text-center justify-between min-h-0">
-              <div className="w-14 h-14 bg-[#06C755] rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <img src="/line-icon.png" alt="LINE" className="w-9 h-9 rounded-lg" />
+            <div className="h-full bg-white rounded-2xl p-5 md:p-8 shadow-[0_8px_40px_rgba(0,0,0,.10)] flex flex-col items-center text-center justify-between min-h-0">
+              <div className="w-12 h-12 md:w-14 md:h-14 bg-[#06C755] rounded-2xl flex items-center justify-center mx-auto mb-3 md:mb-4">
+                <img src="/line-icon.png" alt="LINE" className="w-7 h-7 md:w-9 md:h-9 rounded-lg" />
               </div>
-              <h3 className="text-[18px] md:text-[20px] font-black text-black mb-2">LINEでお問合せ</h3>
-              <p className="text-black/40 text-[13px] leading-[1.8] mb-6 max-w-[280px]">
+              <h3 className="text-[16px] md:text-[20px] font-black text-black mb-2">LINEでお問合せ</h3>
+              <p className="text-black/40 text-[12px] md:text-[13px] leading-[1.7] md:leading-[1.8] mb-4 md:mb-6 max-w-[280px]">
                 友だち追加後、無料相談のご予約が可能です。お気軽にご連絡ください。
               </p>
               <MagneticWrap className="inline-block" strength={0.25}>
-                <a href="#" className="inline-flex items-center gap-2 bg-[#06C755] text-white px-8 py-3.5 rounded-full text-[14px] font-bold shadow-[0_4px_20px_rgba(6,199,85,.25)] hover:shadow-[0_8px_32px_rgba(6,199,85,.35)] hover:-translate-y-0.5 transition-all" style={{ animation: "glow-pulse 3s ease-in-out infinite" }}>
+                <a href="#" className="inline-flex items-center gap-2 bg-[#06C755] text-white px-6 py-3 md:px-8 md:py-3.5 rounded-full text-[13px] md:text-[14px] font-bold shadow-[0_4px_20px_rgba(6,199,85,.25)] hover:shadow-[0_8px_32px_rgba(6,199,85,.35)] hover:-translate-y-0.5 transition-all" style={{ animation: "glow-pulse 3s ease-in-out infinite" }}>
                   <MessageCircle size={16} /> お友だち追加する
                 </a>
               </MagneticWrap>
@@ -1453,12 +1453,12 @@ const Contact = () => (
           {/* メールフォーム — 専用ページへ */}
           <Reveal delay={150} className="h-full">
             <Link to="/contact" className="block h-full group">
-              <div className="h-full bg-white rounded-2xl p-7 md:p-8 shadow-[0_8px_40px_rgba(0,0,0,.10)] group-hover:shadow-[0_12px_48px_rgba(0,0,0,.14)] transition-all flex flex-col items-center justify-between text-center min-h-[280px]">
-                <div className="w-14 h-14 bg-black/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <Mail size={28} className="text-black/60" />
+              <div className="h-full bg-white rounded-2xl p-5 md:p-8 shadow-[0_8px_40px_rgba(0,0,0,.10)] group-hover:shadow-[0_12px_48px_rgba(0,0,0,.14)] transition-all flex flex-col items-center justify-between text-center min-h-[240px] md:min-h-[280px]">
+                <div className="w-12 h-12 md:w-14 md:h-14 bg-black/10 rounded-2xl flex items-center justify-center mx-auto mb-3 md:mb-4">
+                  <Mail size={24} className="text-black/60 md:hidden" /><Mail size={28} className="text-black/60 hidden md:block" />
                 </div>
-                <h3 className="text-[18px] md:text-[20px] font-black text-black mb-2">メールでお問合せ</h3>
-                <p className="text-black/40 text-[13px] leading-[1.8] mb-6 max-w-[260px]">フォームページでご入力いただけます。</p>
+                <h3 className="text-[16px] md:text-[20px] font-black text-black mb-2">メールでお問合せ</h3>
+                <p className="text-black/40 text-[12px] md:text-[13px] leading-[1.7] md:leading-[1.8] mb-4 md:mb-6 max-w-[260px]">フォームページでご入力いただけます。</p>
                 <span className="inline-flex items-center gap-2 bg-[#06C755] text-white px-6 py-3 rounded-full text-[14px] font-bold shadow-[0_4px_20px_rgba(6,199,85,.25)] group-hover:shadow-[0_8px_32px_rgba(6,199,85,.35)] group-hover:-translate-y-0.5 transition-all">
                   <Send size={16} /> フォームへ進む
                 </span>
