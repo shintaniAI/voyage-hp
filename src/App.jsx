@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import {
   MessageCircle, Menu, X, ChevronDown, ArrowRight,
   Users, TrendingUp, Zap, BarChart3, Target,
   Clock, CheckCircle2, Phone, Settings, Sparkles,
-  BookOpen, Palette, PenTool, LineChart,
+  BookOpen, Palette, PenTool, LineChart, Mail, Send,
 } from 'lucide-react';
 
 /* ═══════════════════════════════════════════════════════════
@@ -24,7 +25,7 @@ const HERO_CHATS = [
 ];
 
 const CLIENTS = [
-  { name: "REAL VALUE", cat: "ビジネス番組", desc: "LINE完結で視聴者エンゲージメントとイベント集客を最大化", accent: "#E63946", logo: "/client-realvalue.png", scale: 1.15 },
+  { name: "BUZZ SHIP", cat: "デジタルマーケティング", desc: "既存リストの最適化により広告費を抑制しながら月商を大幅増", accent: "#1a1a1a", logo: "/client-buzzship.png", scale: 0.75 },
   { name: "BREAKING DOWN", cat: "格闘エンタメ", desc: "大規模イベント集客とファンエンゲージメントをLINE基盤で構築", accent: "#1D3557", logo: "/client-breakingdown.png", scale: 1.15 },
   { name: "LAST CALL", cat: "エンタメ", desc: "大型キャスティング×LINE集客で話題性と動員数を最大化", accent: "#1a1a1a", logo: "/client-lastcall.png", scale: 1.08 },
   { name: "HERO'ZZ", cat: "スクール", desc: "プッシュ配信施策により短期間で5,000万円超の売上を創出", accent: "#E76F51", logo: "/client-herozz-banner.png", scale: 1.08 },
@@ -33,15 +34,14 @@ const CLIENTS = [
   { name: "REAL VALUE ACADEMIA", cat: "教育", desc: "オンラインスクールの集客・受講生管理をLINEで一元化", accent: "#1a1a1a", logo: "/client-realvalue-academia.png", scale: 1.5 },
   { name: "WEIN CAREER", cat: "人材", desc: "中卒・高卒採用に特化した人材紹介をLINEで効率化", accent: "#E53935", logo: "/client-weincareer.png" },
   { name: "Expert Partners", cat: "人材", desc: "オウンドメディア×LINEで面談予約率を4%→25%に改善", accent: "#2A3E6C", logo: "/client-expertpartners.png" },
-  { name: "BUZZ SHIP", cat: "デジタルマーケティング", desc: "既存リストの最適化により広告費を抑制しながら月商を大幅増", accent: "#1a1a1a", logo: "/client-buzzship.png", scale: 0.75 },
+  { name: "REAL VALUE", cat: "ビジネス番組", desc: "LINE完結で視聴者エンゲージメントとイベント集客を最大化", accent: "#E63946", logo: "/client-realvalue.png", scale: 1.15 },
 ];
 
 const PAINS = [
-  { icon: Users, img: "/pain-recruit-cost.png", tag: "採用", keyword: "応募の質が上がらない", text: "求人媒体やエージェントに毎年多額の費用を払っているが、母集団の質が低く面接辞退も多い。", statNum: "50万円〜", statLabel: "1人あたり採用コスト" },
-  { icon: Target, img: "/pain-turnover.png", tag: "採用", keyword: "従業員が定着しない", text: "企業文化への理解が浅いまま採用に至り、入社後のミスマッチで早期離職が繰り返される。", statNum: "30%", statLabel: "半年以内の離職率" },
-  { icon: Phone, img: "/pain-dropout.png", tag: "採用", keyword: "面談前に離脱される", text: "せっかく応募があっても、メールや電話が繋がらず、面談前に候補者がいなくなる。", statNum: "4%", statLabel: "面談到達率" },
-  { icon: TrendingUp, img: "/pain-no-repeat.png", tag: "集客", keyword: "リピート・成約に繋がらない", text: "SNS広告やWeb広告で新規獲得はできているが、一度きりで終わり再来店・再購入に至らない。", statNum: "80%", statLabel: "が初回で離脱" },
-  { icon: Settings, img: "/pain-what-to-send.png", tag: "集客", keyword: "何を配信すればいいかわからない", text: "LINE公式アカウントを作ったものの、何を送れば効果的なのか分からず放置してしまう。", statNum: "60%", statLabel: "が運用を停止" },
+  { icon: Users, img: "/pain-recruit-cost.png", tag: "採用", audience: "経営者", keyword: "採用の歩留まりが悪く面接までつながらない", text: "求人媒体やエージェントに毎年多額の費用を払っているが、母集団の質が低く面接辞退も多い。", statNum: "50万円〜", statLabel: "1人あたり採用コスト" },
+  { icon: Phone, img: "/pain-dropout.png", tag: "採用", audience: "人事", keyword: "面談前に離脱される", text: "せっかく応募があっても、メールや電話が繋がらず、面談前に候補者がいなくなる。", statNum: "4%", statLabel: "面談到達率" },
+  { icon: TrendingUp, img: "/pain-no-repeat.png", tag: "集客", audience: "マーケティング担当", keyword: "リピート・成約に繋がらない", text: "SNS広告やWeb広告で新規獲得はできているが、一度きりで終わり再来店・再購入に至らない。", statNum: "80%", statLabel: "が初回で離脱" },
+  { icon: Settings, img: "/pain-what-to-send.png", tag: "集客", audience: "広報・営業担当", keyword: "何を配信すればいいかわからない", text: "LINE公式アカウントを作ったものの、何を送れば効果的なのか分からず放置してしまう。", statNum: "60%", statLabel: "が運用を停止" },
 ];
 
 const LINE_STATS = [
@@ -52,9 +52,9 @@ const LINE_STATS = [
 ];
 
 const CASES = [
-  { num: "01", name: "Expert Partners様", cat: "人材マッチング事業", challenge: "リード獲得後の歩留まり低下", metric: "面談予約率", before: "4%", after: "25%", desc: "オウンドメディアとLINEの連携により機会損失を最小化。", img: "/case-ep.png" },
-  { num: "02", name: "HERO'ZZ様", cat: "スクール事業", challenge: "受講生への効率的なアプローチ", metric: "売上", before: "—", after: "5,000万円超", desc: "プッシュ配信施策により短期間で爆発的な成果を実現。", img: "/case-herozz.png" },
-  { num: "03", name: "マーケ博士様", cat: "SNSマーケティング事業", challenge: "フォロワー獲得後のマネタイズ導線が弱い", metric: "LINE経由売上", before: "—", after: "月商1,000万円超", desc: "LINE診断コンテンツとセグメント配信で見込み客を自動育成。個別最適化されたオファーにより高い成約率を実現。", img: "/case-marke.png" },
+  { num: "01", name: "Expert Partners様", cat: "人材マッチング事業", challenge: "リード獲得後の歩留まり低下", metric: "面談予約率", before: "4%", after: "25%", desc: "オウンドメディアとLINEの連携により機会損失を軽減。", img: "/case-ep.png" },
+  { num: "02", name: "HERO'ZZ様", cat: "スクール事業", challenge: "受講生への効率的なアプローチ", metric: "売上", before: "—", after: "5,000万円超", desc: "プッシュ配信施策による成果。", img: "/case-herozz.png" },
+  { num: "03", name: "マーケ博士様", cat: "SNSマーケティング事業", challenge: "フォロワー獲得後のマネタイズ導線が弱い", metric: "LINE経由売上", before: "—", after: "月商1,000万円超", desc: "LINE診断とセグメント配信で見込み客を育成。", img: "/case-marke.png" },
 ];
 
 const VOICES = [
@@ -87,18 +87,11 @@ const STRENGTHS = [
   { img: "/strength-data.png", ja: "データドリブン運用", desc: "すべての施策を数値で検証。200社超のデータベースから最適パターンを提案しPDCAを高速回転。" },
 ];
 
-const FLOW_RECRUIT = [
-  { ja: "ヒアリング・戦略設計", sub: "第一歩はここから！", desc: "採用課題をヒアリングし、ターゲット人材に響くLINEシナリオの全体設計を行います。" },
-  { ja: "アカウント構築", sub: "プロの手でゼロから構築！", desc: "応募者向けのリッチメニュー・自動応答・日程調整シナリオを約1〜2ヶ月で構築。" },
-  { ja: "テスト運用", sub: "本番前の最終確認！", desc: "実環境でシナリオの動作を確認。応募者体験を最適化し、万全の状態に仕上げます。" },
-  { ja: "本番運用開始", sub: "いよいよスタート！", desc: "専任チームが選考歩留まりや面談予約率をモニタリング。定例会で改善提案を行います。" },
-];
-
-const FLOW_SALES = [
-  { ja: "ヒアリング・戦略設計", sub: "第一歩はここから！", desc: "集客課題をヒアリングし、友だち追加〜CV(購買・予約)までのシナリオを設計します。" },
-  { ja: "アカウント構築", sub: "プロの手でゼロから構築！", desc: "セグメント配信・ステップ配信・リッチメニューを約1〜2ヶ月で構築。" },
-  { ja: "テスト運用", sub: "本番前の最終確認！", desc: "実環境でメッセージの反応率を検証。開封率・クリック率を最適化します。" },
-  { ja: "本番運用開始", sub: "いよいよスタート！", desc: "専任チームがLTV・リピート率をモニタリング。配信施策の改善を継続的に行います。" },
+const FLOW_STEPS = [
+  { ja: "ヒアリング・戦略設計", sub: "第一歩はここから！", desc: "採用・集客のお悩みをヒアリングし、目的に応じたLINEシナリオの全体設計を行います。" },
+  { ja: "アカウント構築", sub: "プロの手でゼロから構築！", desc: "リッチメニュー・自動応答・セグメント配信などを約1〜2ヶ月で構築します。" },
+  { ja: "テスト運用", sub: "本番前の最終確認！", desc: "実環境でシナリオの動作と反応率を検証。ユーザー体験を最適化し、万全の状態に仕上げます。" },
+  { ja: "本番運用開始", sub: "いよいよスタート！", desc: "専任チームが成果指標をモニタリング。定例会で改善提案を継続的に行います。" },
 ];
 
 const FAQ_ITEMS = [
@@ -248,7 +241,7 @@ const FloatingParticles = ({ count = 6, color = "rgba(6,199,85,", className = ""
 );
 
 /* ── Scroll-driven number with dramatic scale ── */
-const BigNumber = ({ end, suffix, label, prefix = "" }) => {
+const BigNumber = ({ end, suffix, label, prefix = "", compact }) => {
   const [ref, val] = useCountUp(end, 1800);
   const elRef = useRef(null);
   const [vis2, setVis2] = useState(false);
@@ -265,13 +258,13 @@ const BigNumber = ({ end, suffix, label, prefix = "" }) => {
           opacity: vis2 ? 1 : 0,
           filter: vis2 ? "blur(0)" : "blur(4px)",
         }}>
-          <span className="font-en text-[46px] md:text-[64px] font-black text-[#06C755] leading-none tabular-nums">
+          <span className={`font-en font-black text-[#06C755] leading-none tabular-nums ${compact ? "text-[32px] md:text-[40px]" : "text-[46px] md:text-[64px]"}`}>
             {prefix}{val}
           </span>
-          <span className="text-[16px] md:text-[20px] font-bold text-black/40 ml-1">{suffix}</span>
+          <span className={`font-bold text-black/40 ml-1 ${compact ? "text-[14px] md:text-[16px]" : "text-[16px] md:text-[20px]"}`}>{suffix}</span>
         </div>
       </div>
-      <p className="text-[11px] text-black/35 font-semibold mt-2">{label}</p>
+      <p className={`text-black/35 font-semibold mt-2 ${compact ? "text-[10px]" : "text-[11px]"}`}>{label}</p>
     </div>
   );
 };
@@ -328,7 +321,7 @@ const GrowUnderline = ({ children, color = "#06C755", className = "" }) => {
   return (
     <span ref={ref} className={`relative inline-block ${className}`}>
       <span className="relative z-10">{children}</span>
-      <span className="absolute left-0 bottom-[2px] w-full h-[8px] md:h-[12px] rounded-sm -z-0 origin-left transition-transform duration-700 ease-out"
+      <span className="absolute left-0 bottom-[2px] w-full h-[4px] md:h-[6px] rounded-sm -z-0 origin-left transition-transform duration-700 ease-out"
         style={{ background: `${color}33`, transform: vis ? "scaleX(1)" : "scaleX(0)" }} />
     </span>
   );
@@ -425,7 +418,7 @@ const AnimatedNumber = ({ value, suffix, label }) => {
 };
 
 const LineBtn = ({ children, large }) => (
-  <a href="#contact" className={`btn-ripple inline-flex items-center gap-2.5 bg-[#06C755] text-white font-bold rounded-full shadow-[0_4px_20px_rgba(6,199,85,.25)] hover:shadow-[0_8px_32px_rgba(6,199,85,.35)] hover:-translate-y-0.5 transition-all duration-300 ${large ? "px-9 py-4 text-[15px]" : "px-6 py-3 text-[13px]"}`}>
+  <a href="#contact" className={`btn-ripple inline-flex items-center gap-2.5 bg-[#06C755] text-white font-bold rounded-full shadow-[0_4px_20px_rgba(6,199,85,.25)] hover:shadow-[0_8px_32px_rgba(6,199,85,.35)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 ${large ? "px-9 py-4 text-[15px]" : "px-6 py-3 text-[13px]"}`}>
     <img src="/line-icon.png" alt="" className="w-5 h-5 rounded-md" />
     {children || "LINEで相談する"}
   </a>
@@ -442,7 +435,7 @@ const WaveSvg = ({ fill = "#fff", flip = false }) => (
 const SectionHead = ({ tag, children, sub, white }) => (
   <div className="text-center mb-8 md:mb-10">
     {tag && <span className={`section-tag mb-3 inline-block ${white ? "!bg-white/15 !text-white" : ""}`}>{tag}</span>}
-    <h2 className={`text-[24px] md:text-[34px] font-black leading-[1.45] heading-line ${white ? "text-white after:bg-white" : "text-black"}`}>{children}</h2>
+    <h2 className={`font-display text-[24px] md:text-[34px] font-black leading-[1.45] heading-line tracking-tight ${white ? "text-white after:bg-white" : "text-black"}`}>{children}</h2>
     {sub && <p className={`text-[14px] leading-[1.9] mt-5 max-w-[500px] mx-auto ${white ? "text-white/60" : "text-black/40"}`}>{sub}</p>}
           </div>
 );
@@ -513,10 +506,10 @@ const Header = () => {
 
   return (
     <>
-      <header className={`fixed top-0 w-full z-50 transition-all duration-500 bg-white ${scrolled ? "shadow-[0_1px_0_rgba(0,0,0,.06)]" : ""}`}>
+      <header className={`fixed top-0 w-full z-50 transition-all duration-500 bg-white/95 backdrop-blur-md ${scrolled ? "shadow-[0_1px_0_rgba(0,0,0,.06)]" : ""}`}>
         <div className="max-w-[1200px] mx-auto px-5 md:px-8 h-16 flex items-center justify-between">
           <a href="#" className="relative z-10">
-            <img src="/logo-vertical.png" alt="VOYAGE" className="h-[32px] md:h-[38px] w-auto transition-all duration-500" />
+            <img src="/logo-horizontal.png" alt="VOYAGE" className="h-[28px] md:h-[32px] w-auto transition-all duration-500" />
           </a>
           <nav className="hidden lg:flex items-center gap-7">
             {links.map(n => <a key={n.l} href={n.h} className="text-[12px] font-semibold tracking-wide transition-colors text-black/50 hover:text-black">{n.l}</a>)}
@@ -629,9 +622,6 @@ const Hero = () => {
   const [loaded, setLoaded] = useState(false);
   useEffect(() => { setTimeout(() => setLoaded(true), 200); }, []);
   const show = () => `transition-all duration-[1000ms] ease-out ${loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`;
-  const [r1, c1] = useCountUp(200);
-  const [r2, c2] = useCountUp(25);
-  const [r3, c3] = useCountUp(5000);
   const heroRef = useRef(null);
   const bgY = useParallax(heroRef, 0.2);
 
@@ -665,6 +655,7 @@ const Hero = () => {
 
   return (
     <section ref={heroRef} className="relative flex flex-col justify-center overflow-hidden bg-white">
+      <div className="grain-overlay z-[1]" aria-hidden="true" />
       <div className="absolute top-[-20%] right-[-10%] w-[50%] aspect-square rounded-full bg-[#06C755]/[.04] blur-[120px] pointer-events-none" />
       <div className="absolute bottom-[-15%] left-[-8%] w-[35%] aspect-square rounded-full bg-[#06C755]/[.03] blur-[100px] pointer-events-none" />
 
@@ -677,35 +668,32 @@ const Hero = () => {
           })}
         </div>
       </div>
-      {/* Fade overlays for text readability */}
-      <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-white via-white/80 to-white/0" style={{ width: "55%" }} />
+      {/* Fade overlays - 参考: ぼかし背景＋淡いグレーグラデーション */}
+      <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-[#f5f6f5]/70 via-transparent to-transparent" style={{ height: "50%" }} />
+      <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-white via-white/85 to-white/20" style={{ width: "55%" }} />
       <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-transparent to-white/40" />
       <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-white via-transparent to-white" />
 
       <div className="relative z-10 max-w-[1100px] mx-auto px-5 md:px-8 w-full pt-20 pb-8 md:pt-24 md:pb-10">
         <div className="max-w-[660px]">
+          {/* 吹き出しタグ - 参考デザインに沿った訴求 */}
+          <div className={show()} style={{ transitionDelay: "200ms" }}>
+            <div className="hero-bubble inline-block bg-[#06C755] text-white px-5 py-2.5 font-bold text-[13px] md:text-[14px] tracking-wide shadow-[0_2px_12px_rgba(6,199,85,.25)]">
+              LINE活用でお悩みの企業様へ
+            </div>
+          </div>
+          {/* Main Copy */}
           <div className={show()} style={{ transitionDelay: "400ms" }}>
-            <h1 className="leading-[1.25]">
-              <span className="block text-[42px] md:text-[64px] lg:text-[76px] font-black text-[#06C755] mb-1">
-                <TextRevealChar text="LINE" delay={500} />
-              </span>
-              <span className="block text-[14px] md:text-[16px] font-bold text-black/40 tracking-[.06em] mb-3">
-                <TextRevealChar text="マーケティングの戦略設計から運用・分析まで" delay={800} />
-              </span>
-              <span className="block text-[24px] md:text-[36px] lg:text-[44px] font-black text-black/85 mt-1">
-                <TextRevealChar text="すべて代行します。" delay={1200} />
+            <h1 className="leading-[1.4] font-display mt-4 md:mt-5">
+              <span className="block text-[28px] md:text-[42px] lg:text-[52px] font-black text-[#333] tracking-tight">
+                LINE活用で、<br className="hidden md:block" />貴社の<span className="text-[#06C755]">事業成長</span>を<br className="hidden md:block" />加速させる。
               </span>
             </h1>
           </div>
+          {/* Sub Copy */}
           <div className={show()} style={{ transitionDelay: "600ms" }}>
-            <div className="mt-6 flex items-center gap-3 md:gap-4">
-              <span className="text-[36px] md:text-[50px] lg:text-[58px] font-black text-[#06C755]">採用</span>
-              <span className="text-[20px] md:text-[28px] font-bold text-black/20">も、</span>
-              <span className="text-[36px] md:text-[50px] lg:text-[58px] font-black text-[#06C755]">集客</span>
-              <span className="text-[20px] md:text-[28px] font-bold text-black/20">も。</span>
-            </div>
-            <p className="text-black/45 text-[13px] md:text-[15px] leading-[2] mt-4 max-w-[520px]">
-              200アカウント以上のご支援から得た知見で、<br className="hidden md:block" />
+            <p className="text-black/55 text-[14px] md:text-[16px] leading-[2] mt-6 max-w-[520px]">
+              採用も、集客も。200アカウント以上のご支援から得た知見で、<br className="hidden md:block" />
               企業の「採用」と「売上」を最大化するLINEソリューション。
             </p>
           </div>
@@ -716,24 +704,7 @@ const Hero = () => {
             </div>
           </div>
         </div>
-        <div className={show()} style={{ transitionDelay: "1000ms" }}>
-          <div className="mt-8 md:mt-10 flex flex-wrap gap-8 md:gap-14 border-t border-black/[.06] pt-6">
-            {[
-              { ref: r1, val: c1, suf: "社超", label: "導入実績" },
-              { ref: r2, val: c2, suf: "%", label: "採用面談率" },
-              { ref: r3, val: c3, suf: "万円超", label: "売上貢献" },
-            ].map((s, i) => (
-              <div key={i} ref={s.ref} className="overflow-hidden">
-                <div className="font-en text-[34px] md:text-[46px] font-extrabold text-black leading-none tabular-nums" style={{ animation: s.val > 0 ? `count-in .6s ease-out ${i * 0.15}s both` : "none" }}>
-                  {s.val}<span className="text-[14px] text-[#06C755] ml-1 font-bold">{s.suf}</span>
-                </div>
-                <p className="text-[10px] text-black/35 font-semibold mt-2">{s.label}</p>
-            </div>
-          ))}
-        </div>
       </div>
-      </div>
-
     </section>
   );
 };
@@ -786,53 +757,48 @@ const ClientShowcase = () => {
 };
 
 /* ═══════════════════════════════════════════════════════════
-   PAIN POINTS — checklist format
+   PAIN POINTS — イメージをアイコンに、そこから吹き出し
    ═══════════════════════════════════════════════════════════ */
 const PainPoints = () => (
-  <section className="relative bg-[#e8f5e9] pt-8 pb-16 md:pt-10 md:pb-20 overflow-hidden">
+  <section className="relative bg-[#e8f5e9] pt-8 pb-10 md:pt-10 md:pb-14 overflow-hidden">
     <WaveSvg fill="#e8f5e9" />
     <FloatingParticles count={8} />
-    <div className="max-w-[1100px] mx-auto px-5 md:px-8 relative z-10">
+    <div className="w-full max-w-[1280px] mx-auto px-10 md:px-16 lg:px-24 relative z-10">
       <Reveal>
         <SectionHead>こんなお悩みはありませんか？</SectionHead>
       </Reveal>
 
-      <div className="space-y-4 md:space-y-5 mt-6">
+      <div className="mt-10 bg-[#e8f5e9] rounded-2xl px-10 py-10 md:px-16 md:py-12 lg:px-24 min-h-[320px] overflow-visible">
         {PAINS.map((pain, i) => (
-          <TiltReveal key={i} delay={i * 100} direction={i % 2 === 0 ? "left" : "right"}>
-            <div className="relative overflow-hidden rounded-2xl py-7 md:py-9 px-6 md:px-10 group hover:shadow-[0_8px_32px_rgba(0,0,0,.06)] transition-shadow duration-500" style={{ minHeight: "140px" }}>
-              {/* Background illustration — full width, seamlessly blended */}
-              <div
-                className="absolute pointer-events-none select-none group-hover:scale-105 transition-transform duration-700"
-                style={{
-                  [i % 2 === 0 ? "right" : "left"]: "-20px",
-                  top: "-20%",
-                  bottom: "-20%",
-                  width: "clamp(300px, 45%, 500px)",
-                  mask: `radial-gradient(ellipse 60% 60% at 50% 50%, black 20%, rgba(0,0,0,.4) 50%, transparent 70%)`,
-                  WebkitMask: `radial-gradient(ellipse 60% 60% at 50% 50%, black 20%, rgba(0,0,0,.4) 50%, transparent 70%)`,
-                }}
-              >
-                <img
-                  src={pain.img}
-                  alt=""
-                  className="w-full h-full object-contain"
-                  style={{ opacity: 1, mixBlendMode: "multiply", filter: "contrast(1.1) saturate(0.4) sepia(0.1) hue-rotate(80deg)" }}
-                />
+          <TiltReveal key={i} delay={i * 80} direction={i % 2 === 0 ? "left" : "right"}>
+            <div className="mb-14 md:mb-16 last:mb-0 flex items-start gap-4 md:gap-5 py-2">
+              {/* アイコン */}
+              <div className="w-12 h-12 md:w-14 md:h-14 rounded-full overflow-hidden bg-[#9dd4e8] shrink-0 flex items-center justify-center border-2 border-white shadow-[0_2px_8px_rgba(0,0,0,.1)]">
+                <img src={pain.img} alt="" className="w-full h-full object-cover" />
               </div>
-              {/* Text content */}
-              <div className="relative z-10 max-w-[550px]" style={{ marginLeft: i % 2 === 0 ? 0 : "auto", marginRight: i % 2 === 0 ? "auto" : 0 }}>
-                <div className="flex items-center gap-3 mb-2">
-                  <pain.icon size={20} className="text-[#06C755] shrink-0 group-hover:animate-[wiggle_.5s_ease-in-out]" />
-                  <h3 className="text-[22px] md:text-[28px] font-black text-black leading-[1.35]">{pain.keyword}</h3>
-                </div>
-                <p className="text-[13px] md:text-[15px] text-black/50 leading-[1.9] max-w-[480px]">{pain.text}</p>
-                {pain.statNum && (
-                  <div className="mt-3 flex items-baseline gap-1.5">
-                    <span className="font-en text-[26px] md:text-[32px] font-black text-[#c62828] leading-none">{pain.statNum}</span>
-                    <span className="text-[11px] md:text-[12px] font-bold text-black/35">{pain.statLabel}</span>
+              {/* 吹き出し — 尾は背後、本体が前面 */}
+              <div className="flex-1 min-w-0 overflow-visible">
+                <p className="text-[11px] md:text-[12px] text-black/50 mb-1 ml-1">{pain.audience}</p>
+                <div className="relative bg-white rounded-2xl rounded-tl-md py-4 px-5 md:py-5 md:px-6 shadow-[0_1px_2px_rgba(0,0,0,.08)] overflow-visible">
+                  {/* 尾 — 吹き出し本体より後ろに */}
+                  <div
+                    className="absolute -z-10"
+                    style={{
+                      left: "-10px",
+                      top: "12px",
+                      width: 0,
+                      height: 0,
+                      borderTop: "10px solid transparent",
+                      borderBottom: "10px solid transparent",
+                      borderRight: "12px solid white",
+                      filter: "drop-shadow(1px 0 2px rgba(0,0,0,.08))",
+                    }}
+                  />
+                  <div className="relative z-10">
+                    <p className="text-[16px] md:text-[18px] font-bold text-black leading-[1.4] mb-2">{pain.keyword}</p>
+                    <p className="text-[13px] md:text-[15px] text-black/85 leading-[1.8]">{pain.text}</p>
                   </div>
-                )}
+                </div>
               </div>
             </div>
           </TiltReveal>
@@ -908,14 +874,14 @@ const MARKET_ITEMS = [
   { num: "∞", unit: "", pct: 100, tag: "ASSET", title: "友だち＝自社資産", desc: "Web広告と異なり、集めた友だちは「自社資産」として残り続け、採用・販促コストを中長期的に下げ続けます。", compare: null },
 ];
 
-const BarChart = ({ items }) => {
+const BarChart = ({ items, compact }) => {
   const [ref, vis] = useInView(0.3);
   return (
-    <div ref={ref} className="space-y-3 mt-4 w-full">
+    <div ref={ref} className={`w-full ${compact ? "space-y-2 mt-2" : "space-y-3 mt-4"}`}>
       {items.map((item, i) => (
-        <div key={i} className="flex items-center gap-3">
-          <span className="text-[12px] font-bold text-black/50 w-[60px] text-right shrink-0">{item.label}</span>
-          <div className="flex-1 h-[22px] bg-black/[.06] rounded-full overflow-hidden relative">
+        <div key={i} className={`flex items-center ${compact ? "gap-2" : "gap-3"}`}>
+          <span className={`font-bold text-black/50 shrink-0 text-right ${compact ? "text-[10px] w-[48px]" : "text-[12px] w-[60px]"}`}>{item.label}</span>
+          <div className={`flex-1 bg-black/[.06] rounded-full overflow-hidden relative ${compact ? "h-[14px]" : "h-[22px]"}`}>
             <div
               className="h-full rounded-full transition-all ease-out relative overflow-hidden"
               style={{
@@ -931,7 +897,7 @@ const BarChart = ({ items }) => {
                 animation: "shimmer-line 1.8s ease-out 1.2s both",
               }} />}
             </div>
-            <span className={`absolute right-3 top-1/2 -translate-y-1/2 text-[11px] font-bold transition-opacity duration-500 ${i === 0 ? "text-white" : "text-black/40"}`} style={{ opacity: vis ? 1 : 0, transitionDelay: `${i * 250 + 800}ms` }}>{item.value}%</span>
+            <span className={`absolute top-1/2 -translate-y-1/2 font-bold transition-opacity duration-500 ${compact ? "text-[9px] right-2" : "text-[11px] right-3"} ${i === 0 ? "text-white" : "text-black/40"}`} style={{ opacity: vis ? 1 : 0, transitionDelay: `${i * 250 + 800}ms` }}>{item.value}%</span>
           </div>
         </div>
       ))}
@@ -951,72 +917,45 @@ const CircleRing = ({ pct }) => {
   );
 };
 
+const MARKET_STATS = [
+  { num: "9,700", unit: "万人", tag: "REACH", label: "日本人口の8割に届く", desc: "YouTube・Xを超える国内最大のプラットフォーム", compare: [{ label: "LINE", value: 80 }, { label: "YouTube", value: 58 }, { label: "X", value: 37 }] },
+  { num: "80", unit: "%", tag: "OPEN RATE", label: "配信当日の開封率", desc: "メールの約4倍。顧客のポケットに直接届く", compare: [{ label: "LINE", value: 80 }, { label: "メール", value: 18 }] },
+  { num: "99.2", unit: "%", tag: "STUDENTS", label: "学生のLINE利用率", desc: "メールの返信がない若者もLINEなら即レス", compare: [{ label: "LINE", value: 99 }, { label: "電話", value: 42 }, { label: "メール", value: 30 }] },
+];
+
 const MarketData = () => (
-  <section className="py-14 md:py-20 bg-[#e8f5e9] relative overflow-hidden">
-    <FloatingParticles count={8} />
-    <div className="max-w-[960px] mx-auto px-5 md:px-8 relative z-10">
+  <section className="py-12 md:py-16 bg-[#e8f5e9] relative overflow-hidden">
+    <div className="max-w-[1100px] mx-auto px-5 md:px-8 relative z-10">
       <Reveal>
-        <div className="text-center mb-10 md:mb-14">
-          <h2 className="text-[24px] md:text-[34px] font-black leading-[1.45] text-black">
-            なぜ今、<GrowUnderline color="#06C755"><span className="text-[#06C755] text-[32px] md:text-[46px]">LINE</span></GrowUnderline>なのか
-          </h2>
-        </div>
+        <h2 className="text-[20px] md:text-[26px] font-bold text-black/85 mb-12 md:mb-14">
+          なぜ今、<span className="text-[#06C755]">LINE</span>なのか
+        </h2>
       </Reveal>
 
-      {/* --- Item 1: Hero number + bar chart --- */}
-      <TiltReveal direction="left">
-        <div className="bg-white rounded-2xl p-6 md:p-8 mb-5 md:mb-6">
-          <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
-            <div className="shrink-0">
-              <div className="flex items-baseline gap-1">
-                <span className="font-en text-[56px] md:text-[72px] font-black text-[#06C755] leading-none">9,700</span>
-                <span className="text-[18px] md:text-[22px] font-bold text-black/50">万人</span>
+      {/* 数字のみ大きく — グラフなし */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12">
+        {MARKET_STATS.map((s, i) => (
+          <Reveal key={i} delay={i * 60}>
+            <div className="text-center md:text-left">
+              <span className="text-[9px] font-medium text-black/35 tracking-[0.2em] font-en uppercase">{s.tag}</span>
+              <div className="flex items-baseline gap-1 mt-1 justify-center md:justify-start">
+                <span className="font-en text-[56px] md:text-[72px] font-bold text-[#06C755] leading-[0.95] tabular-nums">{s.num}</span>
+                <span className="text-[20px] font-semibold text-black/35">{s.unit}</span>
               </div>
-              <p className="text-[18px] md:text-[20px] font-black text-black mt-1">日本人口の8割に届く</p>
+              <p className="text-[15px] font-semibold text-black/85 mt-2">{s.label}</p>
+              <p className="text-[13px] text-black/45 leading-[1.7] mt-2">{s.desc}</p>
             </div>
-            <div className="flex-1 w-full">
-              <p className="text-[13px] text-black/45 leading-[1.7] mb-4">YouTube・Xを超える国内最大のプラットフォーム。あなたの顧客は、すでにLINEの中にいます。</p>
-              <BarChart items={[{ label: "LINE", value: 80 }, { label: "YouTube", value: 58 }, { label: "X", value: 37 }]} />
-            </div>
-          </div>
-        </div>
-      </TiltReveal>
-
-      {/* --- Item 2 & 3: Side by side cards --- */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6 mb-5 md:mb-6">
-        <PopIn delay={60}>
-          <div className="bg-white rounded-2xl p-6 md:p-7 h-full hover:shadow-[0_8px_32px_rgba(0,0,0,.08)] transition-shadow duration-500">
-            <span className="text-[9px] font-bold text-[#06C755]/50 tracking-[.2em] font-en block mb-2">OPEN RATE</span>
-            <div className="flex items-baseline gap-1 mb-2">
-              <span className="font-en text-[48px] md:text-[56px] font-black text-[#06C755] leading-none">80</span>
-              <span className="text-[18px] font-bold text-black/50">%</span>
-            </div>
-            <h3 className="text-[16px] md:text-[18px] font-black text-black mb-2">配信当日の開封率</h3>
-            <p className="text-[12px] md:text-[13px] text-black/45 leading-[1.7] mb-4">メルマガの平均開封率15〜20%と比べて圧倒的。メッセージは顧客のポケットに直接届きます。</p>
-            <BarChart items={[{ label: "LINE", value: 80 }, { label: "メルマガ", value: 18 }]} />
-          </div>
-        </PopIn>
-        <PopIn delay={180}>
-          <div className="bg-white rounded-2xl p-6 md:p-7 h-full hover:shadow-[0_8px_32px_rgba(0,0,0,.08)] transition-shadow duration-500">
-            <span className="text-[9px] font-bold text-[#06C755]/50 tracking-[.2em] font-en block mb-2">STUDENTS</span>
-            <div className="flex items-baseline gap-1 mb-2">
-              <span className="font-en text-[48px] md:text-[56px] font-black text-[#06C755] leading-none">99.2</span>
-              <span className="text-[18px] font-bold text-black/50">%</span>
-            </div>
-            <h3 className="text-[16px] md:text-[18px] font-black text-black mb-2">学生のLINE利用率</h3>
-            <p className="text-[12px] md:text-[13px] text-black/45 leading-[1.7] mb-4">電話に出ない若者もLINEなら即レス。新卒採用における最強のタッチポイント。</p>
-            <BarChart items={[{ label: "LINE", value: 99 }, { label: "電話", value: 42 }, { label: "メール", value: 30 }]} />
-          </div>
-        </PopIn>
+          </Reveal>
+        ))}
       </div>
 
-      {/* --- Item 4: LINE asset message --- */}
-      <Reveal delay={200}>
-        <div className="bg-white rounded-2xl p-8 md:p-12 relative overflow-hidden text-center group hover:shadow-[0_8px_40px_rgba(0,0,0,.06)] transition-shadow duration-500">
-          <h3 className="text-[26px] md:text-[36px] lg:text-[42px] font-black text-black leading-[1.4]">
-            <span className="text-[#06C755]">LINE</span>はずっと残り続ける<br className="hidden md:block" /><span className="text-[#06C755]">資産</span>です。
-          </h3>
-          <p className="text-[13px] md:text-[15px] text-black/40 mt-4 max-w-[480px] mx-auto leading-[1.9]">広告やエージェントは止めれば流入ゼロ。<br />LINEリストは蓄積し続け、配信のたびに売上へ直結します。</p>
+      {/* 資産メッセージ — 中央揃え */}
+      <Reveal delay={80}>
+        <div className="mt-14 md:mt-16 pt-10 md:pt-12 text-center">
+          <p className="leading-[1.6]">
+            <span className="text-[24px] md:text-[28px] font-semibold text-black/90"><span className="text-[#06C755]">LINE</span>はずっと残り続ける<span className="text-[#06C755]">資産</span>です。</span>
+            <span className="block text-[15px] md:text-[16px] font-normal text-black/45 mt-2">広告やエージェントは止めれば流入がゼロに。だからこそ、LINEで蓄積する資産を。</span>
+          </p>
         </div>
       </Reveal>
     </div>
@@ -1052,102 +991,101 @@ const YouTubeSection = () => (
 const BackstageGroup = () => {
   const wrapRef = useRef(null);
   const progress = useScrollProgress(wrapRef, { start: 1.0, end: 0.0 });
-  const imgScale = 1 + progress * 0.1;
+  const imgScale = 1 + progress * 0.05;
   const overlayAlpha = 0.2 + progress * 0.35;
 
   return (
-    <section id="about" className="bg-white relative overflow-hidden">
-      {/* Image — full width, scroll-linked zoom, clipped by overflow-hidden */}
-      <div ref={wrapRef} className="relative w-full overflow-hidden">
-        <img
-          src="/backstage-v2.png" alt="BACKSTAGE Group"
-          className="w-full h-auto block will-change-transform transition-transform duration-100"
-          loading="lazy"
-          style={{ transform: `scale(${imgScale})` }}
-        />
-      </div>
-
-      {/* Content below image */}
-      <div className="max-w-[1100px] mx-auto px-5 md:px-8 pt-10 md:pt-14 pb-10 md:pb-14 relative z-10">
-        <Reveal>
-          <h2 className="text-[26px] md:text-[42px] font-black leading-[1.35] text-black text-center mb-6">
-            国内No.1のIP創出力を誇る<br /><span className="relative inline-block"><span className="relative z-10">採用・マーケティング</span><span className="absolute left-0 bottom-[2px] w-full h-[10px] md:h-[14px] bg-[#06C755]/20 rounded-sm -z-0" /></span>の<span className="relative inline-block"><span className="relative z-10">実行部隊</span><span className="absolute left-0 bottom-[2px] w-full h-[10px] md:h-[14px] bg-[#06C755]/30 rounded-sm -z-0" /></span>。
-          </h2>
-        </Reveal>
-        <div className="flex justify-center gap-10 md:gap-16 mb-10">
-          <BigNumber end={180} suffix="億円超" label="累計資金調達額" />
-          <div className="w-px bg-black/10 self-stretch" />
-          <BigNumber end={5} suffix="億回超" label="月間動画再生数" />
+    <section id="about" className="bg-[#e8f5e9] relative overflow-hidden w-full">
+      {/* 写真 → グラデーションで背景に馴染む → グラデーション終了後にテキスト */}
+      <div ref={wrapRef} className="relative w-[100vw] left-1/2 -translate-x-1/2 overflow-hidden flex flex-col">
+        {/* 画像エリア — 写真の縦横比に合わせて高さを決定 */}
+        <div className="relative w-full aspect-[16/9] bg-[#e8f5e9] overflow-hidden">
+          <img
+            src="/backstage-v2.png" alt="BACKSTAGE Group"
+            className="absolute inset-0 w-full h-full object-cover will-change-transform transition-transform duration-100"
+            style={{ transform: `scale(${imgScale})`, objectPosition: "center 60%" }}
+            loading="lazy"
+          />
+          {/* 上下にグラデーション — YouTubeSection/Leadershipの背景色に合わせる */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{ background: "linear-gradient(to bottom, rgba(232,245,233,1) 0%, rgba(232,245,233,.5) 10%, transparent 22%, transparent 68%, rgba(232,245,233,.6) 80%, rgba(232,245,233,1) 88%)" }}
+          />
         </div>
-        <Reveal delay={200}>
-          <div className="bg-[#f7faf7] rounded-2xl p-6 md:p-8">
-            <h3 className="text-[18px] md:text-[22px] font-black text-black text-center leading-[1.5] mb-2">
-              グループの「認知」を、貴社の<span className="text-[#06C755]">「採用」</span>と<span className="text-[#06C755]">「売上」</span>に変える。
-            </h3>
-            <p className="text-black/40 text-[13px] leading-[1.9] text-center max-w-[460px] mx-auto mb-6">
-              「感覚」ではなく「データ」に基づきLINE上で確実な成果への導線を構築。この運用ノウハウを、貴社の事業成長に活かします。
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-0 max-w-[700px] mx-auto">
-              {[
-                { ja: "採用支援", keyword: "採用コストを削減し、\n定着率を改善", desc: "LINEのシナリオ設計で「志望度」へと変換。選考歩留まり改善とカルチャーマッチした人材の確実な採用を実現。" },
-                { ja: "集客・売上支援", keyword: "売上に直結する\nリスト資産を構築", desc: "「フロー」を「ストック」へ。ユーザーをLINEで見込み客リスト化。LTV向上・優良顧客育成を実現。" },
-              ].map((v, i) => (
-                <div key={i} className={`px-6 md:px-8 py-5 ${i === 0 ? "md:border-r border-b md:border-b-0 border-[#06C755]/10" : ""}`}>
-                  <span className="text-[12px] font-bold text-[#06C755] tracking-wide">{v.ja}</span>
-                  <p className="text-[18px] md:text-[20px] font-black text-black leading-[1.5] mt-2 mb-3 whitespace-pre-line">{v.keyword}</p>
-                  <p className="text-[12px] md:text-[13px] text-black/40 leading-[1.8]">{v.desc}</p>
-                </div>
-              ))}
-            </div>
+        {/* テキストエリア — グラデーションの始まり（下側68%）に文字の始まりがくるよう上に寄せる */}
+        <div className="relative z-10 w-full max-w-[800px] mx-auto px-5 md:px-8 -mt-[18vw] pt-36 pb-20 md:-mt-[20vw] md:pt-44 md:pb-28">
+          <Reveal>
+            <h2 className="text-[22px] md:text-[28px] font-semibold text-black text-center mb-4 leading-[1.5]">
+              国内NO.1の影響力をもつBACKSTAGE Group。<br />その採用・マーケティングを担当。
+            </h2>
+          </Reveal>
+          <div className="flex justify-center gap-6 md:gap-10 mb-4">
+            <BigNumber end={180} suffix="億円超" label="累計資金調達額" compact />
+            <div className="w-px bg-black/15 self-stretch" />
+            <BigNumber end={5} suffix="億回超" label="月間動画再生数" compact />
           </div>
-        </Reveal>
+        </div>
       </div>
     </section>
   );
 };
 
 /* ═══════════════════════════════════════════════════════════
-   LEADERSHIP
+   LEADERSHIP — 切り替え形式
    ═══════════════════════════════════════════════════════════ */
-const LeadershipCard = ({ img, alt, title, name, desc, delay, direction }) => {
-  const cardRef = useRef(null);
-  const progress = useScrollProgress(cardRef, { start: 0.95, end: 0.3 });
-  const scale = 1 + progress * 0.08;
-  return (
-    <HorizontalReveal delay={delay} direction={direction}>
-      <div ref={cardRef} className="relative overflow-hidden bg-gradient-to-t from-black/60 via-black/10 to-transparent h-[420px] md:h-[520px] group">
-        <img src={img} alt={alt} className="absolute inset-0 w-full h-full object-cover transition-transform duration-200 will-change-transform" style={{ objectPosition: "center 10%", transform: `scale(${scale})` }} loading="lazy" />
-        <div className="absolute bottom-0 left-0 right-0 p-5 md:p-7 translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
-          <p className="text-[11px] md:text-[12px] text-[#06C755] font-bold mb-1">{title}</p>
-          <h3 className="text-[22px] md:text-[26px] font-black text-white mb-2 drop-shadow-[0_2px_8px_rgba(0,0,0,.3)]">{name}</h3>
-          <p className="text-[12px] md:text-[13px] text-white/85 leading-[1.9] drop-shadow-[0_1px_4px_rgba(0,0,0,.2)]">{desc}</p>
-        </div>
-      </div>
-    </HorizontalReveal>
-  );
-};
+const LEADERS = [
+  { img: "/ceo-chiba-v3.png", name: "千葉 瑛太", title: "代表取締役", desc: "累計200社以上の支援実績を持ち、年間数億円規模のマーケティング予算を統括。グループの事業成長を採用支援の側面から牽引。" },
+  { img: "/ceo-mizoguchi-v3.png", name: "溝口 勇児", title: "監修 / 共同代表", desc: "BACKSTAGE Inc. 代表取締役。FiNC創業者。累計180億円超の資金調達を実現。" },
+];
 
-const Leadership = () => (
-  <section className="relative bg-[#e8f5e9] pt-8 pb-8 md:pt-10 md:pb-10 overflow-hidden">
-    <WaveSvg fill="#e8f5e9" />
-    {/* Decorative */}
-    <div className="absolute top-[15%] right-[-3%] w-[100px] md:w-[180px] aspect-square rounded-full bg-[#06C755]/[.08] blur-[40px] pointer-events-none animate-pulse-glow" />
-    <div className="absolute bottom-[20%] left-[-5%] w-[80px] md:w-[140px] aspect-square rounded-full bg-[#06C755]/[.06] blur-[30px] pointer-events-none animate-drift-x" />
-    <div className="absolute inset-0 dot-pattern pointer-events-none opacity-30" />
-    <FloatingParticles count={4} color="rgba(255,255,255," />
-    <div className="relative z-10">
-      <div className="max-w-[1100px] mx-auto px-5 md:px-8">
-            <Reveal>
-          <SectionHead>経営陣</SectionHead>
+const Leadership = () => {
+  const [active, setActive] = useState(0);
+  return (
+    <section className="relative bg-[#e8f5e9] pt-16 pb-14 md:pt-24 md:pb-20 overflow-hidden">
+      <div className="relative z-10 max-w-[960px] mx-auto px-5 md:px-8">
+        <Reveal>
+          <h2 className="text-[18px] md:text-[22px] font-semibold text-black/70 tracking-[0.08em] mb-8 md:mb-10">
+            経営陣
+          </h2>
         </Reveal>
-                  </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
-        <LeadershipCard img="/ceo-chiba-v3.png" alt="千葉 瑛太" title="代表取締役" name="千葉 瑛太" desc="累計200社以上の支援実績を持ち、年間数億円規模のマーケティング予算を統括。グループの事業成長を採用支援の側面から牽引。" delay={100} direction="left" />
-        <LeadershipCard img="/ceo-mizoguchi-v3.png" alt="溝口 勇児" title="監修 / 共同代表" name="溝口 勇児" desc="BACKSTAGE Inc. 代表取締役。FiNC創業者。累計180億円超の資金調達を実現。" delay={200} direction="right" />
+        {/* 切り替え式カルーセル */}
+        <div className="relative min-h-[320px] md:min-h-[280px]">
+          {LEADERS.map((l, i) => (
+            <div
+              key={i}
+              className={`transition-opacity duration-500 ${i === active ? "opacity-100 relative" : "opacity-0 absolute inset-x-0 top-0 pointer-events-none"}`}
+            >
+              <div className={`flex flex-col md:flex-row gap-6 md:gap-8 ${i === active ? "" : "invisible"}`}>
+                <div className="w-full md:w-[200px] shrink-0 aspect-square md:aspect-auto md:h-[240px] overflow-hidden">
+                  <img src={l.img} alt={l.name} className="w-full h-full object-cover" style={{ objectPosition: "center 15%" }} loading="lazy" />
+                </div>
+                <div className="flex-1 min-w-0 flex flex-col justify-center">
+                  <h3 className="text-[22px] md:text-[26px] font-bold text-black/90 mb-1 tracking-tight">{l.name}</h3>
+                  <p className="text-[12px] text-black/40 font-medium tracking-widest uppercase mb-4">{l.title}</p>
+                  <p className="text-[14px] md:text-[15px] text-black/60 leading-[1.85] tracking-[0.02em]">{l.desc}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+          {/* ドット＋矢印で切り替え */}
+          <div className="flex items-center justify-center gap-4 mt-6 md:mt-8">
+            <button onClick={() => setActive(a => (a - 1 + LEADERS.length) % LEADERS.length)} className="p-2 rounded-full text-black/50 hover:text-black/80 hover:bg-black/5 transition-colors" aria-label="前へ">
+              <ChevronDown size={20} className="rotate-90" />
+            </button>
+            <div className="flex gap-2">
+              {LEADERS.map((_, i) => (
+                <button key={i} onClick={() => setActive(i)} className={`w-2.5 h-2.5 rounded-full transition-all ${i === active ? "bg-black/60 scale-110" : "bg-black/25 hover:bg-black/40"}`} aria-label={`${i + 1}人目`} />
+              ))}
+            </div>
+            <button onClick={() => setActive(a => (a + 1) % LEADERS.length)} className="p-2 rounded-full text-black/50 hover:text-black/80 hover:bg-black/5 transition-colors" aria-label="次へ">
+              <ChevronDown size={20} className="-rotate-90" />
+            </button>
           </div>
         </div>
-  </section>
-);
+      </div>
+    </section>
+  );
+};
 
 /* ═══════════════════════════════════════════════════════════
    SERVICE — white bg
@@ -1243,14 +1181,11 @@ const CTABanner = () => (
       <div className="absolute inset-0 dot-pattern-dark pointer-events-none opacity-15" />
       <div className="absolute top-[25%] left-[6%] w-2 h-2 rounded-full bg-white/20 pointer-events-none animate-float-a" />
       <div className="absolute bottom-[30%] right-[10%] w-2.5 h-2.5 rounded-full bg-white/15 pointer-events-none animate-float-b" />
-      <div className="max-w-[600px] mx-auto px-5 md:px-8 py-10 md:py-14 text-center relative z-10">
+        <div className="max-w-[600px] mx-auto px-5 md:px-8 py-10 md:py-14 text-center relative z-10">
         <Reveal>
-          <p className="text-white text-[20px] md:text-[26px] font-black leading-[1.7] mb-5">
+          <p className="text-white text-[20px] md:text-[26px] font-black leading-[1.7] mb-5 font-display tracking-tight">
             LINEマーケティングの<br />戦略設計からアカウント構築<br />運用・分析まで
           </p>
-          <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-5 md:p-7 shadow-[0_8px_40px_rgba(0,0,0,.08)] mb-6">
-            <p className="text-[14px] md:text-[15px] text-black/60 leading-[1.9] font-medium">実績豊富なコンサルタントがすべて代行します。<br />まずはお気軽にご相談ください。</p>
-            </div>
           <MagneticWrap className="inline-block" strength={0.2}>
             <a href="#contact" className="btn-ripple group inline-flex items-center gap-3 bg-white text-[#06C755] font-black rounded-full shadow-[0_4px_24px_rgba(255,255,255,.25)] hover:shadow-[0_8px_40px_rgba(255,255,255,.35)] hover:-translate-y-1 active:translate-y-0 transition-all duration-300 px-10 py-4.5 text-[16px] border-2 border-white/80" style={{ animation: "glow-pulse 3s ease-in-out infinite" }}>
               <img src="/line-icon.png" alt="" className="w-6 h-6 rounded-md" />
@@ -1273,80 +1208,61 @@ const CTABanner = () => (
    ACHIEVEMENTS — light green bg
    ═══════════════════════════════════════════════════════════ */
 const Achievements = () => (
-  <section id="results" className="relative bg-[#e8f5e9] pt-14 pb-16 md:pt-16 md:pb-20 overflow-hidden">
+  <section id="results" className="relative bg-[#e8f5e9] pt-10 pb-12 md:pt-12 md:pb-16 overflow-hidden">
     <WaveSvg fill="#e8f5e9" />
-    {/* Decorative */}
-    <div className="absolute top-[8%] left-[-4%] w-[180px] md:w-[280px] aspect-square rounded-full bg-[#06C755]/[.06] blur-[50px] pointer-events-none animate-pulse-glow" />
-    <div className="absolute bottom-[12%] right-[-6%] w-[150px] md:w-[220px] aspect-square rounded-full bg-[#06C755]/[.05] blur-[40px] pointer-events-none animate-drift-x" />
-    <div className="absolute inset-0 dot-pattern pointer-events-none opacity-40" />
-    <FloatingParticles count={10} />
-    <div className="max-w-[1000px] mx-auto px-5 md:px-8 relative z-10">
+    <div className="max-w-[1100px] mx-auto px-4 md:px-6 relative z-10">
         <Reveal>
-        <div className="flex flex-col items-center mb-8">
-          <PopIn><img src="/badge-200.png" alt="運用実績200社以上" className="h-[70px] md:h-[80px] w-auto mb-4" loading="lazy" /></PopIn>
-          <SectionHead>成果事例</SectionHead>
-        </div>
+        <h2 className="text-[16px] md:text-[18px] font-semibold text-black/70 tracking-[0.06em] mb-6 text-center">
+          成果事例
+        </h2>
         </Reveal>
-      <div className="space-y-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5 mb-8 md:items-stretch">
         {CASES.map((c, i) => (
-          <TiltReveal key={i} delay={i * 100} direction={i % 2 === 0 ? "left" : "right"}>
-            <div className={`rounded-2xl shadow-[0_4px_24px_rgba(0,0,0,.07)] overflow-hidden hover:shadow-[0_10px_40px_rgba(0,0,0,.12)] transition-all duration-500 flex flex-col ${i % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"} group`}>
-              {/* Screenshot */}
-              <div className="md:w-[55%] shrink-0 bg-white flex items-center justify-center p-1 md:p-2 overflow-hidden">
-                <img src={c.img} alt={c.name} className="w-full h-auto max-h-[400px] md:max-h-[460px] object-contain group-hover:scale-[1.02] transition-transform duration-700" loading="lazy" />
+          <Reveal key={i} delay={i * 60}>
+            <article className="h-full flex flex-col bg-white/90 rounded-lg overflow-hidden border border-black/[0.04] hover:border-[#06C755]/20 transition-colors">
+              <div className="aspect-[16/10] shrink-0 overflow-hidden bg-black/[0.02] flex items-center justify-center">
+                <img src={c.img} alt={c.name} className="w-full h-full object-contain" loading="lazy" />
               </div>
-              {/* Info */}
-              <div className="p-6 md:p-8 flex flex-col justify-center flex-1 bg-[#f6f9f6]">
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="text-[10px] font-bold text-white bg-[#06C755] px-2.5 py-1 rounded font-en tracking-[.12em]">CASE {c.num}</span>
-                  <span className="text-[11px] text-black/30 font-medium">{c.cat}</span>
+              <div className="flex-1 flex flex-col p-4 md:p-5 min-h-0">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-[9px] font-semibold text-[#06C755]/80 tracking-wider tabular-nums">{c.num}</span>
+                  <span className="text-[10px] text-black/40">{c.cat}</span>
                 </div>
-                <h3 className="text-[20px] md:text-[24px] font-black text-black/90 mb-5 leading-[1.3]">{c.name}</h3>
-
-                {/* Metric highlight */}
-                <div className="rounded-xl bg-white p-4 md:p-5 mb-4 border border-[#06C755]/15 shadow-[0_2px_8px_rgba(6,199,85,.06)]">
-                  <span className="text-[10px] font-bold text-black/35 block mb-1.5 tracking-wider uppercase">{c.metric}</span>
-                  <div className="flex items-baseline gap-2.5">
-                    {c.before !== "—" && <><span className="text-[18px] font-bold text-black/20 line-through">{c.before}</span><ArrowRight size={16} className="text-[#06C755] relative top-[1px]" /></>}
-                    <span className="text-[32px] md:text-[38px] font-black text-[#06C755] leading-none">{c.after}</span>
+                <h3 className="text-[14px] md:text-[15px] font-semibold text-black/90 mb-2">{c.name}</h3>
+                <div className="mb-2">
+                  <span className="text-[9px] text-black/35 block mb-0.5">{c.metric}</span>
+                  <div className="flex items-baseline gap-1.5">
+                    {c.before !== "—" && <span className="text-[12px] text-black/25 line-through tabular-nums">{c.before}</span>}
+                    {c.before !== "—" && <ArrowRight size={10} className="text-[#06C755]/60 shrink-0" />}
+                    <span className="font-en text-[20px] md:text-[22px] font-bold text-[#06C755] tabular-nums leading-none">{c.after}</span>
                   </div>
                 </div>
-
-                {c.challenge && (
-                  <div className="mb-4 bg-black/[.03] rounded-lg px-4 py-2.5">
-                    <span className="text-[9px] font-bold text-black/30 block mb-1">課題</span>
-                    <p className="text-[13px] text-black/55 leading-[1.7]">{c.challenge}</p>
-                  </div>
-                )}
-                <p className="text-[13px] text-black/50 leading-[1.9]">{c.desc}</p>
+                {c.challenge && <p className="text-[11px] text-black/50 leading-[1.5]">{c.challenge}</p>}
+                <p className="text-[11px] text-black/45 leading-[1.6] mt-1">{c.desc}</p>
               </div>
-            </div>
-          </TiltReveal>
+            </article>
+          </Reveal>
         ))}
       </div>
 
       <ScrollLine />
-      <Reveal><p className="text-[14px] font-bold text-black/30 mb-4 text-center">お客様の声</p></Reveal>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <p className="text-[11px] font-medium text-black/40 mb-4 text-center tracking-wide">お客様の声</p>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
         {VOICES.map((v, i) => (
-          <PopIn key={i} delay={i * 120}>
+          <PopIn key={i} delay={i * 80}>
             <div className="h-full">
-              {/* Avatar + name */}
-              <div className="flex items-center gap-3.5 mb-4">
-                <img src={v.avatar} alt="" className="w-10 h-10 md:w-12 md:h-12 rounded-full shrink-0 shadow-[0_2px_8px_rgba(0,0,0,.08)] object-contain" />
-                <div>
-                  <p className="text-[13px] font-bold text-black/60 leading-tight">{v.role}</p>
-                </div>
+              <div className="flex items-center gap-3 mb-3">
+                <img src={v.avatar} alt="" className="w-9 h-9 md:w-10 md:h-10 rounded-full shrink-0 object-contain ring-1 ring-black/[0.06]" />
+                <p className="text-[12px] font-semibold text-black/60 leading-tight">{v.role}</p>
               </div>
-              {/* Speech bubble */}
-              <div className="relative bg-white rounded-2xl rounded-tl-sm p-5 md:p-6 shadow-[0_2px_16px_rgba(0,0,0,.05)] ml-4">
-                <div className="absolute -top-2 left-5 w-0 h-0 border-l-[8px] border-r-[8px] border-b-[8px] border-l-transparent border-r-transparent border-b-white" />
-                <p className="text-[13px] text-black/55 leading-[1.9] mb-4">{v.quote}</p>
+              <div className="relative bg-white rounded-lg rounded-tl-md p-4 shadow-[0_1px_8px_rgba(0,0,0,.04)] ml-4 border border-black/[0.03]">
+                <div className="absolute -top-1.5 left-5 w-0 h-0 border-l-[6px] border-r-[6px] border-b-[6px] border-l-transparent border-r-transparent border-b-white" />
+                <p className="text-[12px] text-black/60 leading-[1.8] mb-3">{v.quote}</p>
                 <div className="flex items-center gap-1.5 mb-1.5">
-                  <CheckCircle2 size={13} className="text-[#06C755]" />
-                  <span className="text-[10px] font-bold text-[#06C755]">導入後の成果</span>
+                  <CheckCircle2 size={12} className="text-[#06C755]" />
+                  <span className="text-[10px] font-semibold text-[#06C755]/80">導入後の成果</span>
                 </div>
-                <p className="text-[12px] text-black/50 leading-[1.8]">{v.result}</p>
+                <p className="text-[11px] text-black/50 leading-[1.7]">{v.result}</p>
               </div>
             </div>
           </PopIn>
@@ -1387,9 +1303,9 @@ const Strength = () => (
                 />
               </div>
               <div className={`flex-1 ${i % 2 === 0 ? "md:text-left" : "md:text-right"}`}>
-                <span className="text-[11px] font-bold text-[#06C755] tracking-widest font-en">STRENGTH {String(i + 1).padStart(2, "0")}</span>
+                <span className="block text-[11px] font-bold text-[#06C755] tracking-widest font-en mb-3">STRENGTH {String(i + 1).padStart(2, "0")}</span>
                 <GrowUnderline>
-                  <h3 className="text-[20px] md:text-[24px] font-black text-black mb-3 mt-1">{s.ja}</h3>
+                  <h3 className="text-[20px] md:text-[24px] font-black text-black mb-3">{s.ja}</h3>
                 </GrowUnderline>
                 <p className="text-[14px] text-black/45 leading-[2]">{s.desc}</p>
                 </div>
@@ -1404,32 +1320,23 @@ const Strength = () => (
 /* ═══════════════════════════════════════════════════════════
    FLOW — light green bg
    ═══════════════════════════════════════════════════════════ */
-const Flow = () => {
-  const [mode, setMode] = useState("recruit");
-  const steps = mode === "recruit" ? FLOW_RECRUIT : FLOW_SALES;
-  return (
-    <section className="relative bg-[#e8f5e9] pt-14 pb-16 md:pt-16 md:pb-20 overflow-hidden">
-      <WaveSvg fill="#e8f5e9" />
-      <div className="absolute top-[10%] right-[-4%] w-[120px] md:w-[200px] aspect-square rounded-full bg-[#06C755]/[.06] blur-[40px] pointer-events-none animate-drift-y" />
-      <div className="absolute bottom-[15%] left-[-6%] w-[100px] md:w-[160px] aspect-square rounded-full bg-[#06C755]/[.05] blur-[30px] pointer-events-none animate-drift-x" />
-      <div className="absolute inset-0 dot-pattern pointer-events-none opacity-40" />
-      <div className="max-w-[800px] mx-auto px-5 md:px-8 relative z-10">
-        <Reveal>
-          <SectionHead>運用開始までの流れ</SectionHead>
-        </Reveal>
-        {/* Toggle tabs */}
-        <div className="flex justify-center gap-2 mb-8">
-          <button onClick={() => setMode("recruit")} className={`px-5 py-2.5 rounded-full text-[13px] font-bold transition-all ${mode === "recruit" ? "bg-[#06C755] text-white shadow-[0_4px_16px_rgba(6,199,85,.3)]" : "bg-white/70 text-black/40 hover:bg-white"}`}>採用DX</button>
-          <button onClick={() => setMode("sales")} className={`px-5 py-2.5 rounded-full text-[13px] font-bold transition-all ${mode === "sales" ? "bg-[#06C755] text-white shadow-[0_4px_16px_rgba(6,199,85,.3)]" : "bg-white/70 text-black/40 hover:bg-white"}`}>集客DX</button>
-        </div>
-        <FlowTimeline steps={steps} mode={mode} />
-      </div>
-    </section>
-  );
-};
+const Flow = () => (
+  <section className="relative bg-[#e8f5e9] pt-14 pb-16 md:pt-16 md:pb-20 overflow-hidden">
+    <WaveSvg fill="#e8f5e9" />
+    <div className="absolute top-[10%] right-[-4%] w-[120px] md:w-[200px] aspect-square rounded-full bg-[#06C755]/[.06] blur-[40px] pointer-events-none animate-drift-y" />
+    <div className="absolute bottom-[15%] left-[-6%] w-[100px] md:w-[160px] aspect-square rounded-full bg-[#06C755]/[.05] blur-[30px] pointer-events-none animate-drift-x" />
+    <div className="absolute inset-0 dot-pattern pointer-events-none opacity-40" />
+    <div className="max-w-[1100px] mx-auto px-5 md:px-8 relative z-10">
+      <Reveal>
+        <SectionHead>運用開始までの流れ</SectionHead>
+      </Reveal>
+      <FlowTimeline steps={FLOW_STEPS} />
+    </div>
+  </section>
+);
 
 /* ── Flow Timeline with scroll-driven line draw ── */
-const FlowTimeline = ({ steps, mode }) => {
+const FlowTimeline = ({ steps }) => {
   const containerRef = useRef(null);
   const progress = useScrollProgress(containerRef, { start: 0.9, end: 0.1 });
   return (
@@ -1443,15 +1350,18 @@ const FlowTimeline = ({ steps, mode }) => {
         <div className="w-full bg-[#06C755] origin-top transition-[height] duration-200" style={{ height: `${Math.min(progress * 120, 100)}%` }} />
       </div>
       {steps.map((s, i) => (
-        <HorizontalReveal key={`${mode}-${i}`} delay={i * 120} direction={i % 2 === 0 ? "left" : "right"}>
-          <div className={`flex items-start gap-5 relative pb-10 ${i % 2 === 0 ? "md:flex-row md:text-left" : "md:flex-row-reverse md:text-right"}`}>
+        <HorizontalReveal key={i} delay={i * 120} direction={i % 2 === 0 ? "left" : "right"}>
+          <div className={`flex items-start gap-8 md:gap-12 relative pb-10 ${i % 2 === 0 ? "md:flex-row md:text-left" : "md:flex-row-reverse md:text-right"}`}>
             <PopIn delay={i * 150}>
-              <div className="w-12 h-12 bg-[#06C755] text-white rounded-full flex items-center justify-center font-black text-[16px] shrink-0 relative z-10 shadow-[0_4px_16px_rgba(6,199,85,.3)] md:absolute md:left-1/2 md:-translate-x-1/2">
+              <div className="w-12 h-12 bg-[#06C755] text-white rounded-full flex items-center justify-center font-black text-[16px] shrink-0 relative z-20 shadow-[0_4px_16px_rgba(6,199,85,.3)] md:absolute md:left-1/2 md:-translate-x-1/2">
                 {String(i + 1).padStart(2, "0")}
               </div>
             </PopIn>
-            <div className={`flex-1 bg-white rounded-2xl p-5 md:p-6 shadow-[0_2px_20px_rgba(0,0,0,.06)] relative hover:shadow-[0_8px_28px_rgba(0,0,0,.09)] transition-shadow duration-500 ${i % 2 === 0 ? "md:mr-[calc(50%+32px)] md:ml-0" : "md:ml-[calc(50%+32px)] md:mr-0"}`}>
-              <div className={`hidden md:block absolute top-5 w-3 h-3 bg-white rotate-45 shadow-[2px_-2px_4px_rgba(0,0,0,.03)] ${i % 2 === 0 ? "-right-1.5" : "-left-1.5"}`} />
+            <div className={`flex-1 bg-white rounded-2xl p-5 md:p-6 shadow-[0_1px_2px_rgba(0,0,0,.08)] relative hover:shadow-[0_4px_16px_rgba(0,0,0,.06)] transition-shadow duration-500 overflow-visible ${i % 2 === 0 ? "md:mr-[calc(50%+88px)] md:ml-0 rounded-tl-md" : "md:ml-[calc(50%+88px)] md:mr-0 rounded-tr-md"}`}>
+              {/* 尾 — PainPointsと同じ形（番号方向に三角）左側の吹き出し */}
+              {i % 2 === 0 && <div className="absolute left-0 top-5 w-0 h-0 border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent border-r-[12px] border-r-white" style={{ transform: "translateX(-1px)" }} />}
+              {/* 右側の吹き出し（デスクトップのみ右向き尾） */}
+              {i % 2 === 1 && <><div className="absolute left-0 top-5 w-0 h-0 border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent border-r-[12px] border-r-white md:hidden" style={{ transform: "translateX(-1px)" }} /><div className="absolute right-0 top-5 w-0 h-0 border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent border-l-[12px] border-l-white hidden md:block" style={{ transform: "translateX(1px)" }} /></>}
               <p className="text-[11px] font-bold text-[#06C755] mb-1">{s.sub}</p>
               <h3 className="text-[17px] font-bold text-black mb-2">{s.ja}</h3>
               <p className="text-[13px] text-black/50 leading-[1.85]">{s.desc}</p>
@@ -1498,49 +1408,66 @@ const FAQ = () => {
 };
 
 /* ═══════════════════════════════════════════════════════════
-   CONTACT — green bg
+   CONTACT — green bg（LINE + メールフォームページへのリンク）
    ═══════════════════════════════════════════════════════════ */
 const Contact = () => (
-  <section id="contact" className="relative bg-[#06C755] pt-14 pb-14 md:pt-16 md:pb-16 overflow-hidden">
-    <WaveSvg fill="#06C755" />
-    <div className="absolute inset-0 pointer-events-none opacity-10">
-      <div className="absolute bottom-0 left-0 w-[50%] h-[50%] bg-white rounded-full blur-[80px] translate-y-1/3 -translate-x-1/4" />
-      <div className="absolute top-0 right-0 w-[40%] h-[40%] bg-white rounded-full blur-[60px] -translate-y-1/4 translate-x-1/4 animate-drift-x" />
-    </div>
-    <div className="absolute inset-0 dot-pattern-dark pointer-events-none opacity-20" />
-    {/* Floating small dots */}
-    <div className="absolute top-[20%] left-[8%] w-2 h-2 rounded-full bg-white/20 pointer-events-none animate-float-a" />
-    <div className="absolute bottom-[25%] right-[12%] w-3 h-3 rounded-full bg-white/15 pointer-events-none animate-float-b" />
-    <div className="absolute top-[50%] right-[5%] w-2 h-2 rounded-full bg-white/10 pointer-events-none animate-drift-y" />
-    <div className="max-w-[640px] mx-auto px-5 md:px-8 text-center relative z-10">
-      <Reveal>
-        <h2 className="text-[24px] md:text-[30px] font-black text-white mb-3 leading-[1.5]">
-          <TextRevealChar text="まずはお気軽に" className="inline" />
-          <br className="md:hidden" />
-          <TextRevealChar text="ご相談ください" className="inline" delay={400} />
-        </h2>
-        <p className="text-white/60 text-[14px] leading-[1.9] mb-8 max-w-[440px] mx-auto">
-          お客様の現状をお聞きし、最適なご提案をさせていただきます。
-        </p>
-      </Reveal>
-      <Reveal delay={100}>
-        <div className="bg-white rounded-2xl p-7 md:p-8 shadow-[0_8px_40px_rgba(0,0,0,.10)]">
-          <div className="w-14 h-14 bg-[#06C755] rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <img src="/line-icon.png" alt="LINE" className="w-9 h-9 rounded-lg" />
-    </div>
-          <h3 className="text-[18px] md:text-[20px] font-black text-black mb-2">LINEでお問合せ</h3>
-          <p className="text-black/40 text-[13px] leading-[1.8] mb-6 max-w-[340px] mx-auto">
-            友だち追加後、無料相談のご予約が可能です。お気軽にご連絡ください。
+    <section id="contact" className="relative bg-[#06C755] pt-14 pb-14 md:pt-16 md:pb-16 overflow-hidden">
+      <WaveSvg fill="#06C755" />
+      <div className="absolute inset-0 pointer-events-none opacity-10">
+        <div className="absolute bottom-0 left-0 w-[50%] h-[50%] bg-white rounded-full blur-[80px] translate-y-1/3 -translate-x-1/4" />
+        <div className="absolute top-0 right-0 w-[40%] h-[40%] bg-white rounded-full blur-[60px] -translate-y-1/4 translate-x-1/4 animate-drift-x" />
+      </div>
+      <div className="absolute inset-0 dot-pattern-dark pointer-events-none opacity-20" />
+      <div className="absolute top-[20%] left-[8%] w-2 h-2 rounded-full bg-white/20 pointer-events-none animate-float-a" />
+      <div className="absolute bottom-[25%] right-[12%] w-3 h-3 rounded-full bg-white/15 pointer-events-none animate-float-b" />
+      <div className="absolute top-[50%] right-[5%] w-2 h-2 rounded-full bg-white/10 pointer-events-none animate-drift-y" />
+      <div className="max-w-[720px] mx-auto px-5 md:px-8 relative z-10">
+        <Reveal>
+          <h2 className="text-[24px] md:text-[30px] font-black text-white mb-3 leading-[1.5] text-center">
+            <TextRevealChar text="まずはお気軽に" className="inline" />
+            <br className="md:hidden" />
+            <TextRevealChar text="ご相談ください" className="inline" delay={400} />
+          </h2>
+          <p className="text-white/60 text-[14px] leading-[1.9] mb-8 max-w-[440px] mx-auto text-center">
+            お客様の現状をお聞きし、最適なご提案をさせていただきます。
           </p>
-          <MagneticWrap className="inline-block" strength={0.25}>
-            <a href="#" className="inline-flex items-center gap-2 bg-[#06C755] text-white px-8 py-3.5 rounded-full text-[14px] font-bold shadow-[0_4px_20px_rgba(6,199,85,.25)] hover:shadow-[0_8px_32px_rgba(6,199,85,.35)] hover:-translate-y-0.5 transition-all" style={{ animation: "glow-pulse 3s ease-in-out infinite" }}>
-              <MessageCircle size={16} /> お友だち追加する
-            </a>
-          </MagneticWrap>
-            </div>
         </Reveal>
-    </div>
-  </section>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-stretch">
+          {/* LINEお問合せ */}
+          <Reveal delay={100} className="h-full">
+            <div className="h-full bg-white rounded-2xl p-7 md:p-8 shadow-[0_8px_40px_rgba(0,0,0,.10)] flex flex-col items-center text-center justify-between min-h-0">
+              <div className="w-14 h-14 bg-[#06C755] rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <img src="/line-icon.png" alt="LINE" className="w-9 h-9 rounded-lg" />
+              </div>
+              <h3 className="text-[18px] md:text-[20px] font-black text-black mb-2">LINEでお問合せ</h3>
+              <p className="text-black/40 text-[13px] leading-[1.8] mb-6 max-w-[280px]">
+                友だち追加後、無料相談のご予約が可能です。お気軽にご連絡ください。
+              </p>
+              <MagneticWrap className="inline-block" strength={0.25}>
+                <a href="#" className="inline-flex items-center gap-2 bg-[#06C755] text-white px-8 py-3.5 rounded-full text-[14px] font-bold shadow-[0_4px_20px_rgba(6,199,85,.25)] hover:shadow-[0_8px_32px_rgba(6,199,85,.35)] hover:-translate-y-0.5 transition-all" style={{ animation: "glow-pulse 3s ease-in-out infinite" }}>
+                  <MessageCircle size={16} /> お友だち追加する
+                </a>
+              </MagneticWrap>
+            </div>
+          </Reveal>
+          {/* メールフォーム — 専用ページへ */}
+          <Reveal delay={150} className="h-full">
+            <Link to="/contact" className="block h-full group">
+              <div className="h-full bg-white rounded-2xl p-7 md:p-8 shadow-[0_8px_40px_rgba(0,0,0,.10)] group-hover:shadow-[0_12px_48px_rgba(0,0,0,.14)] transition-all flex flex-col items-center justify-between text-center min-h-[280px]">
+                <div className="w-14 h-14 bg-black/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <Mail size={28} className="text-black/60" />
+                </div>
+                <h3 className="text-[18px] md:text-[20px] font-black text-black mb-2">メールでお問合せ</h3>
+                <p className="text-black/40 text-[13px] leading-[1.8] mb-6 max-w-[260px]">フォームページでご入力いただけます。</p>
+                <span className="inline-flex items-center gap-2 bg-[#06C755] text-white px-6 py-3 rounded-full text-[14px] font-bold shadow-[0_4px_20px_rgba(6,199,85,.25)] group-hover:shadow-[0_8px_32px_rgba(6,199,85,.35)] group-hover:-translate-y-0.5 transition-all">
+                  <Send size={16} /> フォームへ進む
+                </span>
+              </div>
+            </Link>
+          </Reveal>
+        </div>
+      </div>
+    </section>
 );
 
 /* ═══════════════════════════════════════════════════════════
@@ -1572,40 +1499,10 @@ const Footer = () => (
 /* ═══════════════════════════════════════════════════════════
    APP
    ═══════════════════════════════════════════════════════════ */
-/* ── Cursor follower dot (desktop only) ── */
-const CursorDot = () => {
-  const dotRef = useRef(null);
-  const pos = useRef({ x: 0, y: 0 });
-  const target = useRef({ x: 0, y: 0 });
-  const [hovering, setHovering] = useState(false);
-  useEffect(() => {
-    const move = (e) => { target.current = { x: e.clientX, y: e.clientY }; };
-    const over = (e) => { if (e.target.closest("a, button, [role=button]")) setHovering(true); else setHovering(false); };
-    window.addEventListener("mousemove", move, { passive: true });
-    window.addEventListener("mouseover", over, { passive: true });
-    let raf;
-    const tick = () => {
-      pos.current.x += (target.current.x - pos.current.x) * 0.15;
-      pos.current.y += (target.current.y - pos.current.y) * 0.15;
-      if (dotRef.current) {
-        dotRef.current.style.transform = `translate(${pos.current.x - 10}px, ${pos.current.y - 10}px)`;
-      }
-      raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => { cancelAnimationFrame(raf); window.removeEventListener("mousemove", move); window.removeEventListener("mouseover", over); };
-  }, []);
-  return (
-    <div ref={dotRef} className="fixed top-0 left-0 z-[9999] pointer-events-none hidden lg:block" style={{ willChange: "transform" }}>
-      <div className={`rounded-full border-2 transition-all duration-300 ${hovering ? "w-10 h-10 border-[#06C755] bg-[#06C755]/10 scale-[1.5]" : "w-5 h-5 border-[#06C755]/40 bg-transparent"}`} />
-    </div>
-  );
-};
-
 export default function App() {
   return (
     <div className="antialiased">
-      <CursorDot />
+      <ScrollProgressBar />
       <Header />
       <main>
         <Hero />
