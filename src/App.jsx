@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  MessageCircle, Menu, X, ChevronDown, ArrowRight,
+  MessageCircle, Menu, X, ChevronDown, ChevronLeft, ArrowRight,
   Users, TrendingUp, Zap, BarChart3, Target,
   Clock, CheckCircle2, Phone, Settings, Sparkles,
   BookOpen, Palette, PenTool, LineChart, Mail, Send,
@@ -20,14 +20,13 @@ const HERO_CHATS = [
   { co: "BUZZ SHIP", cl: "#7C3AED", m1: "新キャンペーンのお知らせ🎯", m2: "詳しく知りたい！", m3: "こちらの特別ページをご覧ください✨" },
   { co: "V CLINIC", cl: "#EA580C", m1: "カウンセリングのご案内💝", m2: "予約したいです", m3: "ご希望日をお選びください📋" },
   { co: "New me", cl: "#0891B2", m1: "新メニューのお知らせ🌸", m2: "興味あります！", m3: "詳細はこちらからご確認ください✨" },
-  { co: "VOYAGE", cl: "#06C755", m1: "無料相談のご予約完了です✅", m2: "ありがとうございます！", m3: "当日はZoomでお待ちしております🙌" },
+  { co: "VOYAGE", cl: "#00BFA5", m1: "無料相談のご予約完了です✅", m2: "ありがとうございます！", m3: "当日はZoomでお待ちしております🙌" },
   { co: "ポスティングHD", cl: "#4F46E5", m1: "資料請求ありがとうございます📄", m2: "確認しました！", m3: "担当よりご連絡いたします📞" },
 ];
 
 const CLIENTS = [
   { name: "BUZZ SHIP", cat: "デジタルマーケティング", desc: "既存リストの最適化により広告費を抑制しながら月商を大幅増", accent: "#1a1a1a", logo: "/client-buzzship.png", scale: 0.75 },
   { name: "BREAKING DOWN", cat: "格闘エンタメ", desc: "大規模イベント集客とファンエンゲージメントをLINE基盤で構築", accent: "#1D3557", logo: "/client-breakingdown.png", scale: 1.15 },
-  { name: "LAST CALL", cat: "エンタメ", desc: "大型キャスティング×LINE集客で話題性と動員数を最大化", accent: "#1a1a1a", logo: "/client-lastcall.png", scale: 1.08 },
   { name: "HERO'ZZ", cat: "スクール", desc: "プッシュ配信施策により短期間で5,000万円超の売上を創出", accent: "#E76F51", logo: "/client-herozz-banner.png", scale: 1.08 },
   { name: "V CLINIC", cat: "美容クリニック", desc: "予約管理の自動化と顧客体験の向上をLINEで実現", accent: "#C5A882", logo: "/client-vclinic.png", scale: 1.08 },
   { name: "AI+", cat: "テクノロジー", desc: "AI活用サービスのユーザー獲得とリテンションをLINEで最適化", accent: "#111", logo: "/client-aiplus.png", fill: true },
@@ -83,7 +82,6 @@ const PersonAvatar = ({ color, gender, size = 56 }) => (
 
 const STRENGTHS = [
   { img: "/strength-strategy.png", ja: "戦略的バックアップ", desc: "大型IP運営を含む200社超の運用データから導き出した『成功の型』を、貴社に合わせてカスタマイズ。" },
-  { img: "/strength-team-v2.png", ja: "専門家集団", desc: "戦略・運用・クリエイティブの3名のプロが専任チームを組成。事業KPIの達成にコミット。" },
   { img: "/strength-data.png", ja: "データドリブン運用", desc: "すべての施策を数値で検証。200社超のデータベースから最適パターンを提案しPDCAを高速回転。" },
 ];
 
@@ -173,7 +171,7 @@ const ScrollProgressBar = () => {
     window.addEventListener("scroll", tick, { passive: true });
     return () => window.removeEventListener("scroll", tick);
   }, []);
-  return <div className="fixed top-0 right-0 w-[3px] h-full z-[100] pointer-events-none"><div className="w-full bg-[#06C755] rounded-full transition-[height] duration-100" style={{ height: `${p * 100}%` }} /></div>;
+  return <div className="fixed top-0 right-0 w-[3px] h-full z-[100] pointer-events-none"><div className="w-full bg-[#00BFA5] rounded-full transition-[height] duration-100" style={{ height: `${p * 100}%` }} /></div>;
 };
 
 /* ── Mouse position tracker for magnetic effects ── */
@@ -207,7 +205,7 @@ const MagneticWrap = ({ children, className = "", strength = 0.3 }) => {
 };
 
 /* ── Scroll-triggered horizontal line ── */
-const ScrollLine = ({ color = "#06C755", delay = 0 }) => {
+const ScrollLine = ({ color = "#00BFA5", delay = 0 }) => {
   const [ref, vis] = useInView(0.3);
   return (
     <div ref={ref} className="w-full h-[2px] overflow-hidden my-6">
@@ -221,7 +219,7 @@ const ScrollLine = ({ color = "#06C755", delay = 0 }) => {
 };
 
 /* ── Floating particles background ── */
-const FloatingParticles = ({ count = 6, color = "rgba(6,199,85,", className = "" }) => (
+const FloatingParticles = ({ count = 6, color = "rgba(0,191,165,", className = "" }) => (
   <div className={`absolute inset-0 pointer-events-none overflow-hidden ${className}`}>
     {Array.from({ length: count }).map((_, i) => (
       <div key={i} className="absolute rounded-full" style={{
@@ -255,7 +253,7 @@ const BigNumber = ({ end, suffix, label, prefix = "", compact }) => {
           opacity: vis2 ? 1 : 0,
           filter: vis2 ? "blur(0)" : "blur(4px)",
         }}>
-          <span className={`font-en font-black text-[#06C755] leading-none tabular-nums ${compact ? "text-[32px] md:text-[40px]" : "text-[46px] md:text-[64px]"}`}>
+          <span className={`font-en font-black text-[#00BFA5] leading-none tabular-nums ${compact ? "text-[32px] md:text-[40px]" : "text-[46px] md:text-[64px]"}`}>
             {prefix}{val}
           </span>
           <span className={`font-bold text-black/40 ml-1 ${compact ? "text-[14px] md:text-[16px]" : "text-[16px] md:text-[20px]"}`}>{suffix}</span>
@@ -313,7 +311,7 @@ const TiltReveal = ({ children, delay = 0, direction = "left" }) => {
 };
 
 /* ── Scroll-triggered underline grow ── */
-const GrowUnderline = ({ children, color = "#06C755", className = "" }) => {
+const GrowUnderline = ({ children, color = "#00BFA5", className = "" }) => {
   const [ref, vis] = useInView(0.3);
   return (
     <span ref={ref} className={`relative inline-block ${className}`}>
@@ -384,7 +382,7 @@ const TextRevealChar = ({ text, className = "", delay = 0 }) => {
 
 /* ── Horizontal scrolling text band ── */
 const MarqueeBand = ({ texts, logos, dark = false }) => (
-  <div className={`overflow-hidden py-4 md:py-5 ${dark ? "bg-[#111]" : "bg-[#06C755]"} relative`}>
+  <div className={`overflow-hidden py-4 md:py-5 ${dark ? "bg-[#111]" : "bg-[#00BFA5]"} relative`}>
     <div className="flex items-center w-max animate-marquee-x">
       {[...(logos || []), ...(logos || []), ...(logos || []), ...(logos || []),
         ...(texts || []).map(t => ({ text: t })), ...(texts || []).map(t => ({ text: t })), ...(texts || []).map(t => ({ text: t })), ...(texts || []).map(t => ({ text: t }))
@@ -406,7 +404,7 @@ const AnimatedNumber = ({ value, suffix, label }) => {
     <div ref={ref} className="text-center">
       <div className="overflow-hidden">
         <div className="font-en text-[36px] md:text-[50px] font-extrabold text-white leading-none tabular-nums" style={{ animation: "count-in .8s ease-out" }}>
-          {val}<span className="text-[14px] text-[#06C755] ml-1 font-bold">{suffix}</span>
+          {val}<span className="text-[14px] text-[#00BFA5] ml-1 font-bold">{suffix}</span>
             </div>
           </div>
       <p className="text-[10px] text-white/40 font-semibold mt-2">{label}</p>
@@ -415,8 +413,8 @@ const AnimatedNumber = ({ value, suffix, label }) => {
 };
 
 const LineBtn = ({ children, large }) => (
-  <a href="#contact" className={`btn-ripple inline-flex items-center gap-2.5 bg-[#06C755] text-white font-bold rounded-full shadow-[0_4px_20px_rgba(6,199,85,.25)] hover:shadow-[0_8px_32px_rgba(6,199,85,.35)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 ${large ? "px-9 py-4 text-[15px]" : "px-6 py-3 text-[13px]"}`}>
-    <img src="/line-icon.png" alt="" className="w-5 h-5 rounded-md" />
+  <a href="#contact" className={`btn-ripple inline-flex items-center gap-2.5 bg-[#00BFA5] text-white font-bold rounded-full shadow-[0_4px_20px_rgba(0,191,165,.25)] hover:shadow-[0_8px_32px_rgba(0,191,165,.35)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 ${large ? "px-10 py-4.5 text-[18px]" : "px-6 py-3 text-[13px]"}`}>
+    <img src="/line-icon.png" alt="" className={`${large ? "w-6 h-6" : "w-5 h-5"} rounded-md`} />
     {children || "LINEで相談する"}
   </a>
 );
@@ -460,7 +458,7 @@ const TallPhone = ({ name, color, msgs, scale = 1, className = "" }) => {
           <div className="flex items-center justify-center shrink-0" style={{ height: w * 0.15, background: "#fff" }}>
             <div style={{ width: w * 0.24, height: w * 0.065, background: "#1a1a1a", borderRadius: 999 }} />
               </div>
-          <div className="shrink-0 flex items-center gap-1 px-2" style={{ height: w * 0.14, background: color || "#06C755" }}>
+          <div className="shrink-0 flex items-center gap-1 px-2" style={{ height: w * 0.14, background: color || "#00BFA5" }}>
             <div className="rounded-full bg-white/30 flex items-center justify-center shrink-0" style={{ width: w * 0.085, height: w * 0.085 }}>
               <span className="text-white font-bold" style={{ fontSize: w * 0.04 }}>{(name || "V").charAt(0)}</span>
               </div>
@@ -474,7 +472,7 @@ const TallPhone = ({ name, color, msgs, scale = 1, className = "" }) => {
               </div>
             </div>
             <div className="flex justify-end">
-              <div className="px-1.5 py-1" style={{ maxWidth: "75%", borderRadius: `${w*0.04}px ${w*0.04}px ${w*0.01}px ${w*0.04}px`, background: color || "#06C755" }}>
+              <div className="px-1.5 py-1" style={{ maxWidth: "75%", borderRadius: `${w*0.04}px ${w*0.04}px ${w*0.01}px ${w*0.04}px`, background: color || "#00BFA5" }}>
                 <p style={{ fontSize: w * 0.05, lineHeight: 1.5, color: "#fff" }}>{m2}</p>
               </div>
             </div>
@@ -662,8 +660,8 @@ const Hero = () => {
   return (
     <section ref={heroRef} className="relative flex flex-col justify-center overflow-hidden bg-white">
       <div className="grain-overlay z-[1]" aria-hidden="true" />
-      <div className="absolute top-[-20%] right-[-10%] w-[50%] aspect-square rounded-full bg-[#06C755]/[.04] blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[-15%] left-[-8%] w-[35%] aspect-square rounded-full bg-[#06C755]/[.03] blur-[100px] pointer-events-none" />
+      <div className="absolute top-[-20%] right-[-10%] w-[50%] aspect-square rounded-full bg-[#00BFA5]/[.04] blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-[-15%] left-[-8%] w-[35%] aspect-square rounded-full bg-[#00BFA5]/[.03] blur-[100px] pointer-events-none" />
 
       {/* Alternating up/down scrolling creative columns */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -680,19 +678,16 @@ const Hero = () => {
       <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-transparent to-white/40" />
       <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-white via-transparent to-white" />
 
+      {/* Badge - 右上に配置 */}
+      <img src="/badge-200.png" alt="運用実績200社以上" className="absolute z-20 top-4 right-4 md:top-8 md:right-8 h-[64px] md:h-[100px] lg:h-[120px] w-auto drop-shadow-[0_4px_16px_rgba(0,0,0,.12)] animate-[float_3s_ease-in-out_infinite]" loading="lazy" style={{ animation: "float 3s ease-in-out infinite" }} />
+
       <div className="relative z-10 max-w-[1100px] mx-auto px-4 md:px-8 w-full pt-20 pb-8 md:pt-24 md:pb-10">
         <div className="max-w-[660px]">
-          {/* 吹き出しタグ - 参考デザインに沿った訴求 */}
-          <div className={show()} style={{ transitionDelay: "200ms" }}>
-            <div className="hero-bubble inline-block bg-[#06C755] text-white px-4 py-2 md:px-5 md:py-2.5 font-bold text-[12px] md:text-[14px] tracking-wide shadow-[0_2px_12px_rgba(6,199,85,.25)]">
-              LINE活用でお悩みの企業様へ
-            </div>
-          </div>
           {/* Main Copy */}
           <div className={show()} style={{ transitionDelay: "400ms" }}>
             <h1 className="leading-[1.35] md:leading-[1.4] font-display mt-4 md:mt-5">
               <span className="block text-[24px] md:text-[42px] lg:text-[52px] font-black text-[#333] tracking-tight">
-                LINE活用で、<br />貴社の<span className="text-[#06C755]">事業成長</span>を<br className="hidden md:block" />加速させる。
+                LINE活用で、<br /><span className="text-[#00BFA5]">事業成長</span>を<br className="hidden md:block" />加速させる。
               </span>
             </h1>
           </div>
@@ -706,7 +701,6 @@ const Hero = () => {
           <div className={show()} style={{ transitionDelay: "800ms" }}>
             <div className="mt-6 md:mt-7 flex items-center gap-4 md:gap-5 flex-wrap">
               <MagneticWrap className="inline-block" strength={0.15}><LineBtn large>ご相談・お問合せ（無料）</LineBtn></MagneticWrap>
-              <img src="/badge-200.png" alt="運用実績200社以上" className="h-[56px] md:h-[80px] w-auto drop-shadow-[0_2px_8px_rgba(0,0,0,.08)]" loading="lazy" />
             </div>
           </div>
         </div>
@@ -719,26 +713,84 @@ const Hero = () => {
    CLIENT SHOWCASE — white bg
    ═══════════════════════════════════════════════════════════ */
 const ClientShowcase = () => {
-  const ClientCard = ({ c }) => (
-    <div className="shrink-0 mx-2 group">
-      <div className="relative rounded-2xl overflow-hidden shadow-[0_2px_16px_rgba(0,0,0,.06)] hover:shadow-[0_8px_32px_rgba(0,0,0,.10)] transition-all duration-500">
-        {c.logo ? (
-          <div className="w-[280px] md:w-[440px] h-[160px] md:h-[250px] overflow-hidden bg-white flex items-center justify-center">
-            <img src={c.logo} alt={c.name} className={`w-full h-full ${c.fill ? "object-cover" : "object-contain"} group-hover:scale-105 transition-transform duration-500`} style={c.scale ? { transform: `scale(${c.scale})` } : undefined} />
+  const PhoneMockup = ({ c }) => (
+    <div className="relative w-[70px] md:w-[100px] shrink-0">
+      <div className="relative bg-[#1a1a1a] rounded-[14px] md:rounded-[18px] p-[3px] md:p-[4px] shadow-[0_12px_40px_rgba(0,0,0,.25)]">
+        {/* Notch */}
+        <div className="absolute top-[3px] md:top-[4px] left-1/2 -translate-x-1/2 w-[24px] md:w-[32px] h-[8px] md:h-[10px] bg-[#1a1a1a] rounded-b-lg z-10" />
+        {/* Screen */}
+        <div className="relative bg-[#f5f5f5] rounded-[11px] md:rounded-[14px] overflow-hidden" style={{ aspectRatio: "9/19.5" }}>
+          {/* Status bar placeholder */}
+          <div className="h-[14px] md:h-[18px] bg-white" />
+          {/* LINE-style header */}
+          <div className="bg-[#00BFA5] px-2 py-1 md:py-1.5 flex items-center gap-1">
+            <div className="w-[10px] h-[10px] md:w-[14px] md:h-[14px] rounded-full bg-white/30" />
+            <div className="w-[28px] md:w-[36px] h-[4px] md:h-[5px] bg-white/50 rounded-full" />
           </div>
-        ) : (
-          <div className="w-[280px] md:w-[440px] h-[160px] md:h-[250px] flex items-center justify-center" style={{ background: `linear-gradient(135deg, ${c.accent}, ${c.accent}cc)` }}>
-            <span className="text-white font-black font-en text-[18px] md:text-[28px] tracking-wide text-center px-6">{c.name}</span>
+          {/* Chat placeholder */}
+          <div className="p-1.5 md:p-2 space-y-1.5 md:space-y-2">
+            <div className="flex gap-1">
+              <div className="w-[8px] h-[8px] md:w-[10px] md:h-[10px] rounded-full bg-gray-300 shrink-0 mt-0.5" />
+              <div className="bg-white rounded-lg rounded-tl-sm px-1.5 py-1 md:px-2 md:py-1.5 shadow-sm max-w-[80%]">
+                <div className="w-[24px] md:w-[32px] h-[3px] md:h-[4px] bg-gray-200 rounded-full" />
+                <div className="w-[16px] md:w-[22px] h-[3px] md:h-[4px] bg-gray-200 rounded-full mt-1" />
+              </div>
+            </div>
+            <div className="flex justify-end">
+              <div className="bg-[#00BFA5]/15 rounded-lg rounded-tr-sm px-1.5 py-1 md:px-2 md:py-1.5 max-w-[75%]">
+                <div className="w-[20px] md:w-[28px] h-[3px] md:h-[4px] bg-[#00BFA5]/30 rounded-full" />
+              </div>
+            </div>
+            <div className="flex gap-1">
+              <div className="w-[8px] h-[8px] md:w-[10px] md:h-[10px] rounded-full bg-gray-300 shrink-0 mt-0.5" />
+              <div className="bg-white rounded-lg rounded-tl-sm px-1.5 py-1 md:px-2 md:py-1.5 shadow-sm max-w-[85%]">
+                <div className="w-[28px] md:w-[36px] h-[3px] md:h-[4px] bg-gray-200 rounded-full" />
+                <div className="w-[20px] md:w-[26px] h-[3px] md:h-[4px] bg-gray-200 rounded-full mt-1" />
+                <div className="w-[14px] md:w-[18px] h-[3px] md:h-[4px] bg-gray-200 rounded-full mt-1" />
+              </div>
+            </div>
           </div>
-        )}
+          {/* Rich menu placeholder */}
+          <div className="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-1 md:p-1.5">
+            <div className="grid grid-cols-2 gap-0.5 md:gap-1">
+              <div className="bg-gray-100 rounded h-[12px] md:h-[16px]" />
+              <div className="bg-gray-100 rounded h-[12px] md:h-[16px]" />
+            </div>
+          </div>
+        </div>
       </div>
+    </div>
+  );
+
+  const ClientCard = ({ c }) => (
+    <div className="shrink-0 mx-2 md:mx-3 group">
+      <div className="relative">
+        {/* Banner */}
+        <div className="relative rounded-2xl overflow-hidden shadow-[0_2px_16px_rgba(0,0,0,.06)] hover:shadow-[0_8px_32px_rgba(0,0,0,.10)] transition-all duration-500">
+          {c.logo ? (
+            <div className="w-[280px] md:w-[440px] h-[160px] md:h-[250px] overflow-hidden bg-white flex items-center justify-center">
+              <img src={c.logo} alt={c.name} className={`w-full h-full ${c.fill ? "object-cover" : "object-contain"} group-hover:scale-105 transition-transform duration-500`} style={c.scale ? { transform: `scale(${c.scale})` } : undefined} />
+            </div>
+          ) : (
+            <div className="w-[280px] md:w-[440px] h-[160px] md:h-[250px] flex items-center justify-center" style={{ background: `linear-gradient(135deg, ${c.accent}, ${c.accent}cc)` }}>
+              <span className="text-white font-black font-en text-[18px] md:text-[28px] tracking-wide text-center px-6">{c.name}</span>
+            </div>
+          )}
+        </div>
+        {/* Phone mockup - overlapping bottom-right of banner */}
+        <div className="absolute -bottom-3 -right-5 md:-bottom-4 md:-right-7 z-10 group-hover:-translate-y-1 transition-transform duration-500">
+          <PhoneMockup c={c} />
+        </div>
+      </div>
+      {/* Client name */}
+      <p className="mt-5 md:mt-6 text-[11px] md:text-[13px] font-bold text-gray-500 tracking-wide pl-1">{c.name}</p>
     </div>
   );
 
   return (
     <section id="works" className="py-14 md:py-20 overflow-hidden bg-white relative">
-      <div className="absolute top-[5%] right-[-3%] w-[15%] aspect-square rounded-full bg-[#06C755]/[.03] pointer-events-none animate-drift-y" />
-      <div className="absolute bottom-[10%] left-[-4%] w-[12%] aspect-square rounded-full bg-[#06C755]/[.04] pointer-events-none animate-drift-x" />
+      <div className="absolute top-[5%] right-[-3%] w-[15%] aspect-square rounded-full bg-[#00BFA5]/[.03] pointer-events-none animate-drift-y" />
+      <div className="absolute bottom-[10%] left-[-4%] w-[12%] aspect-square rounded-full bg-[#00BFA5]/[.04] pointer-events-none animate-drift-x" />
       <div className="max-w-[1200px] mx-auto px-5 md:px-8 mb-8">
         <Reveal>
           <SectionHead>LINE運用の実績多数</SectionHead>
@@ -753,8 +805,8 @@ const ClientShowcase = () => {
       </div>
       <div className="max-w-[1200px] mx-auto px-5 md:px-8 mt-5 text-center">
         <Reveal>
-          <a href="#results" className="inline-flex items-center gap-2.5 text-[15px] md:text-[16px] font-bold text-[#06C755] hover:underline">
-            成果事例を見る <ArrowRight size={18} />
+          <a href="#results" className="inline-flex items-center gap-2.5 text-[15px] md:text-[16px] font-bold text-[#00BFA5] hover:underline">
+            実績を見る <ArrowRight size={18} />
           </a>
         </Reveal>
       </div>
@@ -763,63 +815,108 @@ const ClientShowcase = () => {
 };
 
 /* ═══════════════════════════════════════════════════════════
-   PAIN POINTS — イメージをアイコンに、そこから吹き出し
+   PAIN POINTS — LINEトーク画面風
    ═══════════════════════════════════════════════════════════ */
-const PainPoints = () => (
-  <section className="relative bg-[#e8f5e9] pt-8 pb-4 md:pt-10 md:pb-6 overflow-hidden">
+const PainPoints = () => {
+  const times = ["14:02", "14:05", "14:12", "14:18"];
+  return (
+  <section className="relative bg-[#e0f5f2] pt-8 pb-10 md:pt-10 md:pb-14 overflow-hidden">
     <div className="absolute inset-0 diagonal-pattern pointer-events-none" />
-    <WaveSvg fill="#e8f5e9" />
+    <WaveSvg fill="#e0f5f2" />
     <FloatingParticles count={8} />
-    <div className="w-full max-w-[1280px] mx-auto px-4 md:px-16 lg:px-24 relative z-10">
+    <div className="w-full max-w-[540px] mx-auto px-4 relative z-10">
       <Reveal>
         <SectionHead>こんなお悩みはありませんか？</SectionHead>
       </Reveal>
 
-      <div className="mt-8 md:mt-10 bg-[#e8f5e9] rounded-2xl px-4 py-8 md:px-16 md:py-12 lg:px-24 min-h-0 md:min-h-[320px] overflow-visible">
-        {PAINS.map((pain, i) => (
-          <TiltReveal key={i} delay={i * 80} direction={i % 2 === 0 ? "left" : "right"}>
-            <div className="mb-14 md:mb-16 last:mb-0 flex items-start gap-4 md:gap-5 py-2">
-              {/* アイコン */}
-              <div className="w-12 h-12 md:w-14 md:h-14 rounded-full overflow-hidden bg-[#9dd4e8] shrink-0 flex items-center justify-center border-2 border-white shadow-[0_2px_8px_rgba(0,0,0,.1)]">
-                <img src={pain.img} alt="" className="w-full h-full object-cover" />
-              </div>
-              {/* 吹き出し — 尾は背後、本体が前面 */}
-              <div className="flex-1 min-w-0 overflow-visible">
-                <p className="text-[11px] md:text-[12px] text-black/50 mb-1 ml-1">{pain.audience}</p>
-                <div className="relative bg-white rounded-2xl rounded-tl-md py-4 px-5 md:py-5 md:px-6 shadow-[0_1px_2px_rgba(0,0,0,.08)] overflow-visible">
-                  {/* 尾 — 吹き出し本体より後ろに */}
-                  <div
-                    className="absolute -z-10"
-                    style={{
-                      left: "-10px",
-                      top: "12px",
-                      width: 0,
-                      height: 0,
-                      borderTop: "10px solid transparent",
-                      borderBottom: "10px solid transparent",
-                      borderRight: "12px solid white",
-                      filter: "drop-shadow(1px 0 2px rgba(0,0,0,.08))",
-                    }}
-                  />
-                  <div className="relative z-10">
-                    <p className="text-[16px] md:text-[18px] font-bold text-black leading-[1.4] mb-2">{pain.keyword}</p>
-                    <p className="text-[13px] md:text-[15px] text-black/85 leading-[1.8]">{pain.text}</p>
+      {/* LINE風トーク画面 */}
+      <Reveal delay={100}>
+        <div className="mt-6 md:mt-8 rounded-[28px] md:rounded-[32px] overflow-hidden shadow-[0_8px_40px_rgba(0,0,0,.12)] border-[6px] md:border-[8px] border-[#1a1a1a] bg-[#1a1a1a]">
+          {/* ノッチ */}
+          <div className="flex justify-center pt-1 pb-0 bg-[#1a1a1a]">
+            <div className="w-[80px] md:w-[100px] h-[18px] md:h-[22px] bg-[#1a1a1a] rounded-b-2xl" />
+          </div>
+
+          {/* LINEヘッダー */}
+          <div className="bg-[#00BFA5] px-4 py-2.5 md:py-3 flex items-center gap-3">
+            <ChevronLeft size={20} className="text-white/70" />
+            <div className="flex-1 text-center">
+              <p className="text-white font-bold text-[13px] md:text-[14px]">お悩み相談室</p>
+            </div>
+            <div className="w-5" />
+          </div>
+
+          {/* トーク本体 */}
+          <div className="bg-[#7ECEC4] px-3 py-4 md:px-4 md:py-5 space-y-4 md:space-y-5" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000' fill-opacity='.02'%3E%3Ccircle cx='20' cy='20' r='1'/%3E%3C/g%3E%3C/svg%3E\")" }}>
+            {PAINS.map((pain, i) => (
+              <TiltReveal key={i} delay={i * 100} direction="left">
+                <div className="flex items-start gap-2 md:gap-2.5">
+                  {/* アイコン */}
+                  <div className="w-9 h-9 md:w-10 md:h-10 rounded-full overflow-hidden shrink-0 border border-white/30 shadow-sm">
+                    <img src={pain.img} alt="" className="w-full h-full object-cover" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    {/* 名前 */}
+                    <p className="text-[10px] md:text-[11px] text-black/40 font-medium mb-1 ml-0.5">{pain.audience}</p>
+                    {/* 吹き出し（相手メッセージ） */}
+                    <div className="flex items-end gap-1.5">
+                      <div className="relative bg-white rounded-2xl rounded-tl-md px-3.5 py-2.5 md:px-4 md:py-3 shadow-[0_1px_2px_rgba(0,0,0,.06)] max-w-[85%]">
+                        {/* 吹き出しの尾 */}
+                        <div className="absolute -left-[6px] top-[10px] w-0 h-0" style={{ borderTop: "6px solid transparent", borderBottom: "6px solid transparent", borderRight: "7px solid white" }} />
+                        <p className="text-[13px] md:text-[14px] font-bold text-[#333] leading-[1.45] mb-1">{pain.keyword}</p>
+                        <p className="text-[11px] md:text-[12px] text-black/55 leading-[1.7]">{pain.text}</p>
+                      </div>
+                      <span className="text-[9px] md:text-[10px] text-black/30 shrink-0 pb-0.5">{times[i]}</span>
+                    </div>
                   </div>
                 </div>
+              </TiltReveal>
+            ))}
+
+            {/* 自分の返答（VOYAGE） */}
+            <TiltReveal delay={PAINS.length * 100 + 80} direction="right">
+              <div className="flex justify-end items-end gap-1.5 mt-2">
+                <div className="flex flex-col items-end gap-0.5">
+                  <span className="text-[9px] md:text-[10px] text-black/25">既読</span>
+                  <span className="text-[9px] md:text-[10px] text-black/30">14:22</span>
+                </div>
+                <div className="relative bg-[#00BFA5] rounded-2xl rounded-tr-md px-3.5 py-2.5 md:px-4 md:py-3 shadow-[0_1px_2px_rgba(0,0,0,.06)] max-w-[80%]">
+                  {/* 吹き出しの尾 */}
+                  <div className="absolute -right-[6px] top-[10px] w-0 h-0" style={{ borderTop: "6px solid transparent", borderBottom: "6px solid transparent", borderLeft: "7px solid #00BFA5" }} />
+                  <p className="text-[13px] md:text-[14px] font-bold text-white leading-[1.5]">
+                    そのお悩み、<br />VOYAGEがLINEで解決します💪
+                  </p>
+                </div>
               </div>
+            </TiltReveal>
+          </div>
+
+          {/* 入力バー */}
+          <div className="bg-[#efefef] px-3 py-2 md:py-2.5 flex items-center gap-2">
+            <div className="flex-1 bg-white rounded-full px-3 py-1.5 md:py-2">
+              <span className="text-[11px] md:text-[12px] text-black/25">メッセージを入力</span>
             </div>
-          </TiltReveal>
-        ))}
-      </div>
+            <div className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-[#00BFA5] flex items-center justify-center">
+              <ArrowRight size={14} className="text-white -rotate-90" />
+            </div>
+          </div>
+
+          {/* ホームバー */}
+          <div className="flex justify-center py-1.5 bg-[#1a1a1a]">
+            <div className="w-[100px] md:w-[120px] h-[4px] bg-white/30 rounded-full" />
+          </div>
+        </div>
+      </Reveal>
     </div>
   </section>
-);
+  );
+};
 
 /* ═══════════════════════════════════════════════════════════
    GREEN BANNER
    ═══════════════════════════════════════════════════════════ */
 const GreenBanner = ({ children }) => (
-  <div className="bg-[#06C755] py-6 md:py-7 text-center relative overflow-hidden">
+  <div className="bg-[#00BFA5] py-6 md:py-7 text-center relative overflow-hidden">
     <div className="absolute inset-0 pointer-events-none opacity-10">
       <div className="absolute top-0 right-0 w-[50%] h-full bg-white rounded-full blur-[80px] translate-x-1/4" />
       <div className="absolute bottom-0 left-0 w-[40%] h-full bg-white rounded-full blur-[60px] -translate-x-1/4 animate-drift-x" />
@@ -839,11 +936,11 @@ const ChevronDivider = ({ headline, sub, body }) => {
   <div className="relative" ref={secRef}>
     {/* Top chevron pointing down */}
     <svg viewBox="0 0 1440 60" preserveAspectRatio="none" className="w-full block" style={{ height: "clamp(28px, 4vw, 56px)", marginBottom: -1 }}>
-      <path d="M0,0 L720,60 L1440,0 L1440,0 L0,0 Z" fill="#e8f5e9" />
-      <path d="M0,0 L720,60 L1440,0 L1440,60 L720,60 L0,60 Z" fill="#06C755" />
+      <path d="M0,0 L720,60 L1440,0 L1440,0 L0,0 Z" fill="#e0f5f2" />
+      <path d="M0,0 L720,60 L1440,0 L1440,60 L720,60 L0,60 Z" fill="#00BFA5" />
     </svg>
     {/* Main body */}
-    <div className="relative overflow-hidden bg-[#06C755]">
+    <div className="relative overflow-hidden bg-[#00BFA5]">
       {/* Decorative */}
       <div className="absolute inset-0 dot-pattern-dark pointer-events-none opacity-10" />
       <div className="absolute top-[-20%] right-[-10%] w-[40%] aspect-square rounded-full bg-white/[.06] blur-[60px] pointer-events-none animate-drift-x" />
@@ -864,8 +961,8 @@ const ChevronDivider = ({ headline, sub, body }) => {
     </div>
     {/* Bottom chevron pointing down */}
     <svg viewBox="0 0 1440 60" preserveAspectRatio="none" className="w-full block" style={{ height: "clamp(28px, 4vw, 56px)", marginTop: -1 }}>
-      <path d="M0,0 L1440,0 L720,60 Z" fill="#06C755" />
-      <path d="M0,60 L720,60 L1440,60 L1440,0 L720,60 L0,0 Z" fill="#e8f5e9" />
+      <path d="M0,0 L1440,0 L720,60 Z" fill="#00BFA5" />
+      <path d="M0,60 L720,60 L1440,60 L1440,0 L720,60 L0,0 Z" fill="#e0f5f2" />
     </svg>
   </div>
   );
@@ -893,7 +990,7 @@ const BarChart = ({ items, compact }) => {
               className="h-full rounded-full transition-all ease-out relative overflow-hidden"
               style={{
                 width: vis ? `${item.value}%` : "0%",
-                background: i === 0 ? "linear-gradient(90deg, #06C755, #38d9a9)" : "#ccc",
+                background: i === 0 ? "linear-gradient(90deg, #00BFA5, #38d9a9)" : "#ccc",
                 transitionDuration: "1.4s",
                 transitionDelay: `${i * 250 + 200}ms`,
               }}
@@ -916,8 +1013,8 @@ const CircleRing = ({ pct }) => {
   const r = 54, c = 2 * Math.PI * r;
   return (
     <svg viewBox="0 0 128 128" className="w-[60px] md:w-[72px] shrink-0">
-      <circle cx="64" cy="64" r={r} fill="none" stroke="#e8f5e9" strokeWidth="10" />
-      <circle cx="64" cy="64" r={r} fill="none" stroke="#06C755" strokeWidth="10"
+      <circle cx="64" cy="64" r={r} fill="none" stroke="#e0f5f2" strokeWidth="10" />
+      <circle cx="64" cy="64" r={r} fill="none" stroke="#00BFA5" strokeWidth="10"
         strokeLinecap="round" strokeDasharray={c} strokeDashoffset={c * (1 - pct / 100)}
         transform="rotate(-90 64 64)" className="transition-all duration-1000" />
     </svg>
@@ -931,11 +1028,11 @@ const MARKET_STATS = [
 ];
 
 const MarketData = () => (
-  <section className="py-12 md:py-16 bg-[#e8f5e9] relative overflow-hidden">
+  <section className="py-12 md:py-16 bg-[#e0f5f2] relative overflow-hidden">
     <div className="max-w-[1100px] mx-auto px-5 md:px-8 relative z-10">
       <Reveal>
         <h2 className="text-[20px] md:text-[26px] font-bold text-black/85 mb-12 md:mb-14">
-          なぜ今、<span className="text-[#06C755]">LINE</span>なのか
+          なぜ今、<span className="text-[#00BFA5]">LINE</span>なのか
         </h2>
       </Reveal>
 
@@ -946,7 +1043,7 @@ const MarketData = () => (
             <div className="text-center md:text-left">
               <span className="text-[9px] font-medium text-black/35 tracking-[0.2em] font-en uppercase">{s.tag}</span>
               <div className="flex items-baseline gap-1 mt-1 justify-center md:justify-start">
-                <span className="font-en text-[56px] md:text-[72px] font-bold text-[#06C755] leading-[0.95] tabular-nums">{s.num}</span>
+                <span className="font-en text-[56px] md:text-[72px] font-bold text-[#00BFA5] leading-[0.95] tabular-nums">{s.num}</span>
                 <span className="text-[20px] font-semibold text-black/35">{s.unit}</span>
               </div>
               <p className="text-[15px] font-semibold text-black/85 mt-2">{s.label}</p>
@@ -960,7 +1057,7 @@ const MarketData = () => (
       <Reveal delay={80}>
         <div className="mt-14 md:mt-16 pt-10 md:pt-12 text-center">
           <p className="leading-[1.6]">
-            <span className="text-[28px] md:text-[36px] font-semibold text-black/90"><span className="text-[#06C755]">LINE</span>はずっと残り続ける<span className="text-[#06C755]">資産</span>です。</span>
+            <span className="text-[28px] md:text-[36px] font-semibold text-black/90"><span className="text-[#00BFA5]">LINE</span>はずっと残り続ける<span className="text-[#00BFA5]">資産</span>です。</span>
             <span className="block text-[15px] md:text-[16px] font-normal text-black/45 mt-2">広告やエージェントは止めれば流入がゼロに。だからこそ、LINEで蓄積する資産を。</span>
           </p>
         </div>
@@ -972,22 +1069,33 @@ const MarketData = () => (
 /* ═══════════════════════════════════════════════════════════
    YOUTUBE — light green bg
    ═══════════════════════════════════════════════════════════ */
+const YOUTUBE_VIDEOS = [
+  { id: "qOIuvPrF2TY", title: "代表 千葉瑛太が語るLINEを活用した採用支援" },
+  { id: "XvAlNS3MBp8", title: "VOYAGE サービス紹介" },
+];
+
 const YouTubeSection = () => (
-  <section className="relative bg-[#e8f5e9] pt-6 pb-14 md:pt-8 md:pb-16 overflow-hidden">
+  <section className="relative bg-[#e0f5f2] pt-6 pb-14 md:pt-8 md:pb-16 overflow-hidden">
     <div className="max-w-[800px] mx-auto px-5 md:px-8 relative z-10">
       <Reveal>
         <div className="text-center mb-6">
-          <span className="text-[20px] md:text-[28px] font-black text-[#06C755] tracking-wider font-en mb-3 inline-block">MEDIA</span>
-          <p className="text-[16px] md:text-[18px] font-bold text-black">代表 千葉瑛太が語るLINEを活用した採用支援</p>
+          <span className="text-[20px] md:text-[28px] font-black text-[#00BFA5] tracking-wider font-en mb-3 inline-block">MEDIA</span>
         </div>
       </Reveal>
-      <Reveal delay={100}>
-        <div className="rounded-2xl overflow-hidden shadow-[0_4px_32px_rgba(0,0,0,.10)]">
-          <div className="relative w-full" style={{ paddingBottom: "56.25%" }}>
-            <iframe src="https://www.youtube.com/embed/qOIuvPrF2TY" title="VOYAGE" className="absolute inset-0 w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
-          </div>
-        </div>
-      </Reveal>
+      <div className="space-y-8 md:space-y-10">
+        {YOUTUBE_VIDEOS.map((v, i) => (
+          <Reveal key={v.id} delay={i * 120}>
+            <div>
+              <p className="text-[14px] md:text-[16px] font-bold text-black mb-3 md:mb-4 text-center">{v.title}</p>
+              <div className="rounded-2xl overflow-hidden shadow-[0_4px_32px_rgba(0,0,0,.10)]">
+                <div className="relative w-full" style={{ paddingBottom: "56.25%" }}>
+                  <iframe src={`https://www.youtube.com/embed/${v.id}`} title={v.title} className="absolute inset-0 w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
+                </div>
+              </div>
+            </div>
+          </Reveal>
+        ))}
+      </div>
     </div>
   </section>
 );
@@ -1002,11 +1110,11 @@ const BackstageGroup = () => {
   const overlayAlpha = 0.2 + progress * 0.35;
 
   return (
-    <section id="about" className="bg-[#e8f5e9] relative overflow-hidden w-full">
+    <section id="about" className="bg-[#e0f5f2] relative overflow-hidden w-full">
       {/* 写真 → グラデーションで背景に馴染む → グラデーション終了後にテキスト */}
       <div ref={wrapRef} className="relative w-[100vw] left-1/2 -translate-x-1/2 overflow-hidden flex flex-col">
         {/* 画像エリア — 写真の縦横比に合わせて高さを決定 */}
-        <div className="relative w-full aspect-[16/9] bg-[#e8f5e9] overflow-hidden">
+        <div className="relative w-full aspect-[16/9] bg-[#e0f5f2] overflow-hidden">
           <img
             src="/backstage-v2.png" alt="BACKSTAGE Group"
             className="absolute inset-0 w-full h-full object-cover will-change-transform transition-transform duration-100"
@@ -1046,7 +1154,7 @@ const LEADERS = [
 ];
 
 const Leadership = () => (
-  <section className="relative bg-[#e8f5e9] pt-16 pb-14 md:pt-24 md:pb-20 overflow-hidden">
+  <section className="relative bg-[#e0f5f2] pt-16 pb-14 md:pt-24 md:pb-20 overflow-hidden">
     {/* 上部の区切り線 */}
     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[80%] max-w-[600px] h-px bg-black/10" />
     <div className="relative z-10 max-w-[960px] mx-auto px-4 md:px-8">
@@ -1082,77 +1190,92 @@ const Leadership = () => (
 );
 
 /* ═══════════════════════════════════════════════════════════
-   SERVICE — white bg
+   SERVICE — バナーLP導線
    ═══════════════════════════════════════════════════════════ */
+const SERVICE_BANNERS = [
+  {
+    logo: "/logo-riquel.png",
+    logoAlt: "リクエル",
+    logoH: "h-[44px] md:h-[64px]",
+    tag: "採用DXソリューション",
+    headline: <>LINE×採用で<br className="md:hidden" />歩留まりを劇的改善</>,
+    desc: "エントリーから内定承諾までをLINEで自動化・最適化。面談予約率を最大6倍に。",
+    accent: "#00BFA5",
+    bgFrom: "#00BFA5",
+    bgTo: "#0CADA8",
+    stripe: "#009E89",
+    href: "#",
+  },
+  {
+    logo: "/logo-lacademia.png",
+    logoAlt: "L-ACADEMIA",
+    logoH: "h-[44px] md:h-[64px]",
+    tag: "実践型LINEマーケティングスクール",
+    headline: <>200社超のノウハウを<br className="md:hidden" />実践型カリキュラムで習得</>,
+    desc: "現役プロ講師の伴走支援で、未経験からでもプロレベルのLINEマーケスキルが身につく。",
+    accent: "#0CADA8",
+    bgFrom: "#0CADA8",
+    bgTo: "#38BCD8",
+    stripe: "#009DB5",
+    href: "#",
+  },
+];
+
 const Service = () => (
   <section id="service" className="py-14 md:py-20 bg-white relative overflow-hidden">
     <div className="absolute inset-0 circle-ring-pattern pointer-events-none" />
-    <div className="absolute top-[10%] left-[-5%] w-[25%] aspect-square rounded-full bg-[#06C755]/[.03] pointer-events-none animate-drift-y" />
-    <div className="absolute bottom-[5%] right-[-6%] w-[20%] aspect-square rounded-full bg-[#06C755]/[.04] pointer-events-none animate-drift-x" />
-    <div className="absolute top-[30%] right-[4%] w-2.5 h-2.5 rounded-full bg-[#06C755]/20 pointer-events-none animate-float-b" />
-    <div className="absolute top-[60%] left-[6%] w-3 h-3 rounded-full bg-[#06C755]/15 pointer-events-none animate-float-a" />
-    <div className="absolute bottom-[25%] right-[10%] w-2 h-2 rounded-full bg-[#06C755]/25 pointer-events-none animate-drift-y" />
-    <div className="absolute inset-0 dot-pattern-white pointer-events-none" />
-    <FloatingParticles count={6} />
-    <div className="max-w-[1000px] mx-auto px-4 md:px-8 relative z-10">
+    <div className="absolute top-[10%] left-[-5%] w-[25%] aspect-square rounded-full bg-[#00BFA5]/[.03] pointer-events-none animate-drift-y" />
+    <div className="absolute bottom-[5%] right-[-6%] w-[20%] aspect-square rounded-full bg-[#00BFA5]/[.04] pointer-events-none animate-drift-x" />
+    <div className="max-w-[900px] mx-auto px-4 md:px-8 relative z-10">
       <Reveal>
-        <SectionHead>
-          サービス内容
-        </SectionHead>
+        <SectionHead>サービス内容</SectionHead>
       </Reveal>
 
-          <Reveal>
-        <div className="mb-12 md:mb-16">
-          <div className="text-center mb-5 md:mb-6">
-            <p className="text-[11px] text-black/30 font-bold mb-2">採用DXソリューション</p>
-            <PopIn><img src="/logo-riquel.png" alt="リクエル" className="h-[80px] md:h-[160px] w-auto mx-auto" loading="lazy" /></PopIn>
-          </div>
-          <p className="text-[13px] md:text-[14px] text-black/45 leading-[1.8] md:leading-[1.9] max-w-[600px] mx-auto text-center mb-6 md:mb-8">
-            月間9,700万人が利用するLINEを基盤に、エントリーから内定承諾までを自動化・最適化。
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 md:gap-x-8 gap-y-8 md:gap-y-0">
-            {[
-              { num: "01", ja: "歩留まりの改善", sub: "連絡不通・離脱の防止", desc: "メールや電話では連絡がつかない応募者とも、日常的に使うLINEならスムーズに連絡が可能。到達率・開封率の高いLINEを使うことで、説明会や面接の無断キャンセルを防ぎ、選考への参加率を最大化します。" },
-              { num: "02", ja: "データの可視化", sub: "ミスマッチのない採用へ", desc: "「誰が・いつ・どの配信を見たか」といった応募者の行動データを可視化・分析。興味度合いに応じたセグメント配信を行うことで、自社にマッチする熱量の高い人材を効率的に見極め、戦略的な採用活動を実現します。" },
-              { num: "03", ja: "採用工数の削減と自動化", sub: "リソース不足の解消", desc: "会社説明会の日程調整やリマインド配信、面接の案内など、これまで手動で行っていたルーチン業務をLINE上で自動化。採用担当者の負担を大幅に減らし、本来注力すべき「応募者との対話」や「選考」に時間を割ける体制を構築します。" },
-            ].map((f, i) => (
-              <Reveal key={i} delay={i * 100}>
-                <div className="pl-5 md:pl-6 pr-2 border-l-2 border-[#06C755]/30 min-h-0">
-                  <span className="text-[11px] font-bold text-[#06C755]/50 font-en tracking-wider">{f.num}</span>
-                  <h4 className="text-[16px] md:text-[17px] font-black text-black mt-1 mb-0.5">{f.ja}</h4>
-                  <p className="text-[11px] text-[#06C755]/70 font-semibold mb-2">（{f.sub}）</p>
-                  <p className="text-[13px] text-black/45 leading-[1.85]">{f.desc}</p>
+      <div className="space-y-5 md:space-y-6">
+        {SERVICE_BANNERS.map((s, i) => (
+          <Reveal key={i} delay={i * 120}>
+            <a
+              href={s.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group block relative rounded-2xl overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,.08)] hover:shadow-[0_12px_40px_rgba(0,0,0,.15)] hover:-translate-y-1 transition-all duration-400"
+            >
+              {/* Background */}
+              <div className="relative px-6 py-7 md:px-10 md:py-10 min-h-[160px] md:min-h-[200px] flex flex-col justify-center" style={{ background: `linear-gradient(135deg, ${s.bgFrom}, ${s.bgTo})` }}>
+                {/* Diagonal stripes */}
+                <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-[0.08]">
+                  {[...Array(12)].map((_, j) => (
+                    <div key={j} className="absolute h-[200%] w-[30px] md:w-[50px] bg-white -rotate-[25deg]" style={{ left: `${j * 80 - 40}px`, top: "-50%" }} />
+                  ))}
                 </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </Reveal>
 
-      <Reveal>
-        <div>
-          <div className="text-center mb-5 md:mb-6">
-            <p className="text-[11px] text-black/30 font-bold mb-2">実践型LINEマーケティングスクール</p>
-            <img src="/logo-lacademia.png" alt="L-ACADEMIA" className="h-[50px] md:h-[90px] w-auto mx-auto object-contain" loading="lazy" />
-          </div>
-          <p className="text-[13px] md:text-[14px] text-black/45 leading-[1.8] md:leading-[1.9] max-w-[600px] mx-auto text-center mb-6 md:mb-8">
-            200アカウント以上で培った実証済みの勝ちパターンを実践型カリキュラム化。
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 md:gap-x-8 gap-y-8 md:gap-y-0">
-            {LACADEMIA_POINTS.map((p, i) => (
-              <Reveal key={i} delay={i * 100}>
-                <div className="pl-5 md:pl-6 pr-2 border-l-2 border-[#06C755]/30 min-h-0">
-                  <span className="text-[11px] font-bold text-[#06C755]/50 font-en tracking-wider">{p.num}</span>
-                  <h4 className="text-[16px] md:text-[17px] font-black text-black mt-1 mb-0.5">{p.title}</h4>
-                  {p.sub && <p className="text-[11px] text-[#06C755]/70 font-semibold mb-2">（{p.sub}）</p>}
-                  <p className="text-[13px] text-black/45 leading-[1.85]">{p.desc}</p>
+                {/* Content */}
+                <div className="relative z-10 flex flex-col md:flex-row md:items-center gap-5 md:gap-8">
+                  {/* Left: Text */}
+                  <div className="flex-1 min-w-0">
+                    <span className="inline-block text-[10px] md:text-[11px] font-bold text-white/70 tracking-wider mb-2 md:mb-3">{s.tag}</span>
+                    <h3 className="text-[20px] md:text-[28px] font-black text-white leading-[1.4] md:leading-[1.45] mb-2 md:mb-3">
+                      {s.headline}
+                    </h3>
+                    <p className="text-[12px] md:text-[14px] text-white/70 leading-[1.7] max-w-[480px]">{s.desc}</p>
+                  </div>
+
+                  {/* Right: Logo + Arrow */}
+                  <div className="flex items-center gap-4 md:gap-6 shrink-0">
+                    <div className="bg-white rounded-xl px-5 py-3 md:px-6 md:py-4 shadow-[0_4px_16px_rgba(0,0,0,.1)]">
+                      <img src={s.logo} alt={s.logoAlt} className={`${s.logoH} w-auto object-contain`} loading="lazy" />
+                    </div>
+                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/20 flex items-center justify-center group-hover:bg-white/30 group-hover:scale-110 transition-all duration-300">
+                      <ArrowRight size={20} className="text-white group-hover:translate-x-0.5 transition-transform duration-300" />
+                    </div>
+                  </div>
                 </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </Reveal>
-          </div>
+              </div>
+            </a>
+          </Reveal>
+        ))}
+      </div>
+    </div>
   </section>
 );
 
@@ -1164,9 +1287,9 @@ const CTABanner = () => (
     {/* Top chevron */}
     <svg viewBox="0 0 1440 60" preserveAspectRatio="none" className="w-full block" style={{ height: "clamp(28px, 4vw, 56px)", marginBottom: -1 }}>
       <path d="M0,0 L720,60 L1440,0 L1440,0 L0,0 Z" fill="#fff" />
-      <path d="M0,0 L720,60 L1440,0 L1440,60 L720,60 L0,60 Z" className="fill-[#06C755]" />
+      <path d="M0,0 L720,60 L1440,0 L1440,60 L720,60 L0,60 Z" fill="#00BFA5" />
     </svg>
-    <section className="relative overflow-hidden" style={{ background: "linear-gradient(180deg, #06C755 0%, #0bbf5e 50%, #06C755 100%)" }}>
+    <section className="relative overflow-hidden" style={{ background: "linear-gradient(180deg, #00BFA5 0%, #0CADA8 50%, #18B5C0 100%)" }}>
       <div className="absolute inset-0 pointer-events-none opacity-10">
         <div className="absolute top-0 right-0 w-[60%] h-[60%] bg-white rounded-full blur-[100px] -translate-y-1/2 translate-x-1/4" />
         <div className="absolute bottom-0 left-0 w-[40%] h-[40%] bg-white rounded-full blur-[80px] translate-y-1/4 -translate-x-1/4 animate-drift-x" />
@@ -1180,7 +1303,7 @@ const CTABanner = () => (
             LINEマーケティングの<br />戦略設計からアカウント構築<br />運用・分析まで
           </p>
           <MagneticWrap className="inline-block" strength={0.2}>
-            <a href="#contact" className="btn-ripple group inline-flex items-center gap-2.5 md:gap-3 bg-white text-[#06C755] font-black rounded-full shadow-[0_4px_24px_rgba(255,255,255,.25)] hover:shadow-[0_8px_40px_rgba(255,255,255,.35)] hover:-translate-y-1 active:translate-y-0 transition-all duration-300 px-7 py-3.5 md:px-10 md:py-4.5 text-[14px] md:text-[16px] border-2 border-white/80" style={{ animation: "glow-pulse 3s ease-in-out infinite" }}>
+            <a href="#contact" className="btn-ripple group inline-flex items-center gap-2.5 md:gap-3 bg-white text-[#00BFA5] font-black rounded-full shadow-[0_4px_24px_rgba(255,255,255,.25)] hover:shadow-[0_8px_40px_rgba(255,255,255,.35)] hover:-translate-y-1 active:translate-y-0 transition-all duration-300 px-7 py-3.5 md:px-10 md:py-4.5 text-[14px] md:text-[16px] border-2 border-white/80" style={{ animation: "glow-pulse 3s ease-in-out infinite" }}>
               <img src="/line-icon.png" alt="" className="w-5 h-5 md:w-6 md:h-6 rounded-md" />
               ご相談・お問合せ（無料）
               <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform duration-300" />
@@ -1191,8 +1314,8 @@ const CTABanner = () => (
     </section>
     {/* Bottom chevron */}
     <svg viewBox="0 0 1440 60" preserveAspectRatio="none" className="w-full block" style={{ height: "clamp(28px, 4vw, 56px)", marginTop: -1 }}>
-      <path d="M0,0 L1440,0 L720,60 Z" className="fill-[#06C755]" />
-      <path d="M0,60 L720,60 L1440,60 L1440,0 L720,60 L0,0 Z" fill="#e8f5e9" />
+      <path d="M0,0 L1440,0 L720,60 Z" fill="#18B5C0" />
+      <path d="M0,60 L720,60 L1440,60 L1440,0 L720,60 L0,0 Z" fill="#e0f5f2" />
     </svg>
   </div>
 );
@@ -1201,8 +1324,8 @@ const CTABanner = () => (
    ACHIEVEMENTS — light green bg
    ═══════════════════════════════════════════════════════════ */
 const Achievements = () => (
-  <section id="results" className="relative bg-[#e8f5e9] pt-10 pb-12 md:pt-12 md:pb-16 overflow-hidden">
-    <WaveSvg fill="#e8f5e9" />
+  <section id="results" className="relative bg-[#e0f5f2] pt-10 pb-12 md:pt-12 md:pb-16 overflow-hidden">
+    <WaveSvg fill="#e0f5f2" />
     <div className="max-w-[1100px] mx-auto px-4 md:px-6 relative z-10">
         <Reveal>
         <h2 className="text-[24px] md:text-[30px] font-bold text-black/70 tracking-[0.06em] mb-8 text-center">
@@ -1212,13 +1335,13 @@ const Achievements = () => (
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5 mb-8 md:items-stretch">
         {CASES.map((c, i) => (
           <Reveal key={i} delay={i * 60}>
-            <article className="h-full flex flex-col bg-white rounded-xl overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,.06)] hover:shadow-[0_4px_20px_rgba(6,199,85,.12)] hover:-translate-y-1 transition-all duration-300">
+            <article className="h-full flex flex-col bg-white rounded-xl overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,.06)] hover:shadow-[0_4px_20px_rgba(0,191,165,.12)] hover:-translate-y-1 transition-all duration-300">
               <div className="aspect-[16/10] shrink-0 overflow-hidden bg-white flex items-center justify-center">
                 <img src={c.img} alt={c.name} className="w-full h-full object-contain p-2" loading="lazy" />
               </div>
               <div className="flex-1 flex flex-col p-4 md:p-6 min-h-0 bg-gradient-to-b from-[#f8fdf9] to-white">
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="text-[10px] font-bold text-white bg-[#06C755] rounded px-1.5 py-0.5 tabular-nums">{c.num}</span>
+                  <span className="text-[10px] font-bold text-white bg-[#00BFA5] rounded px-1.5 py-0.5 tabular-nums">{c.num}</span>
                   <span className="text-[11px] text-black/50 font-medium">{c.cat}</span>
                 </div>
                 <h3 className="text-[15px] md:text-[16px] font-bold text-black/90 mb-3">{c.name}</h3>
@@ -1226,8 +1349,8 @@ const Achievements = () => (
                   <span className="text-[10px] text-black/40 block mb-1">{c.metric}</span>
                   <div className="flex items-baseline gap-1.5">
                     {c.before !== "—" && <span className="text-[13px] text-black/30 line-through tabular-nums">{c.before}</span>}
-                    {c.before !== "—" && <ArrowRight size={12} className="text-[#06C755]/70 shrink-0" />}
-                    <span className="font-en text-[22px] md:text-[24px] font-bold text-[#06C755] tabular-nums leading-none">{c.after}</span>
+                    {c.before !== "—" && <ArrowRight size={12} className="text-[#00BFA5]/70 shrink-0" />}
+                    <span className="font-en text-[22px] md:text-[24px] font-bold text-[#00BFA5] tabular-nums leading-none">{c.after}</span>
                   </div>
                 </div>
                 {c.challenge && <p className="text-[11px] text-black/50 leading-[1.6] mb-1">{c.challenge}</p>}
@@ -1254,8 +1377,8 @@ const Achievements = () => (
                 <div className="absolute -top-1.5 left-5 w-0 h-0 border-l-[6px] border-r-[6px] border-b-[6px] border-l-transparent border-r-transparent border-b-white" />
                 <p className="text-[12px] text-black/60 leading-[1.8] mb-3">{v.quote}</p>
                 <div className="flex items-center gap-1.5 mb-1.5">
-                  <CheckCircle2 size={12} className="text-[#06C755]" />
-                  <span className="text-[10px] font-semibold text-[#06C755]/80">導入後の成果</span>
+                  <CheckCircle2 size={12} className="text-[#00BFA5]" />
+                  <span className="text-[10px] font-semibold text-[#00BFA5]/80">導入後の成果</span>
                 </div>
                 <p className="text-[11px] text-black/50 leading-[1.7]">{v.result}</p>
               </div>
@@ -1272,12 +1395,11 @@ const Achievements = () => (
    ═══════════════════════════════════════════════════════════ */
 const Strength = () => (
   <section className="py-14 md:py-20 bg-white relative overflow-hidden">
-    <BgText light>STRENGTH</BgText>
     <div className="absolute inset-0 crosshatch-pattern pointer-events-none" />
-    <div className="absolute bottom-[-10%] right-[-8%] w-[30%] aspect-square rounded-full bg-[#06C755]/[.03] pointer-events-none animate-pulse-glow" />
-    <div className="absolute top-[-5%] left-[-6%] w-[25%] aspect-square rounded-full bg-[#06C755]/[.04] pointer-events-none animate-drift-y" />
-    <div className="absolute top-[25%] right-[3%] w-3 h-3 rounded-full bg-[#06C755]/15 pointer-events-none animate-float-a" />
-    <div className="absolute bottom-[35%] left-[5%] w-2 h-2 rounded-full bg-[#06C755]/20 pointer-events-none animate-float-b" />
+    <div className="absolute bottom-[-10%] right-[-8%] w-[30%] aspect-square rounded-full bg-[#00BFA5]/[.03] pointer-events-none animate-pulse-glow" />
+    <div className="absolute top-[-5%] left-[-6%] w-[25%] aspect-square rounded-full bg-[#00BFA5]/[.04] pointer-events-none animate-drift-y" />
+    <div className="absolute top-[25%] right-[3%] w-3 h-3 rounded-full bg-[#00BFA5]/15 pointer-events-none animate-float-a" />
+    <div className="absolute bottom-[35%] left-[5%] w-2 h-2 rounded-full bg-[#00BFA5]/20 pointer-events-none animate-float-b" />
     <div className="absolute inset-0 dot-pattern-white pointer-events-none" />
     <div className="max-w-[1000px] mx-auto px-4 md:px-8 relative z-10">
         <Reveal>
@@ -1300,7 +1422,7 @@ const Strength = () => (
                 />
               </div>
               <div className={`flex-1 ${i % 2 === 0 ? "md:text-left" : "md:text-right"}`}>
-                <span className="block text-[10px] md:text-[11px] font-bold text-[#06C755] tracking-widest font-en mb-2 md:mb-3">STRENGTH {String(i + 1).padStart(2, "0")}</span>
+                <span className="block text-[10px] md:text-[11px] font-bold text-[#00BFA5] tracking-widest font-en mb-2 md:mb-3">STRENGTH {String(i + 1).padStart(2, "0")}</span>
                 <GrowUnderline>
                   <h3 className="text-[18px] md:text-[24px] font-black text-black mb-2 md:mb-3">{s.ja}</h3>
                 </GrowUnderline>
@@ -1318,11 +1440,11 @@ const Strength = () => (
    FLOW — light green bg
    ═══════════════════════════════════════════════════════════ */
 const Flow = () => (
-  <section className="relative bg-[#e8f5e9] pt-14 pb-16 md:pt-16 md:pb-20 overflow-hidden">
+  <section className="relative bg-[#e0f5f2] pt-14 pb-16 md:pt-16 md:pb-20 overflow-hidden">
     <div className="absolute inset-0 diagonal-pattern pointer-events-none" />
-    <WaveSvg fill="#e8f5e9" />
-    <div className="absolute top-[10%] right-[-4%] w-[120px] md:w-[200px] aspect-square rounded-full bg-[#06C755]/[.06] blur-[40px] pointer-events-none animate-drift-y" />
-    <div className="absolute bottom-[15%] left-[-6%] w-[100px] md:w-[160px] aspect-square rounded-full bg-[#06C755]/[.05] blur-[30px] pointer-events-none animate-drift-x" />
+    <WaveSvg fill="#e0f5f2" />
+    <div className="absolute top-[10%] right-[-4%] w-[120px] md:w-[200px] aspect-square rounded-full bg-[#00BFA5]/[.06] blur-[40px] pointer-events-none animate-drift-y" />
+    <div className="absolute bottom-[15%] left-[-6%] w-[100px] md:w-[160px] aspect-square rounded-full bg-[#00BFA5]/[.05] blur-[30px] pointer-events-none animate-drift-x" />
     <div className="absolute inset-0 dot-pattern pointer-events-none opacity-40" />
     <div className="max-w-[1100px] mx-auto px-4 md:px-8 relative z-10">
       <Reveal>
@@ -1341,17 +1463,17 @@ const FlowTimeline = ({ steps }) => {
     <div ref={containerRef} className="space-y-0 relative">
       {/* Background line (faded) */}
       <div className="absolute left-5 md:left-1/2 top-0 bottom-0 w-[2px] md:-translate-x-[1px]">
-        <div className="w-full h-full bg-[#06C755]/10" />
+        <div className="w-full h-full bg-[#00BFA5]/10" />
       </div>
       {/* Animated line that grows with scroll */}
       <div className="absolute left-5 md:left-1/2 top-0 bottom-0 w-[2px] md:-translate-x-[1px] z-[1]">
-        <div className="w-full bg-[#06C755] origin-top transition-[height] duration-200" style={{ height: `${Math.min(progress * 120, 100)}%` }} />
+        <div className="w-full bg-[#00BFA5] origin-top transition-[height] duration-200" style={{ height: `${Math.min(progress * 120, 100)}%` }} />
       </div>
       {steps.map((s, i) => (
         <HorizontalReveal key={i} delay={i * 120} direction={i % 2 === 0 ? "left" : "right"}>
           <div className={`flex items-start gap-4 md:gap-12 relative pb-8 md:pb-10 ${i % 2 === 0 ? "md:flex-row md:text-left" : "md:flex-row-reverse md:text-right"}`}>
             <PopIn delay={i * 150}>
-              <div className="w-10 h-10 md:w-12 md:h-12 bg-[#06C755] text-white rounded-full flex items-center justify-center font-black text-[14px] md:text-[16px] shrink-0 relative z-20 shadow-[0_4px_16px_rgba(6,199,85,.3)] md:absolute md:left-1/2 md:-translate-x-1/2">
+              <div className="w-10 h-10 md:w-12 md:h-12 bg-[#00BFA5] text-white rounded-full flex items-center justify-center font-black text-[14px] md:text-[16px] shrink-0 relative z-20 shadow-[0_4px_16px_rgba(0,191,165,.3)] md:absolute md:left-1/2 md:-translate-x-1/2">
                 {String(i + 1).padStart(2, "0")}
               </div>
             </PopIn>
@@ -1360,7 +1482,7 @@ const FlowTimeline = ({ steps }) => {
               {i % 2 === 0 && <div className="absolute left-0 top-4 md:top-5 w-0 h-0 border-t-[8px] md:border-t-[10px] border-t-transparent border-b-[8px] md:border-b-[10px] border-b-transparent border-r-[10px] md:border-r-[12px] border-r-white" style={{ transform: "translateX(-1px)" }} />}
               {/* 右側の吹き出し（デスクトップのみ右向き尾） */}
               {i % 2 === 1 && <><div className="absolute left-0 top-4 md:top-5 w-0 h-0 border-t-[8px] md:border-t-[10px] border-t-transparent border-b-[8px] md:border-b-[10px] border-b-transparent border-r-[10px] md:border-r-[12px] border-r-white md:hidden" style={{ transform: "translateX(-1px)" }} /><div className="absolute right-0 top-5 w-0 h-0 border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent border-l-[12px] border-l-white hidden md:block" style={{ transform: "translateX(1px)" }} /></>}
-              <p className="text-[10px] md:text-[11px] font-bold text-[#06C755] mb-1">{s.sub}</p>
+              <p className="text-[10px] md:text-[11px] font-bold text-[#00BFA5] mb-1">{s.sub}</p>
               <h3 className="text-[15px] md:text-[17px] font-bold text-black mb-1.5 md:mb-2">{s.ja}</h3>
               <p className="text-[12px] md:text-[13px] text-black/50 leading-[1.75] md:leading-[1.85]">{s.desc}</p>
             </div>
@@ -1379,8 +1501,8 @@ const FAQ = () => {
   return (
     <section className="py-14 md:py-20 bg-white relative overflow-hidden">
       <div className="absolute inset-0 diagonal-pattern pointer-events-none opacity-60" />
-      <div className="absolute top-[10%] right-[-5%] w-[20%] aspect-square rounded-full bg-[#06C755]/[.03] pointer-events-none animate-drift-y" />
-      <div className="absolute bottom-[15%] left-[-4%] w-[15%] aspect-square rounded-full bg-[#06C755]/[.04] pointer-events-none animate-drift-x" />
+      <div className="absolute top-[10%] right-[-5%] w-[20%] aspect-square rounded-full bg-[#00BFA5]/[.03] pointer-events-none animate-drift-y" />
+      <div className="absolute bottom-[15%] left-[-4%] w-[15%] aspect-square rounded-full bg-[#00BFA5]/[.04] pointer-events-none animate-drift-x" />
       <div className="absolute inset-0 dot-pattern-white pointer-events-none" />
       <div className="max-w-[700px] mx-auto px-4 md:px-8 relative z-10">
         <Reveal>
@@ -1389,10 +1511,10 @@ const FAQ = () => {
         <div className="space-y-2.5 md:space-y-3">
           {FAQ_ITEMS.map((item, i) => (
             <HorizontalReveal key={i} delay={i * 80} direction={i % 2 === 0 ? "left" : "right"}>
-              <div className={`bg-[#f7faf7] rounded-xl overflow-hidden transition-all duration-300 ${openIdx === i ? "shadow-[0_4px_20px_rgba(6,199,85,.08)]" : ""}`}>
+              <div className={`bg-[#f5faf9] rounded-xl overflow-hidden transition-all duration-300 ${openIdx === i ? "shadow-[0_4px_20px_rgba(0,191,165,.08)]" : ""}`}>
                 <button onClick={() => setOpenIdx(openIdx === i ? null : i)} className="w-full flex items-center justify-between gap-3 md:gap-4 px-4 py-3.5 md:px-5 md:py-4 text-left group">
-                  <span className="text-[13px] md:text-[14px] font-bold text-black group-hover:text-[#06C755] transition-colors">{item.q}</span>
-                  <ChevronDown className={`text-black/20 shrink-0 transition-transform duration-300 ${openIdx === i ? "rotate-180 !text-[#06C755]" : ""}`} size={16} />
+                  <span className="text-[13px] md:text-[14px] font-bold text-black group-hover:text-[#00BFA5] transition-colors">{item.q}</span>
+                  <ChevronDown className={`text-black/20 shrink-0 transition-transform duration-300 ${openIdx === i ? "rotate-180 !text-[#00BFA5]" : ""}`} size={16} />
               </button>
               <div className={`overflow-hidden transition-all duration-500 ease-out ${openIdx === i ? "max-h-40 pb-3 md:pb-4" : "max-h-0"}`}>
                   <p className="text-[12px] md:text-[13px] text-black/50 leading-[1.8] md:leading-[1.9] px-4 md:px-5">{item.a}</p>
@@ -1410,9 +1532,9 @@ const FAQ = () => {
    CONTACT — green bg（LINE + メールフォームページへのリンク）
    ═══════════════════════════════════════════════════════════ */
 const Contact = () => (
-    <section id="contact" className="relative bg-[#06C755] pt-14 pb-14 md:pt-16 md:pb-16 overflow-hidden">
+    <section id="contact" className="relative bg-[#00BFA5] pt-14 pb-14 md:pt-16 md:pb-16 overflow-hidden">
       <div className="absolute inset-0 diagonal-pattern-dark pointer-events-none" />
-      <WaveSvg fill="#06C755" />
+      <WaveSvg fill="#00BFA5" />
       <div className="absolute inset-0 pointer-events-none opacity-10">
         <div className="absolute bottom-0 left-0 w-[50%] h-[50%] bg-white rounded-full blur-[80px] translate-y-1/3 -translate-x-1/4" />
         <div className="absolute top-0 right-0 w-[40%] h-[40%] bg-white rounded-full blur-[60px] -translate-y-1/4 translate-x-1/4 animate-drift-x" />
@@ -1436,7 +1558,7 @@ const Contact = () => (
           {/* LINEお問合せ */}
           <Reveal delay={100} className="h-full">
             <div className="h-full bg-white rounded-2xl p-5 md:p-8 shadow-[0_8px_40px_rgba(0,0,0,.10)] flex flex-col items-center text-center justify-between min-h-0">
-              <div className="w-12 h-12 md:w-14 md:h-14 bg-[#06C755] rounded-2xl flex items-center justify-center mx-auto mb-3 md:mb-4">
+              <div className="w-12 h-12 md:w-14 md:h-14 bg-[#00BFA5] rounded-2xl flex items-center justify-center mx-auto mb-3 md:mb-4">
                 <img src="/line-icon.png" alt="LINE" className="w-7 h-7 md:w-9 md:h-9 rounded-lg" />
               </div>
               <h3 className="text-[16px] md:text-[20px] font-black text-black mb-2">LINEでお問合せ</h3>
@@ -1444,7 +1566,7 @@ const Contact = () => (
                 友だち追加後、無料相談のご予約が可能です。お気軽にご連絡ください。
               </p>
               <MagneticWrap className="inline-block" strength={0.25}>
-                <a href="#" className="inline-flex items-center gap-2 bg-[#06C755] text-white px-6 py-3 md:px-8 md:py-3.5 rounded-full text-[13px] md:text-[14px] font-bold shadow-[0_4px_20px_rgba(6,199,85,.25)] hover:shadow-[0_8px_32px_rgba(6,199,85,.35)] hover:-translate-y-0.5 transition-all" style={{ animation: "glow-pulse 3s ease-in-out infinite" }}>
+                <a href="#" className="inline-flex items-center gap-2 bg-[#00BFA5] text-white px-6 py-3 md:px-8 md:py-3.5 rounded-full text-[13px] md:text-[14px] font-bold shadow-[0_4px_20px_rgba(0,191,165,.25)] hover:shadow-[0_8px_32px_rgba(0,191,165,.35)] hover:-translate-y-0.5 transition-all" style={{ animation: "glow-pulse 3s ease-in-out infinite" }}>
                   <MessageCircle size={16} /> お友だち追加する
                 </a>
               </MagneticWrap>
@@ -1459,7 +1581,7 @@ const Contact = () => (
                 </div>
                 <h3 className="text-[16px] md:text-[20px] font-black text-black mb-2">メールでお問合せ</h3>
                 <p className="text-black/40 text-[12px] md:text-[13px] leading-[1.7] md:leading-[1.8] mb-4 md:mb-6 max-w-[260px]">フォームページでご入力いただけます。</p>
-                <span className="inline-flex items-center gap-2 bg-[#06C755] text-white px-6 py-3 rounded-full text-[14px] font-bold shadow-[0_4px_20px_rgba(6,199,85,.25)] group-hover:shadow-[0_8px_32px_rgba(6,199,85,.35)] group-hover:-translate-y-0.5 transition-all">
+                <span className="inline-flex items-center gap-2 bg-[#00BFA5] text-white px-6 py-3 rounded-full text-[14px] font-bold shadow-[0_4px_20px_rgba(0,191,165,.25)] group-hover:shadow-[0_8px_32px_rgba(0,191,165,.35)] group-hover:-translate-y-0.5 transition-all">
                   <Send size={16} /> フォームへ進む
                 </span>
               </div>
@@ -1510,7 +1632,7 @@ export default function App() {
         <PainPoints />
         <ChevronDivider
           sub="そのお悩み、VOYAGEが"
-          headline={<><img src="/line-icon.png" alt="LINE" className="inline-block w-8 h-8 md:w-10 md:h-10 rounded-lg align-middle mr-1 -mt-1" /><span className="text-[#fff] bg-[#06C755] px-2 py-0.5 rounded-lg inline-block">LINE</span>を使って<br />すべて<span className="underline decoration-white/40 decoration-4 underline-offset-4">解決</span>します。</>}
+          headline={<><img src="/line-icon.png" alt="LINE" className="inline-block w-8 h-8 md:w-10 md:h-10 rounded-lg align-middle mr-1 -mt-1" /><span className="text-[#fff] bg-[#00BFA5] px-2 py-0.5 rounded-lg inline-block">LINE</span>を使って<br />すべて<span className="underline decoration-white/40 decoration-4 underline-offset-4">解決</span>します。</>}
           body="多くの企業がLINEを「連絡ツール」としてしか活用できていません。VOYAGEは200社超の運用データに基づき、採用・集客の両面からLINEの持つ本来の力を引き出し、貴社の事業成長を加速させます。"
         />
         <MarketData />
