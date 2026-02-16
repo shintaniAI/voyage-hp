@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import {
   MessageCircle, Menu, X, ChevronDown, ChevronLeft, ArrowRight,
@@ -26,14 +26,21 @@ const HERO_CHATS = [
 
 const CLIENTS = [
   { name: "BUZZ SHIP", cat: "デジタルマーケティング", desc: "既存リストの最適化により広告費を抑制しながら月商を大幅増", accent: "#1a1a1a", logo: "/client-buzzship.png", scale: 0.75 },
-  { name: "BREAKING DOWN", cat: "格闘エンタメ", desc: "大規模イベント集客とファンエンゲージメントをLINE基盤で構築", accent: "#1D3557", logo: "/client-breakingdown.png", scale: 1.15 },
-  { name: "HERO'ZZ", cat: "スクール", desc: "プッシュ配信施策により短期間で5,000万円超の売上を創出", accent: "#E76F51", logo: "/client-herozz-banner.png", scale: 1.08 },
-  { name: "V CLINIC", cat: "美容クリニック", desc: "予約管理の自動化と顧客体験の向上をLINEで実現", accent: "#C5A882", logo: "/client-vclinic.png", scale: 1.08 },
+  { name: "BREAKING DOWN", cat: "格闘エンタメ", desc: "大規模イベント集客とファンエンゲージメントをLINE基盤で構築", accent: "#1D3557", logo: "/client-breakingdown.png", scale: 1.15, screenImage: "/screen-BREAKINGDOWN.png", imgFit: "contain" },
+
+
+  { name: "HERO'ZZ", cat: "スクール", desc: "プッシュ配信施策により短期間で5,000万円超の売上を創出", accent: "#E76F51", logo: "/client-herozz-banner.png", scale: 1.08, screenImage: "/screen-HEROZZ.png", imgFit: "contain" },
+
+
+  { name: "V CLINIC", cat: "美容クリニック", desc: "予約管理の自動化と顧客体験の向上をLINEで実現", accent: "#C5A882", logo: "/client-vclinic.png", scale: 1.08, screenImage: "/screen-VCLINIC.jpg", imgFit: "contain" },
+
+
   { name: "AI+", cat: "テクノロジー", desc: "AI活用サービスのユーザー獲得とリテンションをLINEで最適化", accent: "#111", logo: "/client-aiplus.png", fill: true },
   { name: "REAL VALUE ACADEMIA", cat: "教育", desc: "オンラインスクールの集客・受講生管理をLINEで一元化", accent: "#1a1a1a", logo: "/client-realvalue-academia.png", scale: 1.5 },
   { name: "WEIN CAREER", cat: "人材", desc: "中卒・高卒採用に特化した人材紹介をLINEで効率化", accent: "#E53935", logo: "/client-weincareer.png" },
   { name: "Expert Partners", cat: "人材", desc: "オウンドメディア×LINEで面談予約率を4%→25%に改善", accent: "#2A3E6C", logo: "/client-expertpartners.png" },
-  { name: "REAL VALUE", cat: "ビジネス番組", desc: "LINE完結で視聴者エンゲージメントとイベント集客を最大化", accent: "#E63946", logo: "/client-realvalue.png", scale: 1.15 },
+  { name: "REAL VALUE", cat: "ビジネス番組", desc: "LINE完結で視聴者エンゲージメントとイベント集客を最大化", accent: "#E63946", logo: "/client-realvalue.png", scale: 1.15, screenImage: "/screen-realvalue.png" },
+
 ];
 
 const PAINS = [
@@ -385,17 +392,17 @@ const MarqueeBand = ({ texts, logos, dark = false }) => (
   <div className={`overflow-hidden py-4 md:py-5 ${dark ? "bg-[#111]" : "bg-[#00BFA5]"} relative`}>
     <div className="flex items-center w-max animate-marquee-x">
       {[...(logos || []), ...(logos || []), ...(logos || []), ...(logos || []),
-        ...(texts || []).map(t => ({ text: t })), ...(texts || []).map(t => ({ text: t })), ...(texts || []).map(t => ({ text: t })), ...(texts || []).map(t => ({ text: t }))
+      ...(texts || []).map(t => ({ text: t })), ...(texts || []).map(t => ({ text: t })), ...(texts || []).map(t => ({ text: t })), ...(texts || []).map(t => ({ text: t }))
       ].map((item, i) => (
         item.src
           ? <img key={i} src={item.src} alt={item.alt || ""} className={`shrink-0 mx-8 md:mx-12 h-[24px] md:h-[32px] w-auto object-contain rounded ${dark ? "opacity-40 brightness-0 invert" : "opacity-60"}`} />
           : <span key={i} className={`shrink-0 mx-6 md:mx-10 text-[16px] md:text-[20px] font-black tracking-wider whitespace-nowrap ${dark ? "text-white/15" : "text-white/25"}`}>
-              {item.text || item}
-            </span>
+            {item.text || item}
+          </span>
       ))}
-      </div>
     </div>
-  );
+  </div>
+);
 
 /* ── Number counter with clip animation ── */
 const AnimatedNumber = ({ value, suffix, label }) => {
@@ -405,10 +412,10 @@ const AnimatedNumber = ({ value, suffix, label }) => {
       <div className="overflow-hidden">
         <div className="font-en text-[36px] md:text-[50px] font-extrabold text-white leading-none tabular-nums" style={{ animation: "count-in .8s ease-out" }}>
           {val}<span className="text-[14px] text-[#00BFA5] ml-1 font-bold">{suffix}</span>
-            </div>
-          </div>
+        </div>
+      </div>
       <p className="text-[10px] text-white/40 font-semibold mt-2">{label}</p>
-            </div>
+    </div>
   );
 };
 
@@ -421,9 +428,8 @@ const LineBtn = ({ children, large }) => (
 
 /* ── 薄い英語背景テキスト ── */
 const BgText = ({ children, light, dark }) => (
-  <div className={`absolute inset-0 pointer-events-none select-none flex items-center justify-center overflow-hidden ${
-    dark ? "text-white/[0.06]" : light ? "text-black/[0.035]" : "text-black/[0.05]"
-  }`}>
+  <div className={`absolute inset-0 pointer-events-none select-none flex items-center justify-center overflow-hidden ${dark ? "text-white/[0.06]" : light ? "text-black/[0.035]" : "text-black/[0.05]"
+    }`}>
     <span className="font-en font-extrabold text-[100px] md:text-[180px] tracking-tighter whitespace-nowrap">{children}</span>
   </div>
 );
@@ -441,7 +447,7 @@ const SectionHead = ({ tag, children, sub, white }) => (
     {tag && <span className={`section-tag mb-3 inline-block ${white ? "!bg-white/15 !text-white" : ""}`}>{tag}</span>}
     <h2 className={`font-display text-[24px] md:text-[34px] font-black leading-[1.45] heading-line tracking-tight ${white ? "text-white after:bg-white" : "text-black"}`}>{children}</h2>
     {sub && <p className={`text-[14px] leading-[1.9] mt-5 max-w-[500px] mx-auto ${white ? "text-white/60" : "text-black/40"}`}>{sub}</p>}
-          </div>
+  </div>
 );
 
 /* ── Tall iPhone Mockup ── */
@@ -452,41 +458,41 @@ const TallPhone = ({ name, color, msgs, scale = 1, className = "" }) => {
   const r = w * 0.22;
   const bezel = w * 0.025;
   return (
-    <div className={`shrink-0 ${className}`} style={{ width: w, height: h, filter: `drop-shadow(0 ${4*scale}px ${16*scale}px rgba(0,0,0,.12))` }}>
+    <div className={`shrink-0 ${className}`} style={{ width: w, height: h, filter: `drop-shadow(0 ${4 * scale}px ${16 * scale}px rgba(0,0,0,.12))` }}>
       <div className="w-full h-full relative" style={{ borderRadius: r, background: "#1a1a1a", padding: bezel }}>
         <div className="w-full h-full overflow-hidden flex flex-col" style={{ borderRadius: r - bezel, background: "#fff" }}>
           <div className="flex items-center justify-center shrink-0" style={{ height: w * 0.15, background: "#fff" }}>
             <div style={{ width: w * 0.24, height: w * 0.065, background: "#1a1a1a", borderRadius: 999 }} />
-              </div>
+          </div>
           <div className="shrink-0 flex items-center gap-1 px-2" style={{ height: w * 0.14, background: color || "#00BFA5" }}>
             <div className="rounded-full bg-white/30 flex items-center justify-center shrink-0" style={{ width: w * 0.085, height: w * 0.085 }}>
               <span className="text-white font-bold" style={{ fontSize: w * 0.04 }}>{(name || "V").charAt(0)}</span>
-              </div>
-            <span className="text-white font-bold truncate" style={{ fontSize: w * 0.058 }}>{name}</span>
             </div>
-          <div className="flex-1 flex flex-col justify-center gap-1.5 px-1.5" style={{ background: "#E8ECF0", padding: `${w*0.04}px ${w*0.035}px` }}>
+            <span className="text-white font-bold truncate" style={{ fontSize: w * 0.058 }}>{name}</span>
+          </div>
+          <div className="flex-1 flex flex-col justify-center gap-1.5 px-1.5" style={{ background: "#E8ECF0", padding: `${w * 0.04}px ${w * 0.035}px` }}>
             <div className="flex items-end gap-0.5">
-              <div className="rounded-full shrink-0" style={{ width: w*0.06, height: w*0.06, background: `${color}30` }} />
-              <div className="rounded-lg rounded-bl-sm px-1.5 py-1 bg-white shadow-[0_0.5px_1px_rgba(0,0,0,.05)]" style={{ maxWidth: "82%", borderRadius: `${w*0.04}px ${w*0.04}px ${w*0.04}px ${w*0.01}px` }}>
+              <div className="rounded-full shrink-0" style={{ width: w * 0.06, height: w * 0.06, background: `${color}30` }} />
+              <div className="rounded-lg rounded-bl-sm px-1.5 py-1 bg-white shadow-[0_0.5px_1px_rgba(0,0,0,.05)]" style={{ maxWidth: "82%", borderRadius: `${w * 0.04}px ${w * 0.04}px ${w * 0.04}px ${w * 0.01}px` }}>
                 <p style={{ fontSize: w * 0.05, lineHeight: 1.5, color: "#1a1a1a" }}>{m1}</p>
               </div>
             </div>
             <div className="flex justify-end">
-              <div className="px-1.5 py-1" style={{ maxWidth: "75%", borderRadius: `${w*0.04}px ${w*0.04}px ${w*0.01}px ${w*0.04}px`, background: color || "#00BFA5" }}>
+              <div className="px-1.5 py-1" style={{ maxWidth: "75%", borderRadius: `${w * 0.04}px ${w * 0.04}px ${w * 0.01}px ${w * 0.04}px`, background: color || "#00BFA5" }}>
                 <p style={{ fontSize: w * 0.05, lineHeight: 1.5, color: "#fff" }}>{m2}</p>
               </div>
             </div>
             <div className="flex items-end gap-0.5">
-              <div className="rounded-full shrink-0" style={{ width: w*0.06, height: w*0.06, background: `${color}30` }} />
-              <div className="bg-white shadow-[0_0.5px_1px_rgba(0,0,0,.05)]" style={{ maxWidth: "85%", borderRadius: `${w*0.04}px ${w*0.04}px ${w*0.04}px ${w*0.01}px`, padding: `${w*0.01}px ${w*0.035}px` }}>
+              <div className="rounded-full shrink-0" style={{ width: w * 0.06, height: w * 0.06, background: `${color}30` }} />
+              <div className="bg-white shadow-[0_0.5px_1px_rgba(0,0,0,.05)]" style={{ maxWidth: "85%", borderRadius: `${w * 0.04}px ${w * 0.04}px ${w * 0.04}px ${w * 0.01}px`, padding: `${w * 0.01}px ${w * 0.035}px` }}>
                 <p style={{ fontSize: w * 0.05, lineHeight: 1.5, color: "#1a1a1a" }}>{m3}</p>
               </div>
-              </div>
             </div>
-          <div className="shrink-0 bg-white border-t border-black/5 flex items-center px-1.5 gap-1" style={{ height: w * 0.1 }}>
-            <div className="rounded-full bg-[#007AFF] flex items-center justify-center" style={{ width: w*0.06, height: w*0.06 }}>
-              <span className="text-white" style={{ fontSize: w*0.035 }}>+</span>
           </div>
+          <div className="shrink-0 bg-white border-t border-black/5 flex items-center px-1.5 gap-1" style={{ height: w * 0.1 }}>
+            <div className="rounded-full bg-[#007AFF] flex items-center justify-center" style={{ width: w * 0.06, height: w * 0.06 }}>
+              <span className="text-white" style={{ fontSize: w * 0.035 }}>+</span>
+            </div>
             <div className="flex-1 bg-[#F2F2F7] rounded-full" style={{ height: w * 0.05 }} />
           </div>
           <div className="shrink-0 bg-white flex items-center justify-center" style={{ height: w * 0.06 }}>
@@ -513,7 +519,7 @@ const Header = () => {
       <header className={`fixed top-0 w-full z-50 transition-all duration-500 bg-white/95 backdrop-blur-md ${scrolled ? "shadow-[0_1px_0_rgba(0,0,0,.06)]" : ""}`}>
         <div className="max-w-[1200px] mx-auto px-4 md:px-8 h-14 md:h-16 flex items-center justify-between overflow-visible">
           <a href="#" className="relative z-10 flex items-center">
-            <img src="/logo-horizontal.png" alt="VOYAGE" className="h-[40px] md:h-[56px] w-auto transition-all duration-500 object-contain" />
+            <img src="/logo-horizontal.png" alt="VOYAGE" className="h-[50px] md:h-[70px] w-auto transition-all duration-500 object-contain" />
           </a>
           <nav className="hidden lg:flex items-center gap-7">
             {links.map(n => <a key={n.l} href={n.h} className="text-[12px] font-semibold tracking-wide transition-colors text-black/50 hover:text-black">{n.l}</a>)}
@@ -630,32 +636,25 @@ const Hero = () => {
   const bgY = useParallax(heroRef, 0.2);
 
   /* Creative images — displayed as cards in alternating up/down scrolling columns */
-  const creatives = [
-    "/creative-2.png",   // 0
-    "/creative-3.png",   // 1
-    "/creative-4.png",   // 2
-    "/creative-5.png",   // 3
-    "/creative-6.png",   // 4
-    "/creative-7.png",   // 5
-    "/creative-10.png",  // 6
-    "/creative-11.png",  // 8
-    "/creative-13.png",  // 8
-    "/creative-14.png",  // 9
-    "/creative-15.png",  // 10
-    "/creative-16.png",  // 11
-    "/creative-17.png",  // 12
-    "/creative-18.png",  // 13
-    "/creative-19.png",  // 14
-    "/creative-20.png",  // 15
-    "/creative-21.png",  // 16
-    "/creative-22.png",  // 17
-  ];
-  /* Build columns: 3 large columns, 18 images — 6 each, no duplicates */
-  const cols = [
-    { imgs: [creatives[0], creatives[5], creatives[12], creatives[3], creatives[16], creatives[8]], speed: 40, delay: 0 },
-    { imgs: [creatives[14], creatives[4], creatives[10], creatives[1], creatives[17], creatives[6]], speed: 34, delay: -5 },
-    { imgs: [creatives[7], creatives[15], creatives[2], creatives[11], creatives[9], creatives[13]], speed: 38, delay: -10 },
-  ];
+  /* Creative images — 1 to 31, randomized */
+  const cols = useMemo(() => {
+    // Generate array [1..31]
+    const all = Array.from({ length: 31 }, (_, i) => `/creative-${i + 1}.png`);
+
+    // Fisher-Yates shuffle
+    for (let i = all.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [all[i], all[j]] = [all[j], all[i]];
+    }
+
+    // Distribute into 3 columns
+    const chunkOverride = Math.ceil(all.length / 3);
+    return [
+      { imgs: all.slice(0, chunkOverride), speed: 40, delay: 0 },
+      { imgs: all.slice(chunkOverride, chunkOverride * 2), speed: 34, delay: -5 },
+      { imgs: all.slice(chunkOverride * 2), speed: 38, delay: -10 },
+    ];
+  }, []);
 
   return (
     <section ref={heroRef} className="relative flex flex-col justify-center overflow-hidden bg-white">
@@ -679,7 +678,8 @@ const Hero = () => {
       <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-white via-transparent to-white" />
 
       {/* Badge - 右上に配置 */}
-      <img src="/badge-200.png" alt="運用実績200社以上" className="absolute z-20 top-4 right-4 md:top-8 md:right-8 h-[64px] md:h-[100px] lg:h-[120px] w-auto drop-shadow-[0_4px_16px_rgba(0,0,0,.12)] animate-[float_3s_ease-in-out_infinite]" loading="lazy" style={{ animation: "float 3s ease-in-out infinite" }} />
+      {/* Badge - 右上に配置 - ヘッダー被り回避のため top-20 (80px) / md:top-24 (96px) に変更 */}
+      <img src="/badge-200.png" alt="運用実績200社以上" className="absolute z-20 top-20 right-4 md:top-24 md:right-8 h-[64px] md:h-[100px] lg:h-[120px] w-auto drop-shadow-[0_4px_16px_rgba(0,0,0,.12)] animate-[float_3s_ease-in-out_infinite]" loading="lazy" style={{ animation: "float 3s ease-in-out infinite" }} />
 
       <div className="relative z-10 max-w-[1100px] mx-auto px-4 md:px-8 w-full pt-20 pb-8 md:pt-24 md:pb-10">
         <div className="max-w-[660px]">
@@ -722,48 +722,57 @@ const ClientShowcase = () => {
         <div className="relative bg-[#f5f5f5] rounded-[11px] md:rounded-[14px] overflow-hidden" style={{ aspectRatio: "9/19.5" }}>
           {/* Status bar placeholder */}
           <div className="h-[14px] md:h-[18px] bg-white" />
-          {/* LINE-style header */}
-          <div className="bg-[#00BFA5] px-2 py-1 md:py-1.5 flex items-center gap-1">
-            <div className="w-[10px] h-[10px] md:w-[14px] md:h-[14px] rounded-full bg-white/30" />
-            <div className="w-[28px] md:w-[36px] h-[4px] md:h-[5px] bg-white/50 rounded-full" />
-          </div>
-          {/* Chat placeholder */}
-          <div className="p-1.5 md:p-2 space-y-1.5 md:space-y-2">
-            <div className="flex gap-1">
-              <div className="w-[8px] h-[8px] md:w-[10px] md:h-[10px] rounded-full bg-gray-300 shrink-0 mt-0.5" />
-              <div className="bg-white rounded-lg rounded-tl-sm px-1.5 py-1 md:px-2 md:py-1.5 shadow-sm max-w-[80%]">
-                <div className="w-[24px] md:w-[32px] h-[3px] md:h-[4px] bg-gray-200 rounded-full" />
-                <div className="w-[16px] md:w-[22px] h-[3px] md:h-[4px] bg-gray-200 rounded-full mt-1" />
+
+          {c.screenImage ? (
+            <div className={`absolute inset-0 top-[14px] md:top-[18px] bg-white px-1 flex items-center justify-center`}>
+              <img src={c.screenImage} alt="Screen Preview" className={`w-full h-full ${c.imgFit === "contain" ? "object-contain" : "object-cover object-top"}`} />
+            </div>
+          ) : (
+            <>
+              {/* LINE-style header */}
+              <div className="bg-[#00BFA5] px-2 py-1 md:py-1.5 flex items-center gap-1">
+                <div className="w-[10px] h-[10px] md:w-[14px] md:h-[14px] rounded-full bg-white/30" />
+                <div className="w-[28px] md:w-[36px] h-[4px] md:h-[5px] bg-white/50 rounded-full" />
               </div>
-            </div>
-            <div className="flex justify-end">
-              <div className="bg-[#00BFA5]/15 rounded-lg rounded-tr-sm px-1.5 py-1 md:px-2 md:py-1.5 max-w-[75%]">
-                <div className="w-[20px] md:w-[28px] h-[3px] md:h-[4px] bg-[#00BFA5]/30 rounded-full" />
+              {/* Chat placeholder */}
+              <div className="p-1.5 md:p-2 space-y-1.5 md:space-y-2">
+                <div className="flex gap-1">
+                  <div className="w-[8px] h-[8px] md:w-[10px] md:h-[10px] rounded-full bg-gray-300 shrink-0 mt-0.5" />
+                  <div className="bg-white rounded-lg rounded-tl-sm px-1.5 py-1 md:px-2 md:py-1.5 shadow-sm max-w-[80%]">
+                    <div className="w-[24px] md:w-[32px] h-[3px] md:h-[4px] bg-gray-200 rounded-full" />
+                    <div className="w-[16px] md:w-[22px] h-[3px] md:h-[4px] bg-gray-200 rounded-full mt-1" />
+                  </div>
+                </div>
+                <div className="flex justify-end">
+                  <div className="bg-[#00BFA5]/15 rounded-lg rounded-tr-sm px-1.5 py-1 md:px-2 md:py-1.5 max-w-[75%]">
+                    <div className="w-[20px] md:w-[28px] h-[3px] md:h-[4px] bg-[#00BFA5]/30 rounded-full" />
+                  </div>
+                </div>
+                <div className="flex gap-1">
+                  <div className="w-[8px] h-[8px] md:w-[10px] md:h-[10px] rounded-full bg-gray-300 shrink-0 mt-0.5" />
+                  <div className="bg-white rounded-lg rounded-tl-sm px-1.5 py-1 md:px-2 md:py-1.5 shadow-sm max-w-[85%]">
+                    <div className="w-[28px] md:w-[36px] h-[3px] md:h-[4px] bg-gray-200 rounded-full" />
+                    <div className="w-[20px] md:w-[26px] h-[3px] md:h-[4px] bg-gray-200 rounded-full mt-1" />
+                    <div className="w-[14px] md:w-[18px] h-[3px] md:h-[4px] bg-gray-200 rounded-full mt-1" />
+                  </div>
+                </div>
               </div>
-            </div>
-            <div className="flex gap-1">
-              <div className="w-[8px] h-[8px] md:w-[10px] md:h-[10px] rounded-full bg-gray-300 shrink-0 mt-0.5" />
-              <div className="bg-white rounded-lg rounded-tl-sm px-1.5 py-1 md:px-2 md:py-1.5 shadow-sm max-w-[85%]">
-                <div className="w-[28px] md:w-[36px] h-[3px] md:h-[4px] bg-gray-200 rounded-full" />
-                <div className="w-[20px] md:w-[26px] h-[3px] md:h-[4px] bg-gray-200 rounded-full mt-1" />
-                <div className="w-[14px] md:w-[18px] h-[3px] md:h-[4px] bg-gray-200 rounded-full mt-1" />
+              {/* Rich menu placeholder */}
+              <div className="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-1 md:p-1.5">
+                <div className="grid grid-cols-2 gap-0.5 md:gap-1">
+                  <div className="bg-gray-100 rounded h-[12px] md:h-[16px]" />
+                  <div className="bg-gray-100 rounded h-[12px] md:h-[16px]" />
+                </div>
               </div>
-            </div>
-          </div>
-          {/* Rich menu placeholder */}
-          <div className="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-1 md:p-1.5">
-            <div className="grid grid-cols-2 gap-0.5 md:gap-1">
-              <div className="bg-gray-100 rounded h-[12px] md:h-[16px]" />
-              <div className="bg-gray-100 rounded h-[12px] md:h-[16px]" />
-            </div>
-          </div>
+            </>
+          )}
         </div>
       </div>
     </div>
   );
 
   const ClientCard = ({ c }) => (
-    <div className="shrink-0 mx-2 md:mx-3 group">
+    <div className="shrink-0 ml-3 mr-12 md:ml-4 md:mr-20 group">
       <div className="relative">
         {/* Banner */}
         <div className="relative rounded-2xl overflow-hidden shadow-[0_2px_16px_rgba(0,0,0,.06)] hover:shadow-[0_8px_32px_rgba(0,0,0,.10)] transition-all duration-500">
@@ -778,7 +787,7 @@ const ClientShowcase = () => {
           )}
         </div>
         {/* Phone mockup - overlapping bottom-right of banner */}
-        <div className="absolute -bottom-3 -right-5 md:-bottom-4 md:-right-7 z-10 group-hover:-translate-y-1 transition-transform duration-500">
+        <div className="absolute -bottom-3 -right-10 md:-bottom-4 md:-right-16 z-10 group-hover:-translate-y-1 transition-transform duration-500">
           <PhoneMockup c={c} />
         </div>
       </div>
@@ -820,95 +829,95 @@ const ClientShowcase = () => {
 const PainPoints = () => {
   const times = ["14:02", "14:05", "14:12", "14:18"];
   return (
-  <section className="relative bg-[#e0f5f2] pt-8 pb-10 md:pt-10 md:pb-14 overflow-hidden">
-    <div className="absolute inset-0 diagonal-pattern pointer-events-none" />
-    <WaveSvg fill="#e0f5f2" />
-    <FloatingParticles count={8} />
-    <div className="w-full max-w-[540px] mx-auto px-4 relative z-10">
-      <Reveal>
-        <SectionHead>こんなお悩みはありませんか？</SectionHead>
-      </Reveal>
+    <section className="relative bg-[#e0f5f2] pt-8 pb-10 md:pt-10 md:pb-14 overflow-hidden">
+      <div className="absolute inset-0 diagonal-pattern pointer-events-none" />
+      <WaveSvg fill="#e0f5f2" />
+      <FloatingParticles count={8} />
+      <div className="w-full max-w-[540px] mx-auto px-4 relative z-10">
+        <Reveal>
+          <SectionHead>こんなお悩みはありませんか？</SectionHead>
+        </Reveal>
 
-      {/* LINE風トーク画面 */}
-      <Reveal delay={100}>
-        <div className="mt-6 md:mt-8 rounded-[28px] md:rounded-[32px] overflow-hidden shadow-[0_8px_40px_rgba(0,0,0,.12)] border-[6px] md:border-[8px] border-[#1a1a1a] bg-[#1a1a1a]">
-          {/* ノッチ */}
-          <div className="flex justify-center pt-1 pb-0 bg-[#1a1a1a]">
-            <div className="w-[80px] md:w-[100px] h-[18px] md:h-[22px] bg-[#1a1a1a] rounded-b-2xl" />
-          </div>
-
-          {/* LINEヘッダー */}
-          <div className="bg-[#00BFA5] px-4 py-2.5 md:py-3 flex items-center gap-3">
-            <ChevronLeft size={20} className="text-white/70" />
-            <div className="flex-1 text-center">
-              <p className="text-white font-bold text-[13px] md:text-[14px]">お悩み相談室</p>
+        {/* LINE風トーク画面 */}
+        <Reveal delay={100}>
+          <div className="mt-6 md:mt-8 rounded-[28px] md:rounded-[32px] overflow-hidden shadow-[0_8px_40px_rgba(0,0,0,.12)] border-[6px] md:border-[8px] border-[#1a1a1a] bg-[#1a1a1a]">
+            {/* ノッチ */}
+            <div className="flex justify-center pt-1 pb-0 bg-[#1a1a1a]">
+              <div className="w-[80px] md:w-[100px] h-[18px] md:h-[22px] bg-[#1a1a1a] rounded-b-2xl" />
             </div>
-            <div className="w-5" />
-          </div>
 
-          {/* トーク本体 */}
-          <div className="bg-[#7ECEC4] px-3 py-4 md:px-4 md:py-5 space-y-4 md:space-y-5" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000' fill-opacity='.02'%3E%3Ccircle cx='20' cy='20' r='1'/%3E%3C/g%3E%3C/svg%3E\")" }}>
-            {PAINS.map((pain, i) => (
-              <TiltReveal key={i} delay={i * 100} direction="left">
-                <div className="flex items-start gap-2 md:gap-2.5">
-                  {/* アイコン */}
-                  <div className="w-9 h-9 md:w-10 md:h-10 rounded-full overflow-hidden shrink-0 border border-white/30 shadow-sm">
-                    <img src={pain.img} alt="" className="w-full h-full object-cover" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    {/* 名前 */}
-                    <p className="text-[10px] md:text-[11px] text-black/40 font-medium mb-1 ml-0.5">{pain.audience}</p>
-                    {/* 吹き出し（相手メッセージ） */}
-                    <div className="flex items-end gap-1.5">
-                      <div className="relative bg-white rounded-2xl rounded-tl-md px-3.5 py-2.5 md:px-4 md:py-3 shadow-[0_1px_2px_rgba(0,0,0,.06)] max-w-[85%]">
-                        {/* 吹き出しの尾 */}
-                        <div className="absolute -left-[6px] top-[10px] w-0 h-0" style={{ borderTop: "6px solid transparent", borderBottom: "6px solid transparent", borderRight: "7px solid white" }} />
-                        <p className="text-[13px] md:text-[14px] font-bold text-[#333] leading-[1.45] mb-1">{pain.keyword}</p>
-                        <p className="text-[11px] md:text-[12px] text-black/55 leading-[1.7]">{pain.text}</p>
-                      </div>
-                      <span className="text-[9px] md:text-[10px] text-black/30 shrink-0 pb-0.5">{times[i]}</span>
+            {/* LINEヘッダー */}
+            <div className="bg-[#00BFA5] px-4 py-2.5 md:py-3 flex items-center gap-3">
+              <ChevronLeft size={20} className="text-white/70" />
+              <div className="flex-1 text-center">
+                <p className="text-white font-bold text-[13px] md:text-[14px]">お悩み相談室</p>
+              </div>
+              <div className="w-5" />
+            </div>
+
+            {/* トーク本体 */}
+            <div className="bg-[#7ECEC4] px-3 py-4 md:px-4 md:py-5 space-y-4 md:space-y-5" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000' fill-opacity='.02'%3E%3Ccircle cx='20' cy='20' r='1'/%3E%3C/g%3E%3C/svg%3E\")" }}>
+              {PAINS.map((pain, i) => (
+                <TiltReveal key={i} delay={i * 100} direction="left">
+                  <div className="flex items-start gap-2 md:gap-2.5">
+                    {/* アイコン */}
+                    <div className="w-9 h-9 md:w-10 md:h-10 rounded-full overflow-hidden shrink-0 border border-white/30 shadow-sm">
+                      <img src={pain.img} alt="" className="w-full h-full object-cover" />
                     </div>
+                    <div className="flex-1 min-w-0">
+                      {/* 名前 */}
+                      <p className="text-[10px] md:text-[11px] text-black/40 font-medium mb-1 ml-0.5">{pain.audience}</p>
+                      {/* 吹き出し（相手メッセージ） */}
+                      <div className="flex items-end gap-1.5">
+                        <div className="relative bg-white rounded-2xl rounded-tl-md px-3.5 py-2.5 md:px-4 md:py-3 shadow-[0_1px_2px_rgba(0,0,0,.06)] max-w-[85%]">
+                          {/* 吹き出しの尾 */}
+                          <div className="absolute -left-[6px] top-[10px] w-0 h-0" style={{ borderTop: "6px solid transparent", borderBottom: "6px solid transparent", borderRight: "7px solid white" }} />
+                          <p className="text-[13px] md:text-[14px] font-bold text-[#333] leading-[1.45] mb-1">{pain.keyword}</p>
+                          <p className="text-[11px] md:text-[12px] text-black/55 leading-[1.7]">{pain.text}</p>
+                        </div>
+                        <span className="text-[9px] md:text-[10px] text-black/30 shrink-0 pb-0.5">{times[i]}</span>
+                      </div>
+                    </div>
+                  </div>
+                </TiltReveal>
+              ))}
+
+              {/* 自分の返答（VOYAGE） */}
+              <TiltReveal delay={PAINS.length * 100 + 80} direction="right">
+                <div className="flex justify-end items-end gap-1.5 mt-2">
+                  <div className="flex flex-col items-end gap-0.5">
+                    <span className="text-[9px] md:text-[10px] text-black/25">既読</span>
+                    <span className="text-[9px] md:text-[10px] text-black/30">14:22</span>
+                  </div>
+                  <div className="relative bg-[#00BFA5] rounded-2xl rounded-tr-md px-3.5 py-2.5 md:px-4 md:py-3 shadow-[0_1px_2px_rgba(0,0,0,.06)] max-w-[80%]">
+                    {/* 吹き出しの尾 */}
+                    <div className="absolute -right-[6px] top-[10px] w-0 h-0" style={{ borderTop: "6px solid transparent", borderBottom: "6px solid transparent", borderLeft: "7px solid #00BFA5" }} />
+                    <p className="text-[13px] md:text-[14px] font-bold text-white leading-[1.5]">
+                      そのお悩み、<br />VOYAGEがLINEで解決します💪
+                    </p>
                   </div>
                 </div>
               </TiltReveal>
-            ))}
+            </div>
 
-            {/* 自分の返答（VOYAGE） */}
-            <TiltReveal delay={PAINS.length * 100 + 80} direction="right">
-              <div className="flex justify-end items-end gap-1.5 mt-2">
-                <div className="flex flex-col items-end gap-0.5">
-                  <span className="text-[9px] md:text-[10px] text-black/25">既読</span>
-                  <span className="text-[9px] md:text-[10px] text-black/30">14:22</span>
-                </div>
-                <div className="relative bg-[#00BFA5] rounded-2xl rounded-tr-md px-3.5 py-2.5 md:px-4 md:py-3 shadow-[0_1px_2px_rgba(0,0,0,.06)] max-w-[80%]">
-                  {/* 吹き出しの尾 */}
-                  <div className="absolute -right-[6px] top-[10px] w-0 h-0" style={{ borderTop: "6px solid transparent", borderBottom: "6px solid transparent", borderLeft: "7px solid #00BFA5" }} />
-                  <p className="text-[13px] md:text-[14px] font-bold text-white leading-[1.5]">
-                    そのお悩み、<br />VOYAGEがLINEで解決します💪
-                  </p>
-                </div>
+            {/* 入力バー */}
+            <div className="bg-[#efefef] px-3 py-2 md:py-2.5 flex items-center gap-2">
+              <div className="flex-1 bg-white rounded-full px-3 py-1.5 md:py-2">
+                <span className="text-[11px] md:text-[12px] text-black/25">メッセージを入力</span>
               </div>
-            </TiltReveal>
-          </div>
-
-          {/* 入力バー */}
-          <div className="bg-[#efefef] px-3 py-2 md:py-2.5 flex items-center gap-2">
-            <div className="flex-1 bg-white rounded-full px-3 py-1.5 md:py-2">
-              <span className="text-[11px] md:text-[12px] text-black/25">メッセージを入力</span>
+              <div className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-[#00BFA5] flex items-center justify-center">
+                <ArrowRight size={14} className="text-white -rotate-90" />
+              </div>
             </div>
-            <div className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-[#00BFA5] flex items-center justify-center">
-              <ArrowRight size={14} className="text-white -rotate-90" />
+
+            {/* ホームバー */}
+            <div className="flex justify-center py-1.5 bg-[#1a1a1a]">
+              <div className="w-[100px] md:w-[120px] h-[4px] bg-white/30 rounded-full" />
             </div>
           </div>
-
-          {/* ホームバー */}
-          <div className="flex justify-center py-1.5 bg-[#1a1a1a]">
-            <div className="w-[100px] md:w-[120px] h-[4px] bg-white/30 rounded-full" />
-          </div>
-        </div>
-      </Reveal>
-    </div>
-  </section>
+        </Reveal>
+      </div>
+    </section>
   );
 };
 
@@ -933,38 +942,38 @@ const ChevronDivider = ({ headline, sub, body }) => {
   const secRef = useRef(null);
   const progress = useScrollProgress(secRef, { start: 1.0, end: 0.2 });
   return (
-  <div className="relative" ref={secRef}>
-    {/* Top chevron pointing down */}
-    <svg viewBox="0 0 1440 60" preserveAspectRatio="none" className="w-full block" style={{ height: "clamp(28px, 4vw, 56px)", marginBottom: -1 }}>
-      <path d="M0,0 L720,60 L1440,0 L1440,0 L0,0 Z" fill="#e0f5f2" />
-      <path d="M0,0 L720,60 L1440,0 L1440,60 L720,60 L0,60 Z" fill="#00BFA5" />
-    </svg>
-    {/* Main body */}
-    <div className="relative overflow-hidden bg-[#00BFA5]">
-      {/* Decorative */}
-      <div className="absolute inset-0 dot-pattern-dark pointer-events-none opacity-10" />
-      <div className="absolute top-[-20%] right-[-10%] w-[40%] aspect-square rounded-full bg-white/[.06] blur-[60px] pointer-events-none animate-drift-x" />
-      <div className="absolute bottom-[-15%] left-[-8%] w-[30%] aspect-square rounded-full bg-white/[.05] blur-[50px] pointer-events-none animate-drift-y" />
-      <FloatingParticles count={5} color="rgba(255,255,255," />
+    <div className="relative" ref={secRef}>
+      {/* Top chevron pointing down */}
+      <svg viewBox="0 0 1440 60" preserveAspectRatio="none" className="w-full block" style={{ height: "clamp(28px, 4vw, 56px)", marginBottom: -1 }}>
+        <path d="M0,0 L720,60 L1440,0 L1440,0 L0,0 Z" fill="#e0f5f2" />
+        <path d="M0,0 L720,60 L1440,0 L1440,60 L720,60 L0,60 Z" fill="#00BFA5" />
+      </svg>
+      {/* Main body */}
+      <div className="relative overflow-hidden bg-[#00BFA5]">
+        {/* Decorative */}
+        <div className="absolute inset-0 dot-pattern-dark pointer-events-none opacity-10" />
+        <div className="absolute top-[-20%] right-[-10%] w-[40%] aspect-square rounded-full bg-white/[.06] blur-[60px] pointer-events-none animate-drift-x" />
+        <div className="absolute bottom-[-15%] left-[-8%] w-[30%] aspect-square rounded-full bg-white/[.05] blur-[50px] pointer-events-none animate-drift-y" />
+        <FloatingParticles count={5} color="rgba(255,255,255," />
 
-      <div className="max-w-[640px] mx-auto px-4 md:px-8 py-8 md:py-14 text-center relative z-10">
-        {sub && <p className="text-white/80 text-[16px] md:text-[26px] font-bold mb-3 md:mb-4 transition-all duration-500" style={{ transform: `translateY(${(1 - progress) * 20}px)`, opacity: Math.min(progress * 2, 1) }}>{sub}</p>}
-        <h2 className="text-[24px] md:text-[44px] font-black text-white leading-[1.35] md:leading-[1.4] mb-4 md:mb-5 transition-all duration-500" style={{ transform: `translateY(${(1 - progress) * 30}px) scale(${0.9 + progress * 0.1})`, opacity: Math.min(progress * 1.5, 1) }}>
-          {headline}
-        </h2>
-        {body && (
-          <Reveal delay={100}>
-            <p className="text-[12px] md:text-[15px] text-white/75 leading-[1.9] md:leading-[2] max-w-[500px] mx-auto mt-4 md:mt-5">{body}</p>
-          </Reveal>
-        )}
+        <div className="max-w-[640px] mx-auto px-4 md:px-8 py-8 md:py-14 text-center relative z-10">
+          {sub && <p className="text-white/80 text-[16px] md:text-[26px] font-bold mb-3 md:mb-4 transition-all duration-500" style={{ transform: `translateY(${(1 - progress) * 20}px)`, opacity: Math.min(progress * 2, 1) }}>{sub}</p>}
+          <h2 className="text-[24px] md:text-[44px] font-black text-white leading-[1.35] md:leading-[1.4] mb-4 md:mb-5 transition-all duration-500" style={{ transform: `translateY(${(1 - progress) * 30}px) scale(${0.9 + progress * 0.1})`, opacity: Math.min(progress * 1.5, 1) }}>
+            {headline}
+          </h2>
+          {body && (
+            <Reveal delay={100}>
+              <p className="text-[12px] md:text-[15px] text-white/75 leading-[1.9] md:leading-[2] max-w-[500px] mx-auto mt-4 md:mt-5">{body}</p>
+            </Reveal>
+          )}
+        </div>
       </div>
+      {/* Bottom chevron pointing down */}
+      <svg viewBox="0 0 1440 60" preserveAspectRatio="none" className="w-full block" style={{ height: "clamp(28px, 4vw, 56px)", marginTop: -1 }}>
+        <path d="M0,0 L1440,0 L720,60 Z" fill="#00BFA5" />
+        <path d="M0,60 L720,60 L1440,60 L1440,0 L720,60 L0,0 Z" fill="#e0f5f2" />
+      </svg>
     </div>
-    {/* Bottom chevron pointing down */}
-    <svg viewBox="0 0 1440 60" preserveAspectRatio="none" className="w-full block" style={{ height: "clamp(28px, 4vw, 56px)", marginTop: -1 }}>
-      <path d="M0,0 L1440,0 L720,60 Z" fill="#00BFA5" />
-      <path d="M0,60 L720,60 L1440,60 L1440,0 L720,60 L0,0 Z" fill="#e0f5f2" />
-    </svg>
-  </div>
   );
 };
 
@@ -1293,11 +1302,11 @@ const CTABanner = () => (
       <div className="absolute inset-0 pointer-events-none opacity-10">
         <div className="absolute top-0 right-0 w-[60%] h-[60%] bg-white rounded-full blur-[100px] -translate-y-1/2 translate-x-1/4" />
         <div className="absolute bottom-0 left-0 w-[40%] h-[40%] bg-white rounded-full blur-[80px] translate-y-1/4 -translate-x-1/4 animate-drift-x" />
-              </div>
+      </div>
       <div className="absolute inset-0 dot-pattern-dark pointer-events-none opacity-15" />
       <div className="absolute top-[25%] left-[6%] w-2 h-2 rounded-full bg-white/20 pointer-events-none animate-float-a" />
       <div className="absolute bottom-[30%] right-[10%] w-2.5 h-2.5 rounded-full bg-white/15 pointer-events-none animate-float-b" />
-        <div className="max-w-[600px] mx-auto px-4 md:px-8 py-8 md:py-14 text-center relative z-10">
+      <div className="max-w-[600px] mx-auto px-4 md:px-8 py-8 md:py-14 text-center relative z-10">
         <Reveal>
           <p className="text-white text-[18px] md:text-[26px] font-black leading-[1.6] md:leading-[1.7] mb-5 font-display tracking-tight">
             LINEマーケティングの<br />戦略設計からアカウント構築<br />運用・分析まで
@@ -1309,7 +1318,7 @@ const CTABanner = () => (
               <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform duration-300" />
             </a>
           </MagneticWrap>
-          </Reveal>
+        </Reveal>
       </div>
     </section>
     {/* Bottom chevron */}
@@ -1327,11 +1336,11 @@ const Achievements = () => (
   <section id="results" className="relative bg-[#e0f5f2] pt-10 pb-12 md:pt-12 md:pb-16 overflow-hidden">
     <WaveSvg fill="#e0f5f2" />
     <div className="max-w-[1100px] mx-auto px-4 md:px-6 relative z-10">
-        <Reveal>
+      <Reveal>
         <h2 className="text-[24px] md:text-[30px] font-bold text-black/70 tracking-[0.06em] mb-8 text-center">
           成果事例
         </h2>
-        </Reveal>
+      </Reveal>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5 mb-8 md:items-stretch">
         {CASES.map((c, i) => (
           <Reveal key={i} delay={i * 60}>
@@ -1386,9 +1395,9 @@ const Achievements = () => (
           </PopIn>
         ))}
       </div>
-      </div>
-    </section>
-  );
+    </div>
+  </section>
+);
 
 /* ═══════════════════════════════════════════════════════════
    STRENGTH — white bg
@@ -1402,9 +1411,9 @@ const Strength = () => (
     <div className="absolute bottom-[35%] left-[5%] w-2 h-2 rounded-full bg-[#00BFA5]/20 pointer-events-none animate-float-b" />
     <div className="absolute inset-0 dot-pattern-white pointer-events-none" />
     <div className="max-w-[1000px] mx-auto px-4 md:px-8 relative z-10">
-        <Reveal>
+      <Reveal>
         <SectionHead>VOYAGEが選ばれる理由</SectionHead>
-        </Reveal>
+      </Reveal>
       <div className="space-y-8 md:space-y-14">
         {STRENGTHS.map((s, i) => (
           <HorizontalReveal key={i} delay={i * 120} direction={i % 2 === 0 ? "left" : "right"}>
@@ -1427,14 +1436,14 @@ const Strength = () => (
                   <h3 className="text-[18px] md:text-[24px] font-black text-black mb-2 md:mb-3">{s.ja}</h3>
                 </GrowUnderline>
                 <p className="text-[13px] md:text-[14px] text-black/45 leading-[1.85] md:leading-[2]">{s.desc}</p>
-                </div>
               </div>
+            </div>
           </HorizontalReveal>
-          ))}
-        </div>
+        ))}
       </div>
-    </section>
-  );
+    </div>
+  </section>
+);
 
 /* ═══════════════════════════════════════════════════════════
    FLOW — light green bg
@@ -1515,11 +1524,11 @@ const FAQ = () => {
                 <button onClick={() => setOpenIdx(openIdx === i ? null : i)} className="w-full flex items-center justify-between gap-3 md:gap-4 px-4 py-3.5 md:px-5 md:py-4 text-left group">
                   <span className="text-[13px] md:text-[14px] font-bold text-black group-hover:text-[#00BFA5] transition-colors">{item.q}</span>
                   <ChevronDown className={`text-black/20 shrink-0 transition-transform duration-300 ${openIdx === i ? "rotate-180 !text-[#00BFA5]" : ""}`} size={16} />
-              </button>
-              <div className={`overflow-hidden transition-all duration-500 ease-out ${openIdx === i ? "max-h-40 pb-3 md:pb-4" : "max-h-0"}`}>
+                </button>
+                <div className={`overflow-hidden transition-all duration-500 ease-out ${openIdx === i ? "max-h-40 pb-3 md:pb-4" : "max-h-0"}`}>
                   <p className="text-[12px] md:text-[13px] text-black/50 leading-[1.8] md:leading-[1.9] px-4 md:px-5">{item.a}</p>
+                </div>
               </div>
-            </div>
             </HorizontalReveal>
           ))}
         </div>
@@ -1532,64 +1541,64 @@ const FAQ = () => {
    CONTACT — green bg（LINE + メールフォームページへのリンク）
    ═══════════════════════════════════════════════════════════ */
 const Contact = () => (
-    <section id="contact" className="relative bg-[#00BFA5] pt-14 pb-14 md:pt-16 md:pb-16 overflow-hidden">
-      <div className="absolute inset-0 diagonal-pattern-dark pointer-events-none" />
-      <WaveSvg fill="#00BFA5" />
-      <div className="absolute inset-0 pointer-events-none opacity-10">
-        <div className="absolute bottom-0 left-0 w-[50%] h-[50%] bg-white rounded-full blur-[80px] translate-y-1/3 -translate-x-1/4" />
-        <div className="absolute top-0 right-0 w-[40%] h-[40%] bg-white rounded-full blur-[60px] -translate-y-1/4 translate-x-1/4 animate-drift-x" />
-      </div>
-      <div className="absolute inset-0 dot-pattern-dark pointer-events-none opacity-20" />
-      <div className="absolute top-[20%] left-[8%] w-2 h-2 rounded-full bg-white/20 pointer-events-none animate-float-a" />
-      <div className="absolute bottom-[25%] right-[12%] w-3 h-3 rounded-full bg-white/15 pointer-events-none animate-float-b" />
-      <div className="absolute top-[50%] right-[5%] w-2 h-2 rounded-full bg-white/10 pointer-events-none animate-drift-y" />
-      <div className="max-w-[720px] mx-auto px-4 md:px-8 relative z-10">
-        <Reveal>
-          <h2 className="text-[22px] md:text-[30px] font-black text-white mb-3 leading-[1.5] text-center">
-            <TextRevealChar text="まずはお気軽に" className="inline" />
-            <br className="md:hidden" />
-            <TextRevealChar text="ご相談ください" className="inline" delay={400} />
-          </h2>
-          <p className="text-white/60 text-[13px] md:text-[14px] leading-[1.8] md:leading-[1.9] mb-6 md:mb-8 max-w-[440px] mx-auto text-center">
-            お客様の現状をお聞きし、最適なご提案をさせていただきます。
-          </p>
-        </Reveal>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 items-stretch">
-          {/* LINEお問合せ */}
-          <Reveal delay={100} className="h-full">
-            <div className="h-full bg-white rounded-2xl p-5 md:p-8 shadow-[0_8px_40px_rgba(0,0,0,.10)] flex flex-col items-center text-center justify-between min-h-0">
-              <div className="w-12 h-12 md:w-14 md:h-14 bg-[#00BFA5] rounded-2xl flex items-center justify-center mx-auto mb-3 md:mb-4">
-                <img src="/line-icon.png" alt="LINE" className="w-7 h-7 md:w-9 md:h-9 rounded-lg" />
-              </div>
-              <h3 className="text-[16px] md:text-[20px] font-black text-black mb-2">LINEでお問合せ</h3>
-              <p className="text-black/40 text-[12px] md:text-[13px] leading-[1.7] md:leading-[1.8] mb-4 md:mb-6 max-w-[280px]">
-                友だち追加後、無料相談のご予約が可能です。お気軽にご連絡ください。
-              </p>
-              <MagneticWrap className="inline-block" strength={0.25}>
-                <a href="#" className="inline-flex items-center gap-2 bg-[#00BFA5] text-white px-6 py-3 md:px-8 md:py-3.5 rounded-full text-[13px] md:text-[14px] font-bold shadow-[0_4px_20px_rgba(0,191,165,.25)] hover:shadow-[0_8px_32px_rgba(0,191,165,.35)] hover:-translate-y-0.5 transition-all" style={{ animation: "glow-pulse 3s ease-in-out infinite" }}>
-                  <MessageCircle size={16} /> お友だち追加する
-                </a>
-              </MagneticWrap>
+  <section id="contact" className="relative bg-[#00BFA5] pt-14 pb-14 md:pt-16 md:pb-16 overflow-hidden">
+    <div className="absolute inset-0 diagonal-pattern-dark pointer-events-none" />
+    <WaveSvg fill="#00BFA5" />
+    <div className="absolute inset-0 pointer-events-none opacity-10">
+      <div className="absolute bottom-0 left-0 w-[50%] h-[50%] bg-white rounded-full blur-[80px] translate-y-1/3 -translate-x-1/4" />
+      <div className="absolute top-0 right-0 w-[40%] h-[40%] bg-white rounded-full blur-[60px] -translate-y-1/4 translate-x-1/4 animate-drift-x" />
+    </div>
+    <div className="absolute inset-0 dot-pattern-dark pointer-events-none opacity-20" />
+    <div className="absolute top-[20%] left-[8%] w-2 h-2 rounded-full bg-white/20 pointer-events-none animate-float-a" />
+    <div className="absolute bottom-[25%] right-[12%] w-3 h-3 rounded-full bg-white/15 pointer-events-none animate-float-b" />
+    <div className="absolute top-[50%] right-[5%] w-2 h-2 rounded-full bg-white/10 pointer-events-none animate-drift-y" />
+    <div className="max-w-[720px] mx-auto px-4 md:px-8 relative z-10">
+      <Reveal>
+        <h2 className="text-[22px] md:text-[30px] font-black text-white mb-3 leading-[1.5] text-center">
+          <TextRevealChar text="まずはお気軽に" className="inline" />
+          <br className="md:hidden" />
+          <TextRevealChar text="ご相談ください" className="inline" delay={400} />
+        </h2>
+        <p className="text-white/60 text-[13px] md:text-[14px] leading-[1.8] md:leading-[1.9] mb-6 md:mb-8 max-w-[440px] mx-auto text-center">
+          お客様の現状をお聞きし、最適なご提案をさせていただきます。
+        </p>
+      </Reveal>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 items-stretch">
+        {/* LINEお問合せ */}
+        <Reveal delay={100} className="h-full">
+          <div className="h-full bg-white rounded-2xl p-5 md:p-8 shadow-[0_8px_40px_rgba(0,0,0,.10)] flex flex-col items-center text-center justify-between min-h-0">
+            <div className="w-12 h-12 md:w-14 md:h-14 bg-[#00BFA5] rounded-2xl flex items-center justify-center mx-auto mb-3 md:mb-4">
+              <img src="/line-icon.png" alt="LINE" className="w-7 h-7 md:w-9 md:h-9 rounded-lg" />
             </div>
-          </Reveal>
-          {/* メールフォーム — 専用ページへ */}
-          <Reveal delay={150} className="h-full">
-            <Link to="/contact" className="block h-full group">
-              <div className="h-full bg-white rounded-2xl p-5 md:p-8 shadow-[0_8px_40px_rgba(0,0,0,.10)] group-hover:shadow-[0_12px_48px_rgba(0,0,0,.14)] transition-all flex flex-col items-center justify-between text-center min-h-[240px] md:min-h-[280px]">
-                <div className="w-12 h-12 md:w-14 md:h-14 bg-black/10 rounded-2xl flex items-center justify-center mx-auto mb-3 md:mb-4">
-                  <Mail size={24} className="text-black/60 md:hidden" /><Mail size={28} className="text-black/60 hidden md:block" />
-                </div>
-                <h3 className="text-[16px] md:text-[20px] font-black text-black mb-2">メールでお問合せ</h3>
-                <p className="text-black/40 text-[12px] md:text-[13px] leading-[1.7] md:leading-[1.8] mb-4 md:mb-6 max-w-[260px]">フォームページでご入力いただけます。</p>
-                <span className="inline-flex items-center gap-2 bg-[#00BFA5] text-white px-6 py-3 rounded-full text-[14px] font-bold shadow-[0_4px_20px_rgba(0,191,165,.25)] group-hover:shadow-[0_8px_32px_rgba(0,191,165,.35)] group-hover:-translate-y-0.5 transition-all">
-                  <Send size={16} /> フォームへ進む
-                </span>
+            <h3 className="text-[16px] md:text-[20px] font-black text-black mb-2">LINEでお問合せ</h3>
+            <p className="text-black/40 text-[12px] md:text-[13px] leading-[1.7] md:leading-[1.8] mb-4 md:mb-6 max-w-[280px]">
+              友だち追加後、無料相談のご予約が可能です。お気軽にご連絡ください。
+            </p>
+            <MagneticWrap className="inline-block" strength={0.25}>
+              <a href="#" className="inline-flex items-center gap-2 bg-[#00BFA5] text-white px-6 py-3 md:px-8 md:py-3.5 rounded-full text-[13px] md:text-[14px] font-bold shadow-[0_4px_20px_rgba(0,191,165,.25)] hover:shadow-[0_8px_32px_rgba(0,191,165,.35)] hover:-translate-y-0.5 transition-all" style={{ animation: "glow-pulse 3s ease-in-out infinite" }}>
+                <MessageCircle size={16} /> お友だち追加する
+              </a>
+            </MagneticWrap>
+          </div>
+        </Reveal>
+        {/* メールフォーム — 専用ページへ */}
+        <Reveal delay={150} className="h-full">
+          <Link to="/contact" className="block h-full group">
+            <div className="h-full bg-white rounded-2xl p-5 md:p-8 shadow-[0_8px_40px_rgba(0,0,0,.10)] group-hover:shadow-[0_12px_48px_rgba(0,0,0,.14)] transition-all flex flex-col items-center justify-between text-center min-h-[240px] md:min-h-[280px]">
+              <div className="w-12 h-12 md:w-14 md:h-14 bg-black/10 rounded-2xl flex items-center justify-center mx-auto mb-3 md:mb-4">
+                <Mail size={24} className="text-black/60 md:hidden" /><Mail size={28} className="text-black/60 hidden md:block" />
               </div>
-            </Link>
-          </Reveal>
-        </div>
+              <h3 className="text-[16px] md:text-[20px] font-black text-black mb-2">メールでお問合せ</h3>
+              <p className="text-black/40 text-[12px] md:text-[13px] leading-[1.7] md:leading-[1.8] mb-4 md:mb-6 max-w-[260px]">フォームページでご入力いただけます。</p>
+              <span className="inline-flex items-center gap-2 bg-[#00BFA5] text-white px-6 py-3 rounded-full text-[14px] font-bold shadow-[0_4px_20px_rgba(0,191,165,.25)] group-hover:shadow-[0_8px_32px_rgba(0,191,165,.35)] group-hover:-translate-y-0.5 transition-all">
+                <Send size={16} /> フォームへ進む
+              </span>
+            </div>
+          </Link>
+        </Reveal>
       </div>
-    </section>
+    </div>
+  </section>
 );
 
 /* ═══════════════════════════════════════════════════════════
